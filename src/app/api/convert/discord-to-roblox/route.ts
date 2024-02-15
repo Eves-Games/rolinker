@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
         status: 400,
     })
 
-    const accounts = await prisma.account.findMany({
+    const accounts = await prisma.accounts.findMany({
         where: {
             ownerId: id
         }

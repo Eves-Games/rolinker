@@ -12,7 +12,7 @@ async function setPrimary(id: string) {
   try {
     const session = await getServerSession(options);
 
-    const accountToSetPrimary = await prisma.account.findUnique({
+    const accountToSetPrimary = await prisma.accounts.findUnique({
       where: {
         id: id
       }
@@ -26,7 +26,7 @@ async function setPrimary(id: string) {
       throw new Error('Unauthorized access');
     }
 
-    await prisma.account.updateMany({
+    await prisma.accounts.updateMany({
       where: {
         ownerId: accountToSetPrimary.ownerId,
         isPrimary: true
@@ -36,7 +36,7 @@ async function setPrimary(id: string) {
       }
     });
 
-    await prisma.account.update({
+    await prisma.accounts.update({
       where: {
         id: id
       },
@@ -58,7 +58,7 @@ async function deleteAccount(id: string) {
   try {
     const session = await getServerSession(options);
 
-    const accountToDelete = await prisma.account.findUnique({
+    const accountToDelete = await prisma.accounts.findUnique({
       where: {
         id: id
       }
@@ -72,14 +72,14 @@ async function deleteAccount(id: string) {
       throw new Error('Unauthorized access');
     }
 
-    await prisma.account.delete({
+    await prisma.accounts.delete({
       where: {
         id: id
       }
     });
 
     if (accountToDelete.isPrimary) {
-      const nextAccount = await prisma.account.findFirst({
+      const nextAccount = await prisma.accounts.findFirst({
         where: {
           ownerId: accountToDelete.ownerId,
           NOT: {
@@ -89,7 +89,7 @@ async function deleteAccount(id: string) {
       });
 
       if (nextAccount) {
-        await prisma.account.update({
+        await prisma.accounts.update({
           where: {
             id: nextAccount.id
           },
@@ -110,7 +110,7 @@ async function deleteAccount(id: string) {
 export default async function ManageAccounts() {
   const session = await getServerSession(options);
 
-  const accounts = await prisma.account.findMany({
+  const accounts = await prisma.accounts.findMany({
     where: {
       ownerId: session?.user.discordId
     },

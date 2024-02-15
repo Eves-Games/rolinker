@@ -8,7 +8,7 @@ import Image from 'next/image';
 export default async function ManageServer() {
     const session = await getServerSession(options);
 
-    const servers = await prisma.server.findMany({
+    const servers = await prisma.servers.findMany({
         where: {
             ownerId: session?.user.id
         }

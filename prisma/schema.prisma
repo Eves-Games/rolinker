@@ -8,7 +8,7 @@ datasource db {
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
-model Account {
+model Accounts {
   id        String  @id @map("_id")
   isPrimary Boolean @default(false)
   ownerId   String
@@ -16,7 +16,7 @@ model Account {
   @@index([ownerId])
 }
 
-model Server {
+model Servers {
   id              String   @id @map("_id")
   name            String
   imageUrl        String?
@@ -24,8 +24,8 @@ model Server {
   inviteChannelId String?
   parentServerId  String?
   ownerId         String
-  parentServer    Server?  @relation("ParentChild", fields: [parentServerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childServers    Server[] @relation("ParentChild")
+  parentServer    Servers?  @relation("ParentChild", fields: [parentServerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childServers    Servers[] @relation("ParentChild")
 
   @@index([ownerId])
 }

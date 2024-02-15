@@ -10,7 +10,7 @@ import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
 export default async function ManageServerPage({ params }: { params: { id: string } }) {
     const session = await getServerSession(options)
 
-    const guild = await prisma.server.findUnique({
+    const guild = await prisma.servers.findUnique({
         where: {
             id: params.id
         }
@@ -20,7 +20,7 @@ export default async function ManageServerPage({ params }: { params: { id: strin
         return <div>No Permission</div>
     }
 
-    const accounts = await prisma.account.findMany({
+    const accounts = await prisma.accounts.findMany({
         where: {
             ownerId: session?.user.discordId
         },

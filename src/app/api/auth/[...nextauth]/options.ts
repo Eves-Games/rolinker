@@ -38,7 +38,7 @@ export const options: NextAuthOptions = {
             } else if (account?.provider === "roblox" && user) {
                 const session = await getServerSession(options);
 
-                const existingAccount = await prisma.account.findUnique({
+                const existingAccount = await prisma.accounts.findUnique({
                     where: {
                         id: user.id as string,
                     },
@@ -46,7 +46,7 @@ export const options: NextAuthOptions = {
 
                 if (existingAccount) return '/manage/accounts';
 
-                const accounts = await prisma.account.findMany({
+                const accounts = await prisma.accounts.findMany({
                     where: {
                         ownerId: session?.user.id
                     },
@@ -54,7 +54,7 @@ export const options: NextAuthOptions = {
 
                 const isPrimary = accounts.length === 0;
 
-                await prisma.account.create({
+                await prisma.accounts.create({
                     data: {
                         id: user.id as string,
                         ownerId: session?.user.id,

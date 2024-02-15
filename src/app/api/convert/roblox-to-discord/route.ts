@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
         status: 400,
     })
 
-    const account = await prisma.account.findUnique({
+    const account = await prisma.accounts.findUnique({
         where: {
             id: id
         }
