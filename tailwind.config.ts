@@ -20,7 +20,8 @@ const config: Config = {
     },
   },
   plugins: [
-    require('tailwind-scrollbar')
+    require('tailwind-scrollbar'),
+    require('@headlessui/tailwindcss')
   ]
 };
 export default config;
