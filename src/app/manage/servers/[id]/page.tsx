@@ -1,5 +1,5 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { prisma } from "@/db";
+import prisma from "@/db";
 import { UserGroup } from "@/roblox-api";
 import axios from "axios";
 import { getServerSession } from "next-auth";

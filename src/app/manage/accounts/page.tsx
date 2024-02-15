@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { prisma } from '@/db';
+import prisma from "@/db";
 import { getServerSession } from 'next-auth';
 import { options } from '../../api/auth/[...nextauth]/options';
 import AddAccount from '../../components/AddAccount'

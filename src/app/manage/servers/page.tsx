@@ -1,7 +1,6 @@
-import { prisma } from '@/db';
+import prisma from "@/db";
 import { getServerSession } from 'next-auth';
 import { options } from '../../api/auth/[...nextauth]/options';
-import axios from 'axios';
 import { PlusIcon, PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
