@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import brandIcon from '../assets/brandIcon.png';
 import { getServerSession } from 'next-auth/next';
 import { options } from '../api/auth/[...nextauth]/options';
 import UserCard from './UserCard';
@@ -13,7 +12,7 @@ export default async function Nav() {
     <nav className='flex justify-between py-2'>
       <div className='flex items-center space-x-4'>
         <Link href='/' className='flex items-center space-x-4 py-2'>
-          <Image src={brandIcon} alt='Brand Icon' className='h-8 w-8' />
+          <Image src='/rolinker.png' alt='Brand Icon' className='h-8 w-8' height={64} width={64} />
           <span className='font-bold text-xl'>RoLinker</span>
         </Link>
         <div className='flex items-center space-x-2 py-2'>

@@ -107,6 +107,10 @@ async function deleteAccount(id: string) {
   }
 }
 
+export const config = {
+  runtime: 'edge',
+};
+
 export default async function ManageAccounts() {
   const session = await getServerSession(options);
 
