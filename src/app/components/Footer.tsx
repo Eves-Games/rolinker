@@ -21,7 +21,7 @@ export default function Footer() {
                     <a href='https://discord.gg/CJDuGzwFX4'>Discord</a>
                 </section>
             </div>
-            <p className='text-sm text-neutral-400'>© 2024 Eve's Games, SP. We are not affiliated with or endorsed by the Roblox Corporation.</p>
+            <p className='text-sm text-neutral-400'>&copy; 2024 Eve's Games, SP. We are not affiliated with or endorsed by the Roblox Corporation.</p>
         </footer>
     )
 };
