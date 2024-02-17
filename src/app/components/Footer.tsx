@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default async function Footer() {
+export default function Footer() {
     return (
         <footer className='flex flex-col gap-4 py-8 container'>
             <div className='grid grid-flow-col gap-8 md:gap-0'>
