@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
-import AuthProvider from "./context/AuthProvider";
+import { SessionProvider } from "next-auth/react";
 import Nav from "./components/Nav";
+import { auth } from "@/auth";
 
 const open_sans = Open_Sans({
   subsets: ["latin"],
@@ -14,19 +15,21 @@ export const metadata: Metadata = {
   description: "Access your Roblox accounts on Discord",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
+  const session = await auth();
+
   return (
-    <html lang="en">
-      <body className={`${open_sans.className} bg-neutral-900 text-neutral-100 container tracking-wide`}>
-        <AuthProvider>
-          <Nav/>
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body className={`${open_sans.className} bg-neutral-900 text-neutral-100 container tracking-wide`}>
+          <Nav />
           {children}
-        </AuthProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

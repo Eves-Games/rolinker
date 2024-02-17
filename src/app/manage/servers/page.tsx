@@ -1,12 +1,11 @@
 import prisma from "@/db";
-import { getServerSession } from 'next-auth';
-import { options } from '../../api/auth/[...nextauth]/options';
 import { PlusIcon, PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
+import { auth } from "@/auth";
 
 export default async function ManageServer() {
-    const session = await getServerSession(options);
+    const session = await auth();
 
     const servers = await prisma.servers.findMany({
         where: {

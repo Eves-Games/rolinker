@@ -1,18 +1,17 @@
 import axios from 'axios';
-import prisma from "@/db";
-import { getServerSession } from 'next-auth';
-import { options } from '../../api/auth/[...nextauth]/options';
 import AddAccount from '../../components/AddAccount'
 import { AccountItem } from '@/app/components/AccountItem';
 import { Thumbnail, User } from '@/roblox-api';
+import { auth } from '@/auth';
+import db from '@/db';
 
 async function setPrimary(id: string) {
   'use server';
 
   try {
-    const session = await getServerSession(options);
+    const session = await auth();
 
-    const accountToSetPrimary = await prisma.accounts.findUnique({
+    const accountToSetPrimary = await db.accounts.findUnique({
       where: {
         id: id
       }
@@ -26,7 +25,7 @@ async function setPrimary(id: string) {
       throw new Error('Unauthorized access');
     }
 
-    await prisma.accounts.updateMany({
+    await db.accounts.updateMany({
       where: {
         ownerId: accountToSetPrimary.ownerId,
         isPrimary: true
@@ -36,7 +35,7 @@ async function setPrimary(id: string) {
       }
     });
 
-    await prisma.accounts.update({
+    await db.accounts.update({
       where: {
         id: id
       },
@@ -56,9 +55,9 @@ async function deleteAccount(id: string) {
   'use server';
 
   try {
-    const session = await getServerSession(options);
+    const session = await auth();
 
-    const accountToDelete = await prisma.accounts.findUnique({
+    const accountToDelete = await db.accounts.findUnique({
       where: {
         id: id
       }
@@ -68,18 +67,18 @@ async function deleteAccount(id: string) {
       throw new Error('Account not found');
     }
 
-    if (accountToDelete.ownerId !== session?.user.discordId) {
+    if (accountToDelete.ownerId !== session?.user.id) {
       throw new Error('Unauthorized access');
     }
 
-    await prisma.accounts.delete({
+    await db.accounts.delete({
       where: {
         id: id
       }
     });
 
     if (accountToDelete.isPrimary) {
-      const nextAccount = await prisma.accounts.findFirst({
+      const nextAccount = await db.accounts.findFirst({
         where: {
           ownerId: accountToDelete.ownerId,
           NOT: {
@@ -89,7 +88,7 @@ async function deleteAccount(id: string) {
       });
 
       if (nextAccount) {
-        await prisma.accounts.update({
+        await db.accounts.update({
           where: {
             id: nextAccount.id
           },
@@ -108,11 +107,11 @@ async function deleteAccount(id: string) {
 }
 
 export default async function ManageAccounts() {
-  const session = await getServerSession(options);
+  const session = await auth();
 
-  const accounts = await prisma.accounts.findMany({
+  const accounts = await db.accounts.findMany({
     where: {
-      ownerId: session?.user.discordId
+      ownerId: session?.user.id
     },
     orderBy: {
       isPrimary: 'desc'

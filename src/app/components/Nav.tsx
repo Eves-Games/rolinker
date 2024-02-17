@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getServerSession } from 'next-auth/next';
-import { options } from '../api/auth/[...nextauth]/options';
 import UserCard from './UserCard';
 import SignInCard from './SignInCard';
+import { auth } from '../../auth';
 
 export default async function Nav() {
-  const session = await getServerSession(options);
+  const session = await auth();
 
   return (
     <nav className='flex justify-between py-2'>

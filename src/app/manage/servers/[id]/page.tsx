@@ -1,14 +1,13 @@
-import { options } from "@/app/api/auth/[...nextauth]/options";
 import prisma from "@/db";
 import { UserGroup } from "@/roblox-api";
 import axios from "axios";
-import { getServerSession } from "next-auth";
 import Image from 'next/image';
 import { HashtagIcon, ArrowPathIcon, UserGroupIcon, ServerIcon } from '@heroicons/react/24/outline';
 import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
+import { auth } from "@/auth";
 
 export default async function ManageServerPage({ params }: { params: { id: string } }) {
-    const session = await getServerSession(options)
+    const session = await auth();
 
     const guild = await prisma.servers.findUnique({
         where: {
@@ -22,7 +21,7 @@ export default async function ManageServerPage({ params }: { params: { id: strin
 
     const accounts = await prisma.accounts.findMany({
         where: {
-            ownerId: session?.user.discordId
+            ownerId: session?.user.id
         },
         orderBy: {
             isPrimary: 'desc'

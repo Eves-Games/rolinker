@@ -1,4 +1,4 @@
-import prisma from "@/db";
+import db from "@/db";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
         status: 400,
     })
 
-    const account = await prisma.accounts.findUnique({
+    const account = await db.accounts.findUnique({
         where: {
             id: id
         }

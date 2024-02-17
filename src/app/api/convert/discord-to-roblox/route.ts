@@ -1,4 +1,4 @@
-import prisma from "@/db";
+import db from "@/db";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
         status: 400,
     })
 
-    const accounts = await prisma.accounts.findMany({
+    const accounts = await db.accounts.findMany({
         where: {
             ownerId: id
         }
