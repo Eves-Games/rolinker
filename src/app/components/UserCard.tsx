@@ -16,25 +16,25 @@ interface UserProps {
 export default function UserCard({ name, image }: UserProps) {
     return (
         <Menu as='div' className='relative'>
-            <Menu.Button className='flex items-center space-x-4 px-4 py-2 rounded hover:bg-neutral-800 ui-active:shadow-lg ui-open:bg-neutral-800 ui-open:shadow-lg'>
+            <Menu.Button className='flex items-center gap-4 px-4 py-2 rounded hover:bg-neutral-800 ui-active:shadow-lg ui-open:bg-neutral-800 ui-open:shadow-lg'>
                 <span className='font-semibold'>{name}</span>
                 <Image src={image || ''} width={32} height={32} alt='Profile Icon' className='h-8 w-8 rounded-full' />
             </Menu.Button>
-            <Menu.Items className='absolute right-0 rounded mt-3 bg-neutral-800 min-w-full shadow-lg'>
+            <Menu.Items className='absolute right-0 rounded mt-2 bg-neutral-800 min-w-full shadow-lg'>
                 <Menu.Item>
-                    <Link href='/manage/accounts' className='flex items-center justify-between w-full space-x-4 px-4 py-2 ui-active:bg-neutral-700 rounded-t'>
+                    <Link href='/manage/accounts' className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700 rounded-t'>
                         <span className='text-sm'>Manage</span>
                         <AdjustmentsHorizontalIcon className="h-6" />
                     </Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <Link href='/manage/accounts' className='flex items-center justify-between w-full space-x-4 px-4 py-2 ui-active:bg-neutral-700'>
+                    <Link href='/manage/accounts' className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700'>
                         <span className='text-sm'>Settings</span>
                         <Cog6ToothIcon className="h-6" />
                     </Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <button onClick={() => signOut()} className='flex items-center justify-between w-full space-x-4 px-4 py-2 ui-active:bg-neutral-700 rounded-b'>
+                    <button onClick={() => signOut()} className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700 rounded-b'>
                         <span className='text-sm'>Logout</span>
                         <ArrowLeftEndOnRectangleIcon className="h-6" />
                     </button>
