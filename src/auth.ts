@@ -18,6 +18,7 @@ export const {
             if (account?.provider === "discord" && profile) {
                 user.image = profile.avatar ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png` : `https://cdn.discordapp.com/embed/avatars/${Math.abs(Number(profile.id) >> 22) % 5}.png`;
                 user.id = profile.id as string;
+                user.name = profile.username;
 
                 return true;
             } else if (account?.provider === "roblox") {
