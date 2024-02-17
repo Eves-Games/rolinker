@@ -1,9 +1,10 @@
-import axios from 'axios';
 import AddAccount from '../../components/AddAccount'
 import { AccountItem } from '@/app/components/AccountItem';
 import { Thumbnail, User } from '@/roblox-api';
 import { auth } from '@/auth';
 import db from '@/db';
+
+export const runtime = "edge";
 
 async function setPrimary(id: string) {
   'use server';
@@ -117,27 +118,26 @@ export default async function ManageAccounts() {
       isPrimary: 'desc'
     }
   });
-  
+
   const usersData = {
     userIds: accounts.map(account => account.id),
     excludeBannedUsers: true
-  }
+  };
 
-  const usersResponse = await axios.post('https://users.roblox.com/v1/users', usersData)
-
-  const thumbnailsData = accounts.map(account => {
-    return {
-      targetId: account.id,
-      type: 'AvatarBust',
-      size: '75x75',
-      isCircular: false
-    }
+  const usersResponse = await fetch('https://users.roblox.com/v1/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(usersData),
   })
+    .then(response => { return response.json() });
 
-  const thumbnailsResponse = await axios.post('https://thumbnails.roblox.com/v1/batch', thumbnailsData)
+  const thumbnailsResponse = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-bust?userIds=${accounts.map(account => account.id).join(',')}&size=75x75&format=Png&isCircular=false`)
+    .then(response => { return response.json() });
 
-  const users: Array<User> = usersResponse.data.data
-  const thumbnails: Array<Thumbnail> = thumbnailsResponse.data.data
+  const users: Array<User> = usersResponse.data;
+  const thumbnails: Array<Thumbnail> = thumbnailsResponse.data;
 
   const doneAccounts = accounts.map(account => {
     const user = users.find(user => user.id.toString() === account.id);
@@ -146,7 +146,7 @@ export default async function ManageAccounts() {
     return {
       ...account,
       name: user ? user.name : '',
-      imageUrl: thumbnail ? thumbnail.imageUrl : '' 
+      imageUrl: thumbnail ? thumbnail.imageUrl : ''
     };
   });
 
