@@ -1,8 +1,6 @@
-import { commands } from "@/commands"
+import { commands } from "@/lib/commands"
 import { verifyInteractionRequest } from "@/discord/verify-incoming-request"
 import {
-    APIInteractionDataOptionBase,
-    ApplicationCommandOptionType,
     InteractionResponseType,
     InteractionType,
     MessageFlags,
@@ -10,12 +8,6 @@ import {
 import { NextResponse } from "next/server"
 
 export const runtime = "edge"
-
-const ROOT_URL = `https://${process.env.VERCEL_URL}`
-
-function capitalizeFirstLetter(s: string) {
-    return s.charAt(0).toUpperCase() + s.slice(1)
-}
 
 export async function POST(request: Request) {
     const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_CLIENT_ID as string)

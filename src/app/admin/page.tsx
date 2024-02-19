@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import RegisterCommandsCard from '@/components/RegisterCommandsCard';
-import { commands } from '@/commands';
+import { commands } from '@/lib/commands';
 
 export const runtime = "edge";
 
@@ -39,8 +39,6 @@ async function registerCommands() {
 
 export default async function Admin() {
     const session = await auth();
-
-    console.log(session)
 
     return (
         <section className='container'>
