@@ -1,10 +1,11 @@
 import { auth } from "@/auth";
 import db from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
 export async function DELETE(
+    request: NextRequest,
     { params }: { params: { id: string } }
 ) {
     const id = params.id;
