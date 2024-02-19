@@ -10,13 +10,13 @@ export default function ManageLayout({
         <section className='container'>
             <h1 className='font-bold text-3xl mb-4'>Manage</h1>
 
-            <div className='flex space-x-4 items-start'>
+            <div className='flex gap-4 items-start'>
                 <div className='bg-neutral-800 rounded shadow-lg'>
-                    <Link href='/manage/accounts' className='flex items-center justify-between space-x-4 w-full px-4 py-2 hover:bg-neutral-700 rounded-t'>
+                    <Link href='/manage/accounts' className='flex items-center justify-between gap-4 w-full px-4 py-2 hover:bg-neutral-700 rounded-t'>
                         <UsersIcon className="h-6" />
                         <span>Accounts</span>
                     </Link>
-                    <Link href='/manage/guilds' className='flex items-center justify-between space-x-4 w-full px-4 py-2 hover:bg-neutral-700 rounded-b'>
+                    <Link href='/manage/guilds' className='flex items-center justify-between gap-4 w-full px-4 py-2 hover:bg-neutral-700 rounded-b'>
                         <CircleStackIcon className="h-6" />
                         <span>Guilds</span>
                     </Link>
