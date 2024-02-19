@@ -8,24 +8,28 @@ datasource db {
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
-model Accounts {
-  id        String  @id @map("_id")
-  isPrimary Boolean @default(false)
-  ownerId   String
+model Account {
+  id             String   @id @map("_id")
+  isPrimary      Boolean  @default(false)
+  ownerId        String
+  linkedGuilds   Guild[]  @relation(fields: [linkedGuildIds], references: [id])
+  linkedGuildIds String[]
 
   @@index([ownerId])
 }
 
-model Servers {
-  id              String   @id @map("_id")
-  name            String
-  imageUrl        String?
-  groupId         String?
-  inviteChannelId String?
-  parentServerId  String?
-  ownerId         String
-  parentServer    Servers?  @relation("ParentChild", fields: [parentServerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childServers    Servers[] @relation("ParentChild")
+model Guild {
+  id               String    @id @map("_id")
+  name             String
+  ownerId          String
+  imageUrl         String?
+  groupId          String?
+  inviteChannelId  String?
+  parentGuildId    String?
+  parentGuild      Guild?    @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childGuilds      Guild[]   @relation("ParentChild")
+  linkedAccounts   Account[] @relation(fields: [linkedAccountIds], references: [id])
+  linkedAccountIds String[]
 
   @@index([ownerId])
 }
