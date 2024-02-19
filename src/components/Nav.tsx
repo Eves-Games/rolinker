@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import UserCard from './UserCard';
 import SignInCard from './SignInCard';
-import { auth } from '../../auth';
+import { auth } from '@/auth';
 
 export default async function Nav() {
   const session = await auth();
@@ -10,7 +10,7 @@ export default async function Nav() {
   return (
     <nav className='flex justify-between py-4 container'>
       <div className='flex items-center gap-4'>
-        <Link href='/' className='flex items-center gap-4'>
+        <Link href='/' className='flex items-center py-2 gap-4'>
           <Image src='/rolinker.png' alt='Brand Icon' className='h-8 w-8' height={64} width={64} />
           <span className='font-bold text-xl'>RoLinker</span>
         </Link>
@@ -28,4 +28,4 @@ export default async function Nav() {
       </div >
     </nav >
   );
-}
+};

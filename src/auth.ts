@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import db from "@/db";
+import db from "@/lib/db";
 import authConfig from "@/auth.config";
 
 export const {
@@ -8,23 +8,34 @@ export const {
     signIn,
     signOut
 } = NextAuth({
+    session: { strategy: "jwt" },
+    pages: { signIn: '/' },
     callbacks: {
         async session({ session, token }) {
-            session.user.id = token.sub;
-
+            if (session?.user) {
+                session.user.id = token.sub;
+                delete session.user.email;
+            }
             return session;
+        },
+        async jwt({ token, account }) {
+            if (account) {
+                token.sub = account.providerAccountId;
+                token.accessToken = account.access_token;
+            }
+
+            return token;
         },
         async signIn({ user, account, profile }) {
             if (account?.provider === "discord" && profile) {
                 user.image = profile.avatar ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png` : `https://cdn.discordapp.com/embed/avatars/${Math.abs(Number(profile.id) >> 22) % 5}.png`;
-                user.id = profile.id as string;
-                user.name = profile.username;
+                user.name = profile.username as string;
 
                 return true;
             } else if (account?.provider === "roblox") {
                 const session = await auth();
 
-                const existingAccount = await db.accounts.findUnique({
+                const existingAccount = await db.account.findUnique({
                     where: {
                         id: session?.user.id
                     },
@@ -32,7 +43,7 @@ export const {
 
                 if (existingAccount) return '/manage/accounts';
 
-                const existingAccounts = await db.accounts.findMany({
+                const existingAccounts = await db.account.findMany({
                     where: {
                         ownerId: session?.user.id,
                     },
@@ -40,7 +51,7 @@ export const {
 
                 const isPrimary = existingAccounts.length === 0;
 
-                await db.accounts.create({
+                await db.account.create({
                     data: {
                         id: profile?.sub as string,
                         ownerId: session?.user.id,
@@ -54,7 +65,5 @@ export const {
             return '/';
         },
     },
-    pages: { signIn: '/' },
-    session: { strategy: "jwt" },
     ...authConfig
 });

@@ -1,5 +1,5 @@
-import db from "@/db";
-import { NextRequest } from "next/server";
+import db from "@/lib/db";
+import { NextRequest, NextResponse } from "next/server";
 export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
@@ -10,11 +10,11 @@ export async function GET(request: NextRequest) {
         status: 400,
     })
 
-    const accounts = await db.accounts.findMany({
+    const accounts = await db.account.findMany({
         where: {
             ownerId: id
         }
     })
     
-    return Response.json(accounts)
+    return NextResponse.json(accounts)
 }

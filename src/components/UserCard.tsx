@@ -6,14 +6,12 @@ import { Cog6ToothIcon, AdjustmentsHorizontalIcon, ArrowLeftEndOnRectangleIcon }
 import Link from 'next/link';
 import { signOut } from "next-auth/react";
 
-interface UserProps {
+interface Props {
     name: string;
-    email: string;
     image: string;
-    discordId: string;
 }
 
-export default function UserCard({ name, image }: UserProps) {
+export default function UserCard({ name, image }: Props) {
     return (
         <Menu as='div' className='relative'>
             <Menu.Button className='flex items-center gap-4 px-4 py-2 rounded hover:bg-neutral-800 ui-active:shadow-lg ui-open:bg-neutral-800 ui-open:shadow-lg'>
@@ -28,7 +26,7 @@ export default function UserCard({ name, image }: UserProps) {
                     </Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <Link href='/manage/accounts' className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700'>
+                    <Link href='/settings' className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700'>
                         <span className='text-sm'>Settings</span>
                         <Cog6ToothIcon className="h-6" />
                     </Link>

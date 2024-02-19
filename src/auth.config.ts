@@ -14,7 +14,7 @@ export default {
             clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
             authorization: {
                 params: {
-                    scope: 'identify'
+                    scope: 'identify guilds'
                 }
             },
         }),

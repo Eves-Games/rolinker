@@ -1,8 +1,8 @@
-import AddAccount from '../../components/AddAccount'
-import { AccountItem } from '@/app/components/AccountItem';
+import AddAccount from '../../../components/AddAccount'
+import { AccountItem } from '@/components/AccountItem';
 import { Thumbnail, User } from '@/roblox-api';
 import { auth } from '@/auth';
-import db from '@/db';
+import db from '@/lib/db';
 
 export const runtime = "edge";
 
@@ -12,7 +12,7 @@ async function setPrimary(id: string) {
   try {
     const session = await auth();
 
-    const accountToSetPrimary = await db.accounts.findUnique({
+    const accountToSetPrimary = await db.account.findUnique({
       where: {
         id: id
       }
@@ -26,7 +26,7 @@ async function setPrimary(id: string) {
       throw new Error('Unauthorized access');
     }
 
-    await db.accounts.updateMany({
+    await db.account.updateMany({
       where: {
         ownerId: accountToSetPrimary.ownerId,
         isPrimary: true
@@ -36,7 +36,7 @@ async function setPrimary(id: string) {
       }
     });
 
-    await db.accounts.update({
+    await db.account.update({
       where: {
         id: id
       },
@@ -58,7 +58,7 @@ async function deleteAccount(id: string) {
   try {
     const session = await auth();
 
-    const accountToDelete = await db.accounts.findUnique({
+    const accountToDelete = await db.account.findUnique({
       where: {
         id: id
       }
@@ -72,14 +72,14 @@ async function deleteAccount(id: string) {
       throw new Error('Unauthorized access');
     }
 
-    await db.accounts.delete({
+    await db.account.delete({
       where: {
         id: id
       }
     });
 
     if (accountToDelete.isPrimary) {
-      const nextAccount = await db.accounts.findFirst({
+      const nextAccount = await db.account.findFirst({
         where: {
           ownerId: accountToDelete.ownerId,
           NOT: {
@@ -89,7 +89,7 @@ async function deleteAccount(id: string) {
       });
 
       if (nextAccount) {
-        await db.accounts.update({
+        await db.account.update({
           where: {
             id: nextAccount.id
           },
@@ -110,7 +110,7 @@ async function deleteAccount(id: string) {
 export default async function ManageAccounts() {
   const session = await auth();
 
-  const accounts = await db.accounts.findMany({
+  const accounts = await db.account.findMany({
     where: {
       ownerId: session?.user.id
     },

@@ -1,15 +1,16 @@
-import prisma from "@/db";
+import prisma from "@/lib/db";
 import { UserGroup } from "@/roblox-api";
-import axios from "axios";
 import Image from 'next/image';
 import { HashtagIcon, ArrowPathIcon, UserGroupIcon, ServerIcon } from '@heroicons/react/24/outline';
 import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
 import { auth } from "@/auth";
 
+export const runtime = "edge";
+
 export default async function ManageServerPage({ params }: { params: { id: string } }) {
     const session = await auth();
 
-    const guild = await prisma.servers.findUnique({
+    const guild = await prisma.guild.findUnique({
         where: {
             id: params.id
         }
@@ -19,7 +20,7 @@ export default async function ManageServerPage({ params }: { params: { id: strin
         return <div>No Permission</div>
     }
 
-    const accounts = await prisma.accounts.findMany({
+    const accounts = await prisma.account.findMany({
         where: {
             ownerId: session?.user.id
         },
@@ -28,16 +29,21 @@ export default async function ManageServerPage({ params }: { params: { id: strin
         }
     });
 
-    const userGroupsPromises = accounts.map(account => {
-        return axios.get(`https://groups.roblox.com/v2/users/${account.id}/groups/roles?includeLocked=true`);
+    const userGroupsPromises = accounts.map(async account => {
+        return await fetch(`https://groups.roblox.com/v2/users/${account.id}/groups/roles?includeLocked=true`)
+            .then(response => { return response.json(); });
     });
 
     const userGroupsResponses = await Promise.all(userGroupsPromises);
 
-    const userGroups: Array<UserGroup> = userGroupsResponses.map(response => response.data.data).reduce((acc, current) => [...acc, ...current], []).filter((userGroup: UserGroup) => userGroup.role.rank == 255);
+    const userGroups: Array<UserGroup> = userGroupsResponses
+        .map(response => response.data)
+        .reduce((acc, current) => [...acc, ...current], [])
+        .filter((userGroup: UserGroup) => userGroup.role.rank == 255);
 
     return (
         <div className='flex-col space-y-2 w-full'>
+            <div>{session.user.id}</div>
             <div className='flex items-center justify-between space-x-4 bg-neutral-800 w-full px-4 py-2 rounded shadow-lg'>
                 <div className='flex items-center space-x-4'>
                     {guild.imageUrl ? (

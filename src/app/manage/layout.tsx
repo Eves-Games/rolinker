@@ -16,9 +16,9 @@ export default function ManageLayout({
                         <UsersIcon className="h-6" />
                         <span>Accounts</span>
                     </Link>
-                    <Link href='/manage/servers' className='flex items-center justify-between space-x-4 w-full px-4 py-2 hover:bg-neutral-700 rounded-b'>
+                    <Link href='/manage/guilds' className='flex items-center justify-between space-x-4 w-full px-4 py-2 hover:bg-neutral-700 rounded-b'>
                         <CircleStackIcon className="h-6" />
-                        <span>Servers</span>
+                        <span>Guilds</span>
                     </Link>
                 </div>
                 {children}
