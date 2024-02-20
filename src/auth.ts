@@ -14,6 +14,7 @@ export const {
         async session({ session, token }) {
             if (session?.user) {
                 session.user.id = token.sub;
+                session.user.access_token = token.accessToken;
                 delete session.user.email;
             }
             return session;
