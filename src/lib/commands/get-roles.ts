@@ -1,8 +1,8 @@
-import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, APIInteractionResponseCallbackData, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
+import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
 import { NextResponse } from "next/server";
 
 export async function getRoles(interaction: APIChatInputApplicationCommandInteraction) {
-    const res = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/members/${interaction.user?.id}/roles/1197897676692398170`, {
+    const res = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/members/${interaction.member?.user.id}/roles/1197897676692398170`, {
         method: 'PUT',
         headers: {
             Authorization: 'Bot ' + process.env.DISCORD_BOT_TOKEN,
@@ -23,7 +23,7 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
                             { name: 'Status', value: res.status.toString(), inline: false },
                             { name: 'Error', value: `\`\`\`${responseText}\`\`\``, inline: false },
                             { name: 'Guild ID', value: interaction.guild_id || 'Null', inline: true },
-                            { name: 'User ID', value: interaction.user?.id || 'Null', inline: true },
+                            { name: 'User ID', value: interaction.member?.user.id || 'Null', inline: true },
                         ]
                     }
                 ],
