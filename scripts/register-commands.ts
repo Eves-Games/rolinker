@@ -1,4 +1,4 @@
-import { commands } from '@/lib/commands';
+import { commands } from '@/commands';
 import dotenv from 'dotenv';
 dotenv.config();
 

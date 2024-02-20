@@ -1,4 +1,5 @@
-import { commands } from "@/lib/commands"
+import { commands } from "@/commands"
+import { getRoles } from "@/lib/commands/get-roles"
 import { verifyInteractionRequest } from "@/lib/verify-discord-request"
 import {
     APIApplicationCommandInteractionDataMentionableOption,
@@ -42,28 +43,15 @@ export async function POST(request: Request) {
                             {
                                 title: 'Link with RoLinker',
                                 description: 'Click to access RoLinker.net',
-                                url: 'https://rolinker.net'
+                                url: 'https://rolinker.net',
                             }
                         ],
-                        components: [],
                         flags: MessageFlags.Ephemeral,
                     },
                 });
 
             case commands.getroles.name:
-                await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/members/${interaction.user?.id}/roles/1197897676692398170`, {
-                    method: 'PUT',
-                    headers: {
-                        Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`
-                    }
-                })
-                return NextResponse.json({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        content: `Get roles`,
-                        flags: MessageFlags.Ephemeral,
-                    },
-                });
+                return getRoles(interaction);
 
             case commands.getsubguilds.name:
                 return NextResponse.json({
