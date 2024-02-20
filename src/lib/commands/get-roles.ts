@@ -1,4 +1,4 @@
-import { APIChatInputApplicationCommandInteraction, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
+import { APIChatInputApplicationCommandInteraction, APIInteractionResponseCallbackData, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
 import { NextResponse } from "next/server";
 
 export async function getRoles(interaction: APIChatInputApplicationCommandInteraction) {
@@ -20,15 +20,15 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
                         title: 'Something went wrong!',
                         color: 15548997,
                         fields: [
-                            { name: 'Status', value: res.status, inline: true },
+                            { name: 'Status', value: res.status.toString(), inline: true },
                             { name: 'Body', value: responseText, inline: true },
-                            { name: 'Guild ID', value: interaction.guild_id, inline: true },
-                            { name: 'User ID', value: interaction.user?.id, inline: true },
+                            { name: 'Guild ID', value: interaction.guild_id || 'nil', inline: true },
+                            { name: 'User ID', value: interaction.user?.id || 'nil', inline: true },
                         ]
                     }
                 ],
                 flags: MessageFlags.Ephemeral,
-            },
+            } satisfies APIInteractionResponseCallbackData,
         });
     };
 
