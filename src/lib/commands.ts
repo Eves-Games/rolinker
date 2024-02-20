@@ -1,5 +1,3 @@
-import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
-
 const PING_COMMAND = {
     name: 'ping',
     description: 'responds with pong',

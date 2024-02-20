@@ -1,5 +1,7 @@
 import { APIApplicationCommand } from "discord-api-types/v10";
 
+export const runtime = 'edge';
+
 export default async function Page() {
     const res = await fetch(`https://discord.com/api/v10/applications/${process.env.DISCORD_CLIENT_ID}/commands`, {
         headers: {
