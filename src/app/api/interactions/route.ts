@@ -33,10 +33,10 @@ export async function POST(request: Request) {
                 });
 
             case commands.link.name:
-                return NextResponse.json(link());
+                return NextResponse.json(await link());
 
             case commands.getroles.name:
-                return NextResponse.json(getRoles(interaction));
+                return NextResponse.json(await getRoles(interaction));
 
             case commands.getsubguilds.name:
                 return NextResponse.json({
