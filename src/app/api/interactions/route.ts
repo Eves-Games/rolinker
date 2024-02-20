@@ -1,5 +1,5 @@
 import { commands } from "@/lib/commands"
-import { verifyInteractionRequest } from "@/discord/verify-incoming-request"
+import { verifyInteractionRequest } from "@/lib/verify-discord-request"
 import {
     InteractionResponseType,
     InteractionType,
@@ -10,13 +10,11 @@ import { NextResponse } from "next/server"
 export const runtime = "edge"
 
 export async function POST(request: Request) {
-    const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_CLIENT_ID as string)
+    const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_PUBLIC_KEY as string)
     if (!verifyResult.isValid || !verifyResult.interaction) {
         return new NextResponse("Invalid request", { status: 401 })
     }
     const { interaction } = verifyResult
-
-    console.log(interaction)
 
     if (interaction.type === InteractionType.Ping) {
         return NextResponse.json({ type: InteractionResponseType.Pong })
