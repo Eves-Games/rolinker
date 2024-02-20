@@ -1,14 +1,10 @@
-import { auth } from '@/auth';
-import RegisterCommandsCard from '@/components/RegisterCommandsCard';
 import { commands } from '@/lib/commands';
+import dotenv from 'dotenv';
+dotenv.config();
 
-export const runtime = "edge";
+const URL = `https://discord.com/api/v10/applications/${process.env.DISCORD_CLIENT_ID}/commands`;
 
-async function registerCommands() {
-    'use server';
-
-    const URL = `https://discord.com/api/v10/applications/${process.env.DISCORD_CLIENT_ID}/commands`;
-
+async function main() {
     const response = await fetch(URL, {
         headers: {
             "Content-Type": "application/json",
@@ -37,14 +33,4 @@ async function registerCommands() {
     };
 };
 
-export default async function Admin() {
-    const session = await auth();
-
-    return (
-        <section className='container'>
-            <h1 className='font-bold text-3xl mb-4'>Admin</h1>
-
-            <RegisterCommandsCard registerCommands={registerCommands} />
-        </section>
-    );
-};
+main();

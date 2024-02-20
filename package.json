@@ -31,6 +31,7 @@
     "react": "^18",
     "react-dom": "^18",
     "roblox-provider": "^1.0.19",
+    "tsx": "^4.7.1",
     "tweetnacl": "^1.0.3",
     "uninstall": "^0.0.0",
     "vercel": "^33.5.1"
