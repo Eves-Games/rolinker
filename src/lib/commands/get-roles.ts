@@ -1,4 +1,4 @@
-import { APIChatInputApplicationCommandInteraction, APIInteractionResponseCallbackData, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
+import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, APIInteractionResponseCallbackData, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
 import { NextResponse } from "next/server";
 
 export async function getRoles(interaction: APIChatInputApplicationCommandInteraction) {
@@ -11,7 +11,7 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
 
     if (!res.ok) {
         const responseText = (await res.text()).substring(0, 1024)
-        
+
         return NextResponse.json({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
@@ -19,17 +19,17 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
                     {
                         title: 'Something went wrong!',
                         color: 15548997,
+                        description: res.status.toString(),
                         fields: [
-                            { name: 'Status', value: res.status.toString(), inline: true },
-                            { name: 'Body', value: responseText, inline: true },
+                            { name: 'Status', value: res.status.toString(), inline: false },
                             { name: 'Guild ID', value: interaction.guild_id || 'nil', inline: true },
                             { name: 'User ID', value: interaction.user?.id || 'nil', inline: true },
                         ]
                     }
                 ],
                 flags: MessageFlags.Ephemeral,
-            } satisfies APIInteractionResponseCallbackData,
-        });
+            },
+        } satisfies APIInteractionResponse);
     };
 
     return NextResponse.json({
@@ -38,5 +38,5 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
             content: `Get roles`,
             flags: MessageFlags.Ephemeral,
         },
-    });
+    } satisfies APIInteractionResponse);
 }
