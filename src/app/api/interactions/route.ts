@@ -27,7 +27,7 @@ export async function POST(request: Request) {
             case commands.ping.name:
                 return NextResponse.json({
                     type: InteractionResponseType.ChannelMessageWithSource,
-                    data: { content: `Pong` },
+                    data: { content: 'Pong' },
                 })
 
             case commands.link.name:
