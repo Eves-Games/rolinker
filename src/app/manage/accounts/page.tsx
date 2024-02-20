@@ -3,6 +3,10 @@ import { AccountItem } from '@/components/AccountItem';
 import { Thumbnail, User } from '@/roblox-api';
 import { auth } from '@/auth';
 import db from '@/lib/db';
+import { StarIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export const runtime = "edge";
 
@@ -153,6 +157,33 @@ export default async function ManageAccounts() {
   return (
     <div className='flex-col space-y-2 w-full'>
       {doneAccounts.map((account) => (
+        /* Get a way to reload accounts list after set primary/delete account to make accountItem deprecated
+        <>
+          <div className='flex items-center justify-between space-x-4 bg-neutral-800 w-full px-4 py-2 rounded shadow-lg'>
+            <div className='flex items-center space-x-4'>
+              <Image src={account.imageUrl} alt='Avatar Icon' className='h-16 w-16 rounded' width={100} height={100} />
+              <span className='text-lg'>{account.name}</span>
+            </div>
+            <div className='flex items-center space-x-2'>
+              {account.isPrimary ? (
+                <div className="px-2 py-2 transition rounded">
+                  <SolidStarIcon className="h-6" />
+                </div>
+              ) : (
+                <form action={() => setPrimary(account.id)}>
+                  <button className="px-2 py-2 transition hover:bg-neutral-700 rounded">
+                    <StarIcon className="h-6" />
+                  </button>
+                </form>
+              )}
+              <form action={() => deleteAccount(account.id)}>
+                <button className="px-2 py-2 transition hover:bg-neutral-700 rounded">
+                  <TrashIcon className="h-6 stroke-red-500" />
+                </button>
+              </form>
+            </div>
+          </div>
+        </>*/
         <AccountItem key={account.id} {...account} deleteAccount={deleteAccount} setPrimary={setPrimary} />
       ))}
       <AddAccount />
