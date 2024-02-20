@@ -18,7 +18,7 @@ export default function Footer() {
                 <section className='flex flex-col gap-1'>
                     <span className='font-bold text-xl'>Legal</span>
                     <Link href='/privacy-policy'>Privacy Policy</Link>
-                    <Link href='/terms-and-services'>Terms and Services</Link>
+                    <Link href='/terms-of-service'>Terms of Service</Link>
                 </section>
                 <section className='flex flex-col gap-1'>
                     <span className='font-bold text-xl'>Social</span>

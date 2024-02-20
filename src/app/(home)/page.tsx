@@ -1,5 +1,5 @@
 export default function Home() {
   return (
-    <div></div>
+    <h1 className='container'>home</h1>
   );
 }
