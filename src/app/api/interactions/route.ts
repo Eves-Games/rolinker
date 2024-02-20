@@ -51,6 +51,12 @@ export async function POST(request: Request) {
                 });
 
             case commands.getroles.name:
+                await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/members/${interaction.user?.id}/roles/1197897676692398170`, {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`
+                    }
+                })
                 return NextResponse.json({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
