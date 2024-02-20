@@ -16,6 +16,7 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
                 embeds: [
                     {
                         title: 'Something went wrong!',
+                        description: `Guild ID: ${interaction.guild_id}, User ID: ${interaction.user?.id}`,
                         color: 15548997,
                     }
                 ],
