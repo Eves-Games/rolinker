@@ -3,10 +3,6 @@ import { AccountItem } from '@/components/AccountItem';
 import { Thumbnail, User } from '@/roblox-api';
 import { auth } from '@/auth';
 import db from '@/lib/db';
-import { StarIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 export const runtime = "edge";
 
