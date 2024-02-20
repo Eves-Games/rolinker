@@ -7,9 +7,11 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
         headers: {
             Authorization: 'Bot ' + process.env.DISCORD_BOT_TOKEN,
         }
-    })
+    });
 
     if (!res.ok) {
+        const responseText = (await res.text()).substring(0, 1024)
+        
         return NextResponse.json({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
@@ -19,7 +21,7 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
                         color: 15548997,
                         fields: [
                             { name: 'Status', value: res.status, inline: true },
-                            { name: 'Body', value: res.text(), inline: true },
+                            { name: 'Body', value: responseText, inline: true },
                             { name: 'Guild ID', value: interaction.guild_id, inline: true },
                             { name: 'User ID', value: interaction.user?.id, inline: true },
                         ]
