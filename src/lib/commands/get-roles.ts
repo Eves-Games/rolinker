@@ -19,11 +19,11 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
                     {
                         title: 'Something went wrong!',
                         color: 15548997,
-                        description: res.status.toString(),
+                        description: `\`${responseText}\``,
                         fields: [
                             { name: 'Status', value: res.status.toString(), inline: false },
-                            { name: 'Guild ID', value: interaction.guild_id || 'nil', inline: true },
-                            { name: 'User ID', value: interaction.user?.id || 'nil', inline: true },
+                            { name: 'Guild ID', value: interaction.guild_id || 'Null', inline: true },
+                            { name: 'User ID', value: interaction.user?.id || 'Null', inline: true },
                         ]
                     }
                 ],
