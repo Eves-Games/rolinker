@@ -1,13 +1,17 @@
-import { APIApplication } from "discord-api-types/v10";
-
-export const runtime = "edge";
+import { APIApplicationCommand } from "discord-api-types/v10";
 
 export default async function Page() {
-    const commands = await fetch(`https://discord.com/api/v10/applications/${process.env.DISCORD_CLIENT_ID}/commands`, {
+    const res = await fetch(`https://discord.com/api/v10/applications/${process.env.DISCORD_CLIENT_ID}/commands`, {
         headers: {
             Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
         }
-    }).then((res) => res.json() as Promise<APIApplication[]>);
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch commands');
+    };
+
+    const commands = await res.json() as Array<APIApplicationCommand>;
 
     return (
         <section className='container'>
