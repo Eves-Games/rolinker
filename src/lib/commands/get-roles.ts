@@ -16,8 +16,13 @@ export async function getRoles(interaction: APIChatInputApplicationCommandIntera
                 embeds: [
                     {
                         title: 'Something went wrong!',
-                        description: `Guild ID: ${interaction.guild_id}, User ID: ${interaction.user?.id}`,
                         color: 15548997,
+                        fields: [
+                            {name: 'Status', value: res.status, inline: true},
+                            {name: 'Body', value: res.body, inline: true},
+                            {name: 'Guild ID', value: interaction.guild_id, inline: true},
+                            {name: 'User ID', value: interaction.user?.id, inline: true},
+                        ]
                     }
                 ],
                 flags: MessageFlags.Ephemeral,
