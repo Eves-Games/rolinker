@@ -1,11 +1,8 @@
 import { commands } from "@/commands"
 import { getRoles } from "@/lib/commands/get-roles"
+import { link } from '@/lib/commands/link'
 import { verifyInteractionRequest } from "@/lib/verify-discord-request"
 import {
-    APIApplicationCommandInteractionDataMentionableOption,
-    APIMessageComponentBaseInteractionData,
-    APIModalInteractionResponse,
-    APIModalInteractionResponseCallbackData,
     InteractionResponseType,
     InteractionType,
     MessageFlags,
@@ -36,22 +33,10 @@ export async function POST(request: Request) {
                 });
 
             case commands.link.name:
-                return NextResponse.json({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        embeds: [
-                            {
-                                title: 'Link with RoLinker',
-                                description: 'Click to access RoLinker.net',
-                                url: 'https://rolinker.net',
-                            }
-                        ],
-                        flags: MessageFlags.Ephemeral,
-                    },
-                });
+                return NextResponse.json(link());
 
             case commands.getroles.name:
-                return getRoles(interaction);
+                return NextResponse.json(getRoles(interaction));
 
             case commands.getsubguilds.name:
                 return NextResponse.json({
