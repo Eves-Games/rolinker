@@ -10,16 +10,29 @@ interface Guild {
     id: string;
 }
 
-export default async function ManageServer() {
+export default async function Page() {
     const session = await auth();
 
-    const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
+    const res = await fetch('https://discord.com/api/users/@me/guilds', {
         headers: {
             Authorization: 'Bearer ' + session?.user.access_token
         }
     });
 
-    const guilds: Array<Guild> = await guildsRes.json();
+    if (!res.ok) {
+        throw new Error('Failed to fetch guilds');
+    };
+
+    const guilds: Array<Guild> = await res.json();
+
+    if (guilds.length === 0) {
+        return (
+            <a href='https://discord.com/api/oauth2/authorize?client_id=990855457885278208&permissions=8&scope=bot+applications.commands' target='_blank' className="px-4 py-2 w-full flex justify-center items-center transition hover:bg-neutral-700 bg-neutral-800 rounded shadow-lg">
+                <PlusIcon className="h-16 w-6" />
+            </a>
+        )
+    }
+
     const guildIds: Array<string> = guilds.map(guild => guild.id);
 
     const knownGuilds = await prisma.guild.findMany({
