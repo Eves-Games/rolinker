@@ -2,6 +2,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import UserCard from './UserCard';
 import { auth, signIn } from '@/auth';
+import NavButton from '@/components/NavButton';
+
+export interface NavLink {
+  name: string;
+  href: string;
+};
+
+const NavLinks = [
+  { name: 'Commands', href: '/commands' },
+  { name: 'Pricing', href: '/pricing' },
+  { name: 'Support', href: 'https://discord.gg/CJDuGzwFX4' },
+] satisfies Array<NavLink>;
 
 export default async function Nav() {
   const session = await auth();
@@ -9,16 +21,17 @@ export default async function Nav() {
   return (
     <nav className='flex justify-between py-4 container'>
       <div className='flex items-center gap-4'>
-        <Link href='/' className='flex items-center py-2 gap-4'>
-          <Image src='/rolinker.png' alt='Brand Icon' className='h-8 w-8' height={64} width={64} />
+        <Link href='/' className='flex items-center gap-4'>
+          <Image src='/rolinker.png' alt='Brand Icon' className='h-10 w-10' height={64} width={64} />
           <span className='font-bold text-xl'>RoLinker</span>
         </Link>
-        <div className='flex items-center gap-2'>
-          <Link href='/' className='px-4 py-2 rounded hover:bg-neutral-800 hover:shadow-lg'>Home</Link>
-          <Link href='/commands' className='px-4 py-2 rounded hover:bg-neutral-800 hover:shadow-lg'>Commands</Link>
+        <div className='hidden flex items-center gap-2 sm:flex'>
+          {NavLinks.map((navLink, index) => (
+            <Link key={index} href={navLink.href} className='px-4 py-2 rounded hover:bg-neutral-800 hover:shadow-lg'>{navLink.name}</Link>
+          ))}
         </div>
       </div>
-      <div className='flex items-center'>
+      <div className='flex items-center gap-2'>
         {session?.user ? (
           <UserCard {...session.user} />
         ) : (
@@ -38,6 +51,7 @@ export default async function Nav() {
             </button>
           </form>
         )}
+        <NavButton navLinks={NavLinks} />
       </div >
     </nav >
   );
