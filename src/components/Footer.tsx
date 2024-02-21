@@ -22,7 +22,7 @@ export default function Footer() {
                 </section>
                 <section className='flex flex-col gap-1'>
                     <span className='font-bold text-xl'>Social</span>
-                    <a href='https://discord.gg/CJDuGzwFX4' target='_blank'>Discord</a>
+                    <Link href='https://discord.gg/CJDuGzwFX4' target='_blank'>Discord</Link>
                 </section>
             </div>
             <p className='text-sm text-neutral-400'>&copy; 2024 Eve&apos;s Games, SP. We are not affiliated with or endorsed by the Roblox Corporation.</p>

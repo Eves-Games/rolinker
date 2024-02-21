@@ -107,7 +107,7 @@ async function deleteAccount(id: string) {
   }
 }
 
-export default async function ManageAccounts() {
+export default async function Page() {
   const session = await auth();
 
   const accounts = await db.account.findMany({

@@ -11,7 +11,7 @@ export default async function Page() {
         throw new Error('Failed to fetch commands');
     };
 
-    const commands = await res.json() as Array<APIApplicationCommand>;
+    const commands: Array<APIApplicationCommand> = await res.json();
 
     return (
         <section className='container'>

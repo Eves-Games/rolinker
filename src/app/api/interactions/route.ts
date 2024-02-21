@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 
             default:
         }
-    }
+    };
 
     return new NextResponse("Unknown command", { status: 400 });
-}
+};

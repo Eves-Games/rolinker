@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 
 export const runtime = "edge";
 
-export default async function ManageServerPage({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
     const session = await auth();
 
     const guild = await prisma.guild.findUnique({
