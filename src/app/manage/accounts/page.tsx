@@ -1,14 +1,15 @@
 import AddAccount from '../../../components/AddAccount'
-import { AccountItem } from '@/components/AccountItem';
+import { PlusIcon, StarIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
 import { Thumbnail, User } from '@/roblox-api';
-import { auth } from '@/auth';
+import { auth, signIn } from '@/auth';
+import Image from 'next/image';
 import db from '@/lib/db';
+import { revalidatePath } from 'next/cache';
 
 export const runtime = "edge";
 
 async function setPrimary(id: string) {
-  'use server';
-
   try {
     const session = await auth();
 
@@ -53,8 +54,6 @@ async function setPrimary(id: string) {
 }
 
 async function deleteAccount(id: string) {
-  'use server';
-
   try {
     const session = await auth();
 
@@ -151,38 +150,52 @@ export default async function Page() {
   });
 
   return (
-    <div className='flex-col space-y-2 w-full'>
+    <div className='grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-2 w-full'>
       {doneAccounts.map((account) => (
-        /* Get a way to reload accounts list after set primary/delete account to make accountItem deprecated
-        <>
-          <div className='flex items-center justify-between space-x-4 bg-neutral-800 w-full px-4 py-2 rounded shadow-lg'>
-            <div className='flex items-center space-x-4'>
-              <Image src={account.imageUrl} alt='Avatar Icon' className='h-16 w-16 rounded' width={100} height={100} />
-              <span className='text-lg'>{account.name}</span>
-            </div>
-            <div className='flex items-center space-x-2'>
-              {account.isPrimary ? (
-                <div className="px-2 py-2 transition rounded">
-                  <SolidStarIcon className="h-6" />
-                </div>
-              ) : (
-                <form action={() => setPrimary(account.id)}>
-                  <button className="px-2 py-2 transition hover:bg-neutral-700 rounded">
-                    <StarIcon className="h-6" />
-                  </button>
-                </form>
-              )}
-              <form action={() => deleteAccount(account.id)}>
+        <div key={account.id} className='flex items-center justify-between space-x-4 bg-neutral-800 w-full px-4 py-2 rounded shadow-lg'>
+          <div className='flex items-center space-x-4'>
+            <Image src={account.imageUrl} alt='Avatar Icon' className='h-16 w-16 rounded' width={100} height={100} />
+            <span className='text-lg'>{account.name}</span>
+          </div>
+          <div className='flex items-center space-x-2'>
+            {account.isPrimary ? (
+              <div className="px-2 py-2 transition rounded">
+                <SolidStarIcon className="h-6" />
+              </div>
+            ) : (
+              <form action={async () => {
+                'use server';
+
+                await setPrimary(account.id);
+                await revalidatePath('/');
+              }}>
                 <button className="px-2 py-2 transition hover:bg-neutral-700 rounded">
-                  <TrashIcon className="h-6 stroke-red-500" />
+                  <StarIcon className="h-6" />
                 </button>
               </form>
-            </div>
+            )}
+            <form action={async () => {
+              'use server';
+
+              await deleteAccount(account.id);
+              await revalidatePath('/');
+            }}>
+              <button className="px-2 py-2 transition hover:bg-neutral-700 rounded">
+                <TrashIcon className="h-6 stroke-red-500" />
+              </button>
+            </form>
           </div>
-        </>*/
-        <AccountItem key={account.id} {...account} deleteAccount={deleteAccount} setPrimary={setPrimary} />
+        </div>
       ))}
-      <AddAccount />
+      <form className='col-span-full' action={async () => {
+        'use server';
+
+        await signIn("roblox");
+      }}>
+        <button className="px-4 py-2 w-full flex justify-center items-center transition hover:bg-neutral-700 bg-neutral-800 rounded shadow-lg">
+          <PlusIcon className="h-16 w-6" />
+        </button>
+      </form>
     </div>
   );
 };
