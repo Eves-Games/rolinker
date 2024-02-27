@@ -1,4 +1,3 @@
-import AddAccount from '../../../components/AddAccount'
 import { PlusIcon, StarIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
 import { Thumbnail, User } from '@/roblox-api';
