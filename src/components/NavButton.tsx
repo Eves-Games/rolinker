@@ -11,7 +11,7 @@ interface NavLinks {
 
 export default function NavButton({ navLinks }: NavLinks) {
     return (
-        <Menu as='div' className='relative sm:hidden'>
+        <Menu as='div' className='relative md:hidden'>
             <Menu.Button className='flex items-center px-2 py-2 rounded hover:shadow-lg hover:bg-neutral-800 ui-open:bg-neutral-800 ui-open:shadow-lg'>
                 <Bars3Icon className='h-8 w-8' />
             </Menu.Button>

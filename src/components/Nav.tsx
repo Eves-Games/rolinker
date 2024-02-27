@@ -25,7 +25,7 @@ export default async function Nav() {
           <Image src='/rolinker.png' alt='Brand Icon' className='h-10 w-10' height={64} width={64} />
           <span className='font-bold text-xl'>RoLinker</span>
         </Link>
-        <div className='hidden flex items-center gap-2 sm:flex'>
+        <div className='hidden flex items-center gap-2 md:flex'>
           {NavLinks.map((navLink, index) => (
             <Link key={index} href={navLink.href} className='px-4 py-2 rounded hover:bg-neutral-800 hover:shadow-lg'>{navLink.name}</Link>
           ))}
