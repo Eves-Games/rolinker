@@ -1,29 +1,42 @@
 import prisma from "@/lib/db";
 import { PlusIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { APIGuild } from "discord-api-types/v10"
 import Link from 'next/link';
 import Image from 'next/image';
 import { auth } from "@/auth";
 
 export const runtime = "edge";
 
-interface Guild {
-    id: string;
-}
-
 export default async function Page() {
     const session = await auth();
 
-    const res = await fetch('https://discord.com/api/users/@me/guilds', {
+    const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
         headers: {
             Authorization: 'Bearer ' + session?.user.access_token
         }
     });
 
-    if (!res.ok) {
+    if (!guildsRes.ok) {
         throw new Error('Failed to fetch guilds');
     };
 
-    const guilds: Array<Guild> = await res.json();
+    const guilds: Array<APIGuild> = await guildsRes.json();
+    const ownedGuilds: Array<APIGuild> = guilds.filter(guild => guild.owner === true);
+
+    const fetchGuildPreview = async (guild: APIGuild) => {
+        const guildRes = await fetch(`https://discord.com/api/v10/guilds/${guild.id}/preview`, {
+            headers: {
+                Authorization: 'Bot ' + process.env.DISCORD_BOT_TOKEN,
+            }
+        });
+    
+        return await guildRes.json();
+    };
+    
+    const activeGuildsPromises = ownedGuilds.map(guild => fetchGuildPreview(guild));
+    const activeGuilds = await Promise.all(activeGuildsPromises);
+    
+    console.log(activeGuilds);
 
     if (guilds.length === 0) {
         return (
@@ -34,6 +47,7 @@ export default async function Page() {
     }
 
     const guildIds: Array<string> = guilds.map(guild => guild.id);
+
 
     const knownGuilds = await prisma.guild.findMany({
         where: {
