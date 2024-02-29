@@ -20,9 +20,7 @@ model Account {
 
 model Guild {
   id               String    @id @map("_id")
-  name             String
   ownerId          String
-  imageUrl         String?
   groupId          String?
   inviteChannelId  String?
   parentGuildId    String?
