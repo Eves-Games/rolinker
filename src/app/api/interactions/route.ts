@@ -1,7 +1,7 @@
 import { commands } from "@/commands"
-import { getRoles } from "@/lib/commands/get-roles"
-import { link } from '@/lib/commands/link'
-import { verifyInteractionRequest } from "@/lib/verify-discord-request"
+import { getRoles } from "@/lib/discord/commands/get-roles"
+import { link } from '@/lib/discord/commands/link'
+import { verifyInteractionRequest } from "@/lib/discord/verify-discord-request"
 import {
     InteractionResponseType,
     InteractionType,
