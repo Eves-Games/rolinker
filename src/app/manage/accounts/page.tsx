@@ -1,10 +1,9 @@
 import { PlusIcon, StarIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
-import { Thumbnail, User } from '@/roblox-api';
+import { ThumbnailBatchResponse, GetUserResponse } from 'roblox-api-types';
 import { auth, signIn } from '@/auth';
 import Image from 'next/image';
 import db from '@/lib/db';
-import { revalidatePath } from 'next/cache';
 
 export const runtime = "edge";
 
@@ -134,8 +133,8 @@ export default async function Page() {
   const thumbnailsResponse = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-bust?userIds=${accounts.map(account => account.id).join(',')}&size=75x75&format=Png&isCircular=false`)
     .then(response => { return response.json() });
 
-  const users: Array<User> = usersResponse.data;
-  const thumbnails: Array<Thumbnail> = thumbnailsResponse.data;
+  const users: Array<GetUserResponse> = usersResponse.data;
+  const thumbnails: Array<ThumbnailBatchResponse> = thumbnailsResponse.data;
 
   const doneAccounts = accounts.map(account => {
     const user = users.find(user => user.id.toString() === account.id);
