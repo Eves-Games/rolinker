@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 )}
             </div>
             {!botGuild && (
-                <Link className="px-4 py-2 w-full flex justify-center items-center gap-4 hover:bg-neutral-700 bg-neutral-800 rounded shadow-lg" href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=cod`}>
+                <Link className="px-4 py-2 w-full flex justify-center items-center gap-4 hover:bg-neutral-700 bg-neutral-800 rounded shadow-lg" href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`}>
                     Add RoLinker<PlusIcon className="h-16 w-6" />
                 </Link>
             )}
