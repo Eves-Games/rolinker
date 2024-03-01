@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { getBotGuild, getUserGuilds } from "@/lib/guilds";
+import { getBotGuild, getUserGuild, getUserGuilds } from "@/lib/guilds";
 import { PlusIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { APIGuild } from "discord-api-types/v10";
 import Link from "next/link";
@@ -10,16 +10,27 @@ export const runtime = "edge";
 export default async function Page({ params }: { params: { id: string } }) {
     const session = await auth();
 
-    const userGuilds: Array<APIGuild> = await getUserGuilds(session?.user.access_token);
-    const userGuild: APIGuild | undefined = userGuilds.find(guild => guild.id === params.id);
+    const userGuild: APIGuild | null = await getUserGuild(params.id, session?.user.access_token);
 
     if (!userGuild || !userGuild.owner) {
         return (
-            <div>No permission</div>
+            <div className='flex-col space-y-2 w-full'>
+                <div className='flex items-center justify-between space-x-4 bg-neutral-800 w-full px-4 py-2 rounded shadow-lg'>
+                    <div className='flex items-center space-x-4'>
+                        <div className='h-16 w-16 flex items-center justify-center'>
+                            <span className='text-4xl'>?</span>
+                        </div>
+                        <span className='text-lg'>{params.id}</span>
+                    </div>
+                    <div className='flex items-center gap-4'>
+                        <ExclamationTriangleIcon className="h-16 w-6" />You do not have permission to view this guild.
+                    </div>
+                </div>
+            </div>
         )
     };
 
-    const botGuild: APIGuild = await getBotGuild(params.id);
+    const botGuild: APIGuild | null = await getBotGuild(params.id);
 
     return (
         <div className='flex-col space-y-2 w-full'>
@@ -36,7 +47,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
                 {!botGuild && (
                     <div className='flex items-center gap-4'>
-                        <ExclamationTriangleIcon className="h-16 w-6" />RoLinker is not a member of this guild.
+                        <ExclamationTriangleIcon className="h-16 w-6" />RoLinker bot is not a member of this guild.
                     </div>
                 )}
             </div>
