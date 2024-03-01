@@ -13,10 +13,6 @@ export async function getBotGuild(id: string) {
 
     const guild = await guildRes.json();
 
-    if (!guild) {
-        throw new Error('Failed to fetch guild');
-    };
-
     return guild;
 };
 
@@ -25,7 +21,7 @@ export async function getUserGuilds(access_token: string) {
     
     const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
         headers: {
-            Authorization: 'Bearer ' + access_token
+            Authorization: 'Bearer ' + access_token,
         }
     });
 
@@ -34,10 +30,6 @@ export async function getUserGuilds(access_token: string) {
     };
 
     const guilds = await guildsRes.json();
-
-    if (!guilds) {
-        throw new Error('Failed to fetch guilds');
-    };
 
     return guilds;
 };

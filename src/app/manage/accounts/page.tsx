@@ -156,7 +156,7 @@ export default async function Page() {
             <span className='text-lg'>{account.name}</span>
           </div>
           {account.isPrimary && (
-            <div className="px-2 py-2 transition rounded">
+            <div className="px-2 py-2 rounded">
               <SolidStarIcon className="h-6" />
             </div>
           )}
@@ -167,7 +167,7 @@ export default async function Page() {
 
         await signIn("roblox");
       }}>
-        <button className="px-4 py-2 w-full flex justify-center items-center transition hover:bg-neutral-700 bg-neutral-800 rounded shadow-lg">
+        <button className="px-4 py-2 w-full flex justify-center items-center hover:bg-neutral-700 bg-neutral-800 rounded shadow-lg">
           <PlusIcon className="h-16 w-6" />
         </button>
       </form>
