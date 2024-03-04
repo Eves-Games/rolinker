@@ -4,6 +4,7 @@ import { PlusIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { APIGuild } from "discord-api-types/v10";
 import Link from "next/link";
 import Image from 'next/image';
+import GuildOptions from "@/components/GuildOptions";
 
 export const runtime = "edge";
 
@@ -56,6 +57,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     Add RoLinker<PlusIcon className="h-16 w-6" />
                 </Link>
             )}
+            <GuildOptions />
         </div>
     )
 }
