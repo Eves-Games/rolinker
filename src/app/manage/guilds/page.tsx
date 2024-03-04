@@ -13,11 +13,17 @@ export default async function Page() {
 
     if (!guilds) {
         return (
-            <div>No guilds!</div>
-        )
-    }
+            <div>You are apart of no guilds!</div>
+        );
+    };
 
     const ownedGuilds: Array<APIGuild> = guilds.filter(guild => guild.owner === true);
+
+    if (ownedGuilds.length === 0) {
+        return (
+            <div>You own no guilds!</div>
+        );
+    };
 
     return (
         <div className='grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-2 w-full'>
