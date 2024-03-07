@@ -33,16 +33,16 @@ export async function POST(request: Request) {
                 });
 
             case commands.link.name:
-                return NextResponse.json(await link());
+                return NextResponse.json(await link(interaction));
 
             case commands.getroles.name:
                 return NextResponse.json(await getRoles(interaction));
 
-            case commands.getsubguilds.name:
+            case commands.getdivisions.name:
                 return NextResponse.json({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
-                        content: `Get sub-guilds`,
+                        content: 'Get divisions',
                         flags: MessageFlags.Ephemeral,
                     },
                 });
