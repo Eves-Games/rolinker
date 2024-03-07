@@ -1,8 +1,10 @@
+'use server';
+
 import { APIGuild } from "discord-api-types/v10";
+import db from "@/lib/db";
+import { auth } from "@/auth";
 
 export async function getBotGuild(id: string) {
-    'use server';
-
     const guildRes = await fetch(`https://discord.com/api/v10/guilds/${id}`, {
         headers: {
             Authorization: 'Bot ' + process.env.DISCORD_BOT_TOKEN,
@@ -10,18 +12,42 @@ export async function getBotGuild(id: string) {
         next: { revalidate: 4 }
     });
 
+
+
     if (!guildRes.ok) {
+        delGuildDoc(id)
         return null;
     };
 
     const guild: APIGuild = await guildRes.json();
 
+    setupGuildDoc(guild)
+
     return guild;
 };
 
-export async function getUserGuild(id: string, access_token: string) {
-    'use server';
+async function delGuildDoc(id: string) {
+    try {
+        await db.guild.delete({
+            where: {
+                id: id
+            }
+        })
+    } catch {}
+}
 
+async function setupGuildDoc(guild: APIGuild) {
+    try {
+        await db.guild.create({
+            data: {
+                id: guild.id,
+                ownerId: guild.owner_id
+            }
+        })
+    } catch {}
+}
+
+export async function getUserGuild(id: string, access_token: string) {
     const guilds: Array<APIGuild> | null = await getUserGuilds(access_token);
 
     if (!guilds) {
@@ -38,8 +64,6 @@ export async function getUserGuild(id: string, access_token: string) {
 };
 
 export async function getUserGuilds(access_token: string) {
-    'use server';
-
     const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
         headers: {
             Authorization: 'Bearer ' + access_token,
@@ -54,4 +78,24 @@ export async function getUserGuilds(access_token: string) {
     const guilds: Array<APIGuild> = await guildsRes.json();
 
     return guilds;
+};
+
+export async function updateGuildGroup(guildId: string, groupId: string) {
+    const session = await auth()
+
+    try {
+        await db.guild.update({
+            where: {
+                id: guildId,
+                ownerId: session?.user.id
+            },
+            data: {
+                groupId: groupId
+            }
+        })
+    } catch {
+        return false;
+    }
+
+    return true;
 };
