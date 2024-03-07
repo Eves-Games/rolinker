@@ -19,7 +19,6 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
 
     useEffect(() => {
         setCanSubmit(selectedGroup.id !== initialGroup.id);
-        console.log(canSubmit)
     }, [selectedGroup, initialGroup]);
 
     return (
