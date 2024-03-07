@@ -1,6 +1,6 @@
-import { APIInteractionResponse, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
+import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
 
-export async function link() {
+export async function link(interaction?: APIChatInputApplicationCommandInteraction) {
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
@@ -19,4 +19,4 @@ export async function link() {
             flags: MessageFlags.Ephemeral,
         },
     } satisfies APIInteractionResponse;
-}
+};
