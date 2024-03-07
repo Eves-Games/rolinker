@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer"
+import Nav from "@/app/_components/Nav";
+import Footer from "@/app/_components/Footer"
 import { auth } from "@/auth";
 
 const open_sans = Open_Sans({
