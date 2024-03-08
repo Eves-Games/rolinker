@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { getGuild } from "@/lib/guilds";
+import { getUserGuild } from "@/lib/guilds";
 import { PlusIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { APIGuild } from "discord-api-types/v10";
 import { Options } from "../_components/Options";
@@ -10,18 +10,48 @@ import Image from "next/image";
 
 export const runtime = "edge";
 
+enum GuildStatus {
+    NotFound = 'Not Found',
+    Unauthorized = 'Unauthorized',
+    Authorized = 'Authorized'
+}
+
 export default async function Page({ params }: { params: { id: string } }) {
     const session = await auth();
 
-    const guildRes: { status: string; guild: APIGuild | null } = await getGuild(params.id);
-    const guild = guildRes.guild;
+    let guild = await db.guild.findUnique({
+        where: {
+            id: params.id
+        }
+    });
+
+    let status = !guild ? GuildStatus.NotFound : (guild.ownerId !== session?.user.id ? GuildStatus.Unauthorized : GuildStatus.Authorized);
+
+    if (status == GuildStatus.NotFound) {
+        const userGuild: APIGuild | null = await getUserGuild(params.id, session?.user.access_token)
+
+        if (!userGuild?.owner) {
+            status = GuildStatus.Unauthorized
+        } else {
+            guild = {
+                id: userGuild.id,
+                name: userGuild.name,
+                ownerId: userGuild.owner_id,
+                iconUrl: `https://cdn.discordapp.com/icons/${userGuild.id}/${userGuild.icon}.png`,
+                groupId: null,
+                inviteChannelId: null,
+                parentGuildId: null,
+                linkedAccountIds: []
+            }
+        }
+    }
 
     const guildContent = guild ? (
         <>
-            {guild.icon ? (
-                <Image src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`} alt={`${guild.name} Icon`} className='h-16 w-16 rounded' width={100} height={100} />
+            {guild.iconUrl ? (
+                <Image src={guild.iconUrl} alt={`${guild.name} Icon`} className='h-16 w-16 rounded' width={100} height={100} />
             ) : (
-                <span className='h-16 w-16 flex items-center justify-center'>{guild.name.charAt(0)}</span>
+                <span className='h-16 w-16 flex items-center text-4xl justify-center'>{guild.name.charAt(0)}</span>
             )
             }
             <span className='text-lg'>{guild.name}</span>
@@ -33,7 +63,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         </>
     );
 
-    if (guildRes.status == 'Unauthorized') {
+    if (status == GuildStatus.Unauthorized) {
         return (
             <>
                 <Block className='flex space-x-4 justify-between items-center w-full'>
@@ -48,11 +78,11 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </Block>
             </>
         );
-    } else if (guildRes.status == 'Not Found') {
+    } else if (status == GuildStatus.NotFound) {
         return (
             <>
                 <div className='flex-col space-y-2 w-full'>
-                    <Block className='flex space-x-4 justify-between items-center w-full'>
+                    <Block className='flex space-x-4 justify-between items-center'>
                         <div className='flex items-center space-x-4'>
                             {guildContent}
                         </div>
@@ -62,7 +92,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         </div>
                     </Block>
                     {guild && (
-                        <Block className='flex space-x-4 justify-center items-center w-full' href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`}>
+                        <Block className='flex space-x-4 justify-center items-center' href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`}>
                             <span>Add RoLinker</span>
                             <PlusIcon className="h-16 w-6" />
                         </Block>
@@ -103,7 +133,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         }
     });
 
-    const currentGroupId = currentGuild ? (currentGuild.groupId ? parseInt(currentGuild.groupId) : 0) : 0;
+    const currentGroupId = currentGuild?.groupId ? parseInt(currentGuild.groupId) : 0;
 
     return (
         <div className='flex-col space-y-2 w-full'>
