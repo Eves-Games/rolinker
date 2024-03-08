@@ -37,7 +37,10 @@ export default async function Nav() {
         {session?.user ? (
           <UserCard {...session.user} />
         ) : (
-          <form action={async () => await signIn('discord')}>
+          <form action={async () => {
+            'use server';
+            await signIn('discord')
+          }}>
             <button className='flex items-center gap-4 px-4 py-2 rounded transition-colors bg-[#5865F2] hover:bg-opacity-75 whitespace-nowrap'>
               <DiscordLogo />
               <span>Sign in</span>
