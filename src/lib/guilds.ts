@@ -4,26 +4,41 @@ import { APIGuild } from "discord-api-types/v10";
 import db from "@/lib/db";
 import { auth } from "@/auth";
 
-export async function getBotGuild(id: string) {
-    const guildRes = await fetch(`https://discord.com/api/v10/guilds/${id}`, {
+enum GuildAuthStatus {
+    NotFound = 'Not Found',
+    Unauthorized = 'Unauthorized',
+    Authorized = 'Authorized',
+}
+
+export async function getGuild(guildId: string) {
+    const session = await auth();
+
+    const botGuildRes = await fetch(`https://discord.com/api/v10/guilds/${guildId}`, {
         headers: {
             Authorization: 'Bot ' + process.env.DISCORD_BOT_TOKEN,
         },
         next: { revalidate: 4 }
     });
 
+    if (!botGuildRes.ok) {
+        const userGuild = await getUserGuild(guildId, session?.user.access_token)
+        delGuildDoc(guildId)
 
+        if (!userGuild || !userGuild.owner) {
+            return { status: GuildAuthStatus.Unauthorized, guild: userGuild }
+        }
 
-    if (!guildRes.ok) {
-        delGuildDoc(id)
-        return null;
+        return { status: GuildAuthStatus.NotFound, guild: userGuild };
     };
 
-    const guild: APIGuild = await guildRes.json();
+    const botGuild: APIGuild = await botGuildRes.json();
+    setupGuildDoc(botGuild);
 
-    setupGuildDoc(guild)
+    if (botGuild.owner_id !== session?.user.id) {
+        return { status: GuildAuthStatus.Unauthorized, guild: botGuild };
+    };
 
-    return guild;
+    return { status: GuildAuthStatus.Authorized, guild: botGuild };
 };
 
 async function delGuildDoc(id: string) {
@@ -33,7 +48,7 @@ async function delGuildDoc(id: string) {
                 id: id
             }
         })
-    } catch {}
+    } catch { }
 }
 
 async function setupGuildDoc(guild: APIGuild) {
@@ -44,10 +59,10 @@ async function setupGuildDoc(guild: APIGuild) {
                 ownerId: guild.owner_id
             }
         })
-    } catch {}
+    } catch { }
 }
 
-export async function getUserGuild(id: string, access_token: string) {
+async function getUserGuild(id: string, access_token: string) {
     const guilds: Array<APIGuild> | null = await getUserGuilds(access_token);
 
     if (!guilds) {
