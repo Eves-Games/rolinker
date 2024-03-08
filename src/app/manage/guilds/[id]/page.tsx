@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 id: userGuild.id,
                 name: userGuild.name,
                 ownerId: userGuild.owner_id,
-                iconUrl: `https://cdn.discordapp.com/icons/${userGuild.id}/${userGuild.icon}.png`,
+                iconUrl: userGuild.icon ? `https://cdn.discordapp.com/icons/${userGuild.id}/${userGuild.icon}.png` : null,
                 groupId: null,
                 inviteChannelId: null,
                 parentGuildId: null,
