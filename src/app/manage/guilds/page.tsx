@@ -1,7 +1,8 @@
 import { APIGuild } from "discord-api-types/v10"
 import { auth } from "@/auth";
 import { getUserGuilds } from "@/lib/guilds";
-import { Guild } from "./_components/Guild";
+import Image from "next/image";
+import Block from "@/app/_components/Block";
 
 export const runtime = "edge";
 
@@ -27,7 +28,16 @@ export default async function Page() {
     return (
         <div className='grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-2 w-full'>
             {ownedGuilds.length !== 0 && ownedGuilds.map((guild) => (
-                <Guild key={guild.id} href={`/manage/guilds/${guild.id}`} guild={guild} className={`${ownedGuilds.length === 1 && 'col-span-full'}`} />
+                <Block key={guild.id} href={`/manage/guilds/${guild.id}`} className={`${ownedGuilds.length === 1 && 'col-span-full'} flex space-x-4 items-center`}>
+                    {guild.icon ? (
+                        <Image src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`} alt={`${guild.name} Icon`} className='h-16 w-16 rounded' width={100} height={100} />
+                    ) : (
+                        <div className='h-16 w-16 flex items-center justify-center'>
+                            <span className='text-4xl'>{guild.name.charAt(0)}</span>
+                        </div>
+                    )}
+                    <span className='text-lg'>{guild.name}</span>
+                </Block>
             ))}
         </div>
     );

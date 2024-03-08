@@ -10,7 +10,7 @@ interface OptionsProps {
     id: string;
     currentGroupId: number | null;
     groups: GroupBasicResponse[];
-}
+};
 
 export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) => {
     const [selectedGroup, setSelectedGroup] = useState(groups.find(group => group.id == currentGroupId) || groups[0]);
