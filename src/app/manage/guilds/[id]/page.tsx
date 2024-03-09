@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     if (status == GuildStatus.Unauthorized) {
         return (
             <>
-                <Block className='flex space-x-4 justify-between items-center w-full'>
+                <Block className='flex space-x-4 py-2 px-4 justify-between items-center w-full'>
                     <div className='flex items-center space-x-4'>
                         <span className='h-16 w-16 flex items-center text-4xl justify-center'>U</span>
                         <span className='text-lg'>Unauthorized</span>
@@ -82,7 +82,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         return (
             <>
                 <div className='flex-col space-y-2 w-full'>
-                    <Block className='flex space-x-4 justify-between items-center'>
+                    <Block className='flex space-x-4 px-4 py-2 justify-between items-center'>
                         <div className='flex items-center space-x-4'>
                             {guildContent}
                         </div>
@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         </div>
                     </Block>
                     {guild && (
-                        <Block className='flex space-x-4 justify-center items-center' href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`}>
+                        <Block className='flex space-x-4 px-4 py-2 justify-center items-center' href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`}>
                             <span>Add RoLinker</span>
                             <PlusIcon className="h-16 w-6" />
                         </Block>
@@ -137,7 +137,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <div className='flex-col space-y-2 w-full'>
-            <Block className='flex space-x-4 items-center'>
+            <Block className='flex space-x-4 py-2 px-4 items-center'>
                 {guildContent}
             </Block>
             <Options id={params.id} currentGroupId={currentGroupId} groups={ownedGroups} />

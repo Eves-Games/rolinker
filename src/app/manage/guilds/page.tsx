@@ -28,7 +28,7 @@ export default async function Page() {
     return (
         <div className='grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-2 w-full'>
             {ownedGuilds.length !== 0 && ownedGuilds.map((guild) => (
-                <Block key={guild.id} href={`/manage/guilds/${guild.id}`} className={`${ownedGuilds.length === 1 && 'col-span-full'} flex space-x-4 items-center`}>
+                <Block key={guild.id} href={`/manage/guilds/${guild.id}`} className={`${ownedGuilds.length === 1 && 'col-span-full'} px-4 py-2 flex space-x-4 items-center`}>
                     {guild.icon ? (
                         <Image src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`} alt={`${guild.name} Icon`} className='h-16 w-16 rounded' width={100} height={100} />
                     ) : (

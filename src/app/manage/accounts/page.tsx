@@ -4,6 +4,7 @@ import { ThumbnailBatchResponse, GetUserResponse } from 'roblox-api-types';
 import { auth, signIn } from '@/auth';
 import Image from 'next/image';
 import db from '@/lib/db';
+import Block from '@/app/_components/Block';
 
 export const runtime = "edge";
 
@@ -148,27 +149,30 @@ export default async function Page() {
   });
 
   return (
-    <div className='grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-2 w-full'>
-      {doneAccounts.map((account) => (
-        <button key={account.id} className='flex items-center justify-between space-x-4 bg-neutral-800 w-full px-4 py-2 rounded shadow-lg hover:bg-neutral-700'>
-          <div className='flex items-center space-x-4'>
-            <Image src={account.imageUrl} alt='Avatar Icon' className='h-16 w-16 rounded' width={100} height={100} />
-            <span className='text-lg'>{account.name}</span>
-          </div>
-          {account.isPrimary && (
-            <div className="px-2 py-2 rounded">
-              <SolidStarIcon className="h-6" />
+    <div className='flex flex-col space-y-2 w-full'>
+      <div className='grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-2'>
+        {doneAccounts.map((account) => (
+          <Block key={account.id} href={`/manage/accounts/${account.id}`} className='flex items-center justify-between space-x-4 px-4 py-2'>
+            <div className='flex items-center space-x-4'>
+              <Image src={account.imageUrl} alt='Avatar Icon' className='h-16 w-16 rounded' width={100} height={100} />
+              <span className='text-lg'>{account.name}</span>
             </div>
-          )}
-        </button>
-      ))}
-      <form className='col-span-full' action={async () => {
+            {account.isPrimary && (
+              <div className="px-2 py-2 rounded">
+                <SolidStarIcon className="h-6" />
+              </div>
+            )}
+          </Block>
+        ))}
+      </div>
+      <form action={async () => {
         'use server';
 
         await signIn("roblox");
       }}>
-        <button className="px-4 py-2 w-full flex justify-center items-center hover:bg-neutral-700 bg-neutral-800 rounded shadow-lg">
-          <PlusIcon className="h-16 w-6" />
+        <button className='flex items-center space-x-4 py-2 px-4 rounded bg-neutral-800 hover:bg-neutral-700 shadow-lg'>
+          <span>Add Account</span>
+          <PlusIcon className="h-6 w-6" />
         </button>
       </form>
     </div>
