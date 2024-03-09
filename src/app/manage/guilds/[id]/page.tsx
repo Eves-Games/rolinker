@@ -12,7 +12,7 @@ export const runtime = "edge";
 
 interface APIGuild extends OriginalAPIGuild {
     id: string;
-  }
+}
 
 enum GuildStatus {
     NotFound = 'Not Found',

@@ -2,11 +2,9 @@
 
 import { auth } from '@/auth';
 import db from '@/lib/db';
+import { rest } from '@/lib/discord';
 import { getRoles } from '@/lib/roblox';
-import { REST } from '@discordjs/rest';
 import { RESTGetAPIGuildRolesResult, Routes } from 'discord-api-types/v10';
-
-const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN as string)
 
 export async function GenDiscordRoles(guildId: string) {
     const session = await auth();
@@ -30,7 +28,7 @@ export async function GenDiscordRoles(guildId: string) {
         guildRoles = guildRolesData.map(guildRole => guildRole.name);
     } catch { return };
 
-    const filteredGroupRoles = groupRoles.roles.reverse().filter(groupRole => !guildRoles.includes(groupRole.name));
+    const filteredGroupRoles = groupRoles.reverse().filter(groupRole => !guildRoles.includes(groupRole.name));
 
     filteredGroupRoles.forEach(async groupRole => {
         await rest.post(Routes.guildRoles(guildId), {
@@ -38,6 +36,6 @@ export async function GenDiscordRoles(guildId: string) {
                 name: groupRole.name,
                 hoist: true
             }
-        }).catch()
+        }).catch(err => console.log(err))
     })
 };

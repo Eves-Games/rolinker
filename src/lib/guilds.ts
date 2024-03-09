@@ -1,8 +1,12 @@
 'use server';
 
-import { APIGuild } from "discord-api-types/v10";
+import { APIGuild as OriginalAPIGuild } from "discord-api-types/v10";
 import db from "@/lib/db";
 import { auth } from "@/auth";
+
+interface APIGuild extends OriginalAPIGuild {
+    id: string;
+}
 
 export async function getUserGuild(id: string, access_token: string) {
     const guilds: Array<APIGuild> | null = await getUserGuilds(access_token);

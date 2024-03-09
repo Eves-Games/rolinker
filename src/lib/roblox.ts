@@ -21,5 +21,7 @@ export async function getRoles(groupId: string) {
 
     if (!res.ok) return null;
 
-    return await res.json() as GroupRoles;
+    const GroupRoles = await res.json() as GroupRoles;
+
+    return GroupRoles.roles;
 };
