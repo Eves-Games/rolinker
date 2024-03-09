@@ -22,12 +22,12 @@ export async function GenDiscordRoles(guildId: string) {
     };
 
     const groupRoles = await getRoles(guild.groupId);
-    let guildRoles: Array<string>
+    let guildRoles: Array<string> = [];
 
     try {
-        const guildRolesData: RESTGetAPIGuildRolesResult = await rest.get(Routes.guildRoles(guildId));
+        const guildRolesData: RESTGetAPIGuildRolesResult = await rest.get(Routes.guildRoles(guildId)) as RESTGetAPIGuildRolesResult;
         guildRoles = guildRolesData.map(guildRole => guildRole.name);
-    } catch {
+    } catch (error) {
         return;
     }
 
