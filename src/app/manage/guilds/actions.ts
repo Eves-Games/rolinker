@@ -31,11 +31,15 @@ export async function GenDiscordRoles(guildId: string) {
     const filteredGroupRoles = groupRoles.reverse().filter(groupRole => !guildRoles.includes(groupRole.name));
 
     filteredGroupRoles.forEach(async groupRole => {
-        await rest.post(Routes.guildRoles(guildId), {
-            body: {
-                name: groupRole.name,
-                hoist: true
-            }
-        }).catch(err => console.log(err))
+        try {
+            await rest.post(Routes.guildRoles(guildId), {
+                body: {
+                    name: groupRole.name,
+                    hoist: true
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
     })
 };
