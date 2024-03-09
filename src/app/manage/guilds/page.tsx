@@ -1,10 +1,14 @@
-import { APIGuild } from "discord-api-types/v10"
+import { APIGuild as OriginalAPIGuild } from "discord-api-types/v10";
 import { auth } from "@/auth";
 import { getUserGuilds } from "@/lib/guilds";
 import Image from "next/image";
 import Block from "@/app/_components/Block";
 
 export const runtime = "edge";
+
+interface APIGuild extends OriginalAPIGuild {
+  id: string;
+}
 
 export default async function Page() {
     const session = await auth();

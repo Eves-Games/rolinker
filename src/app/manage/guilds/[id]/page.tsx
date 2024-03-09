@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { getUserGuild } from "@/lib/guilds";
 import { PlusIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { APIGuild } from "discord-api-types/v10";
+import { APIGuild as OriginalAPIGuild } from "discord-api-types/v10";
 import { Options } from "../_components/Options";
 import db from "@/lib/db";
 import { GroupBasicResponse, GroupMembershipResponse } from "roblox-api-types";
@@ -9,6 +9,10 @@ import Block from "@/app/_components/Block";
 import Image from "next/image";
 
 export const runtime = "edge";
+
+interface APIGuild extends OriginalAPIGuild {
+    id: string;
+  }
 
 enum GuildStatus {
     NotFound = 'Not Found',
@@ -28,7 +32,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     let status = !guild ? GuildStatus.NotFound : (guild.ownerId !== session?.user.id ? GuildStatus.Unauthorized : GuildStatus.Authorized);
 
     if (status == GuildStatus.NotFound) {
-        const userGuild: APIGuild | null = await getUserGuild(params.id, session?.user.access_token)
+        const userGuild: APIGuild | null = await getUserGuild(params.id, session?.user.access_token);
 
         if (!userGuild?.owner) {
             status = GuildStatus.Unauthorized
