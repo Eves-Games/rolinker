@@ -9,7 +9,7 @@ import { RESTGetAPIGuildRolesResult, Routes } from 'discord-api-types/v10';
 export async function GenDiscordRoles(guildId: string) {
     const session = await auth();
 
-    const guild = await db.guild.findUnique({
+    const guild = await db.guild.findFirst({
         where: {
             id: guildId
         }
@@ -26,22 +26,18 @@ export async function GenDiscordRoles(guildId: string) {
     try {
         const guildRolesData: RESTGetAPIGuildRolesResult = await rest.get(Routes.guildRoles(guildId)) as RESTGetAPIGuildRolesResult;
         guildRoles = guildRolesData.map(guildRole => guildRole.name);
-        console.log(guildRoles)
     } catch { return };
 
     const filteredGroupRoles = groupRoles.reverse().filter(groupRole => !guildRoles.includes(groupRole.name));
-    console.log(filteredGroupRoles)
 
-    filteredGroupRoles.forEach(async groupRole => {
-        try {
-            await rest.post(Routes.guildRoles(guildId), {
-                body: {
-                    name: groupRole.name,
-                    hoist: true
-                }
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    })
+    const roleCreationPromises = filteredGroupRoles.map(async groupRole => {
+        await rest.post(Routes.guildRoles(guildId), {
+            body: {
+                name: groupRole.name,
+                hoist: true
+            }
+        }).catch();
+    });
+
+    await Promise.all(roleCreationPromises);
 };
