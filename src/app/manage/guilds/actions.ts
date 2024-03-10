@@ -26,9 +26,11 @@ export async function GenDiscordRoles(guildId: string) {
     try {
         const guildRolesData: RESTGetAPIGuildRolesResult = await rest.get(Routes.guildRoles(guildId)) as RESTGetAPIGuildRolesResult;
         guildRoles = guildRolesData.map(guildRole => guildRole.name);
+        console.log(guildRoles)
     } catch { return };
 
     const filteredGroupRoles = groupRoles.reverse().filter(groupRole => !guildRoles.includes(groupRole.name));
+    console.log(filteredGroupRoles)
 
     filteredGroupRoles.forEach(async groupRole => {
         try {
