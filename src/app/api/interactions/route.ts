@@ -1,6 +1,6 @@
 import { commands } from "@/commands"
-import { getRoles } from "@/lib/discord/commands/get-roles"
-import { link } from '@/lib/discord/commands/link'
+import { getRolesCommand } from "@/lib/discord/commands/get-roles"
+import { linkCommand } from '@/lib/discord/commands/link'
 import { verifyInteractionRequest } from "@/lib/discord/verify-discord-request"
 import {
     InteractionResponseType,
@@ -33,10 +33,10 @@ export async function POST(request: Request) {
                 });
 
             case commands.link.name:
-                return NextResponse.json(await link(interaction));
+                return NextResponse.json(await linkCommand(interaction));
 
             case commands.getroles.name:
-                return NextResponse.json(await getRoles(interaction));
+                return NextResponse.json(await getRolesCommand(interaction));
 
             case commands.getdivisions.name:
                 return NextResponse.json({

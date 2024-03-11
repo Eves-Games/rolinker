@@ -1,6 +1,6 @@
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
 
-export async function link(interaction?: APIChatInputApplicationCommandInteraction) {
+export async function linkCommand(interaction?: APIChatInputApplicationCommandInteraction) {
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {

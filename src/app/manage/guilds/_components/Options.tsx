@@ -5,7 +5,7 @@ import { Disclosure, Listbox } from '@headlessui/react';
 import { UserGroupIcon, PlusIcon, MinusIcon, CheckIcon, ChevronUpDownIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { GroupBasicResponse } from 'roblox-api-types';
-import { GenDiscordRoles } from '../actions';
+import { genDiscordRoles } from '@/lib/discord';
 
 interface OptionsProps {
     id: string;
@@ -38,7 +38,7 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                             <div className='space-y-2'>
                                 <span className='text-lg'>Discord Roles</span>
                                 <form action={async () => {
-                                    await GenDiscordRoles(id);
+                                    await genDiscordRoles(id);
                                 }}>
                                     <button className='flex justify-between w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg'>
                                         <span className='truncate'>Generate Discord Roles</span>

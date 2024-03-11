@@ -1,6 +1,43 @@
-import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
+import db from "@/lib/db";
+import { rest } from "@/lib/discord";
+import { getRoles, getUserRoles } from "@/lib/roblox";
+import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
 
-export async function getRoles(interaction: APIChatInputApplicationCommandInteraction) {
+export async function getRolesCommand(interaction: APIChatInputApplicationCommandInteraction) {
+    const guildId = interaction.guild_id;
+
+    if (!guildId) return;
+
+    const guild = await db.guild.findFirst({
+        where: {
+            id: guildId
+        }
+    });
+
+    const account = await db.account.findFirst({
+        where: {
+            ownerId: interaction.user?.id
+        }
+    })
+
+    if (!guild?.groupId || !account) return;
+
+    const userRoles = await getUserRoles(account.id) || [];
+    const userRoleNames = userRoles.filter(userRole => userRole.group.id.toString() === guild.groupId).map(userRole => userRole.role.name)
+
+    const groupRoles = await getRoles(guild.groupId);
+    const groupRoleNames = groupRoles?.map(groupRole => groupRole.name);
+
+    const memberRoles = interaction.member?.roles || [];
+
+    if (!userRoles || !groupRoles || !groupRoleNames) return;
+
+    const memberGroupRoles = memberRoles.filter(memberRole => groupRoleNames.includes(memberRole));
+    const removeRoles = memberGroupRoles.map(memberGroupRole => userRoleNames.includes(memberGroupRole))
+    const addRole = memberGroupRoles.map(memberGroupRole => !userRoleNames.includes(memberGroupRole))
+
+    console.log(removeRoles, addRole);
+    
     const res = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/members/${interaction.member?.user.id}/roles/1197897676692398170`, {
         method: 'PUT',
         headers: {

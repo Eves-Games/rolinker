@@ -12,18 +12,18 @@ export const runtime = "edge";
 
 interface APIGuild extends OriginalAPIGuild {
     id: string;
-}
+};
 
 enum GuildStatus {
     NotFound = 'Not Found',
     Unauthorized = 'Unauthorized',
     Authorized = 'Authorized'
-}
+};
 
 export default async function Page({ params }: { params: { id: string } }) {
     const session = await auth();
 
-    let guild = await db.guild.findUnique({
+    let guild = await db.guild.findFirst({
         where: {
             id: params.id
         }
@@ -46,9 +46,9 @@ export default async function Page({ params }: { params: { id: string } }) {
                 inviteChannelId: null,
                 parentGuildId: null,
                 linkedAccountIds: []
-            }
-        }
-    }
+            };
+        };
+    };
 
     const guildContent = guild ? (
         <>
