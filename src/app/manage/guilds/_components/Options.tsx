@@ -5,7 +5,7 @@ import { Disclosure, Listbox } from '@headlessui/react';
 import { UserGroupIcon, PlusIcon, MinusIcon, CheckIcon, ChevronUpDownIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { GroupBasicResponse } from 'roblox-api-types';
-import { genDiscordRoles } from '@/lib/discord';
+import { genDiscordRoles } from '../actions';
 
 interface OptionsProps {
     id: string;
