@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import Nav from "@/app/_components/Nav";
 import Footer from "@/app/_components/Footer"
 import { auth } from "@/auth";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const open_sans = Open_Sans({
   subsets: ["latin"],
