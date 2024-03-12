@@ -19,11 +19,14 @@ export async function getDetailedAccounts(ownerId: string) {
             userIds: accounts.map((account) => parseInt(account.id)),
             excludeBannedUsers: true,
         }),
+        next: { revalidate: 3600 }
     }).then((res) => res.json());
 
     const users: GetUserResponse[] = usersResponse.data;
 
-    const thumbnailsResponse = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-bust?userIds=${accounts.map(account => account.id).join(',')}&size=75x75&format=Png&isCircular=false`).then(
+    const thumbnailsResponse = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-bust?userIds=${accounts.map(account => account.id).join(',')}&size=75x75&format=Png&isCircular=false`, {
+        next: { revalidate: 60 }
+    }).then(
         (res) => res.json()
     );
 
