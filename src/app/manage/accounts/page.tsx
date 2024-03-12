@@ -8,6 +8,8 @@ import { deleteAccount, updatePrimaryAccount } from './actions';
 import { StarIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
 
+export const runtime = 'edge';
+
 interface Account {
   id: string;
   ownerId: string;
