@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import { rest } from "@/lib/discord";
+import { rest } from '@/lib/discord/rest';
 import { getRoles, getUserRoles } from "@/lib/roblox";
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
 
