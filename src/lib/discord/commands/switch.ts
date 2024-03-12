@@ -53,7 +53,12 @@ export async function switchCommand(interaction?: APIChatInputApplicationCommand
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
-            content: 'Please select an option:',
+            embeds: [
+                {
+                    title: 'Select a Roblox Account',
+                    description: 'This will change what account is being used only in this server.'
+                },
+            ],
             components: [
                 {
                     type: ComponentType.ActionRow,
