@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 groupId: null,
                 inviteChannelId: null,
                 parentGuildId: null,
-                linkedAccountIds: []
+                accountIds: []
             };
         };
     };
