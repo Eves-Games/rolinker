@@ -9,27 +9,28 @@ datasource db {
 }
 
 model Account {
-  id             String   @id @map("_id")
-  isPrimary      Boolean  @default(false)
-  ownerId        String
-  linkedGuilds   Guild[]  @relation(fields: [linkedGuildIds], references: [id])
-  linkedGuildIds String[]
+  id        String   @id @map("_id")
+  ownerId   String
+  isPrimary Boolean  @default(false)
+  guildIds  String[]
+  guilds    Guild[]  @relation(fields: [guildIds], references: [id])
 
+  @@unique([ownerId, isPrimary], name: "oneAccountPerUserPrimary")
   @@index([ownerId])
 }
 
 model Guild {
-  id               String    @id @map("_id")
-  name             String
-  ownerId          String
-  iconUrl          String?
-  groupId          String?
-  inviteChannelId  String?
-  parentGuildId    String?
-  parentGuild      Guild?    @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childGuilds      Guild[]   @relation("ParentChild")
-  linkedAccounts   Account[] @relation(fields: [linkedAccountIds], references: [id])
-  linkedAccountIds String[]
+  id              String    @id @map("_id")
+  name            String
+  ownerId         String
+  iconUrl         String?
+  groupId         String?
+  inviteChannelId String?
+  parentGuildId   String?
+  accountIds      String[]
+  parentGuild     Guild?    @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childGuilds     Guild[]   @relation("ParentChild")
+  accounts        Account[] @relation(fields: [accountIds], references: [id])
 
   @@index([ownerId])
 }
