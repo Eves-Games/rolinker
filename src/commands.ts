@@ -8,6 +8,11 @@ const LINK_COMMAND = {
     description: 'redirect user to link web-page'
 };
 
+const SWITCH_COMMAND = {
+    name: 'switch',
+    description: 'switch roblox account being used'
+};
+
 const GET_ROLES_COMMAND = {
     name: 'get-roles',
     description: 'assign roblox group roles to user'
@@ -21,6 +26,7 @@ const GET_DIVISIONS_COMMAND = {
 export const commands = {
     ping: PING_COMMAND,
     link: LINK_COMMAND,
+    switch: SWITCH_COMMAND,
     getroles: GET_ROLES_COMMAND,
     getdivisions: GET_DIVISIONS_COMMAND,
 };

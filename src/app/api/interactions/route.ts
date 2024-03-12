@@ -1,6 +1,7 @@
 import { commands } from "@/commands"
 import { getRolesCommand } from "@/lib/discord/commands/get-roles"
 import { linkCommand } from '@/lib/discord/commands/link'
+import { switchCommand } from '@/lib/discord/commands/switch'
 import { verifyInteractionRequest } from "@/lib/discord/verify-discord-request"
 import {
     InteractionResponseType,
@@ -34,6 +35,9 @@ export async function POST(request: Request) {
 
             case commands.link.name:
                 return NextResponse.json(await linkCommand(interaction));
+            
+            case commands.switch.name:
+                return NextResponse.json(await switchCommand(interaction));
 
             case commands.getroles.name:
                 return NextResponse.json(await getRolesCommand(interaction));
