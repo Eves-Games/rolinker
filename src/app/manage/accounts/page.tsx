@@ -58,6 +58,9 @@ export default function Page() {
     session.data ? `/api/user/${session.data?.user.id}/accounts` : null,
     fetcher
   );
+
+  const [primaryId, setPrimaryId] = useState(accounts?.find(account => account.isPrimary)?.id || '');
+
   if (isLoading) {
     return <div>Loading...</div>;
   };
@@ -65,8 +68,6 @@ export default function Page() {
   if (error || !accounts) {
     return <div>Error loading accounts</div>;
   };
-
-  const [primaryId, setPrimaryId] = useState(accounts.find(account => account.isPrimary)?.id || '');
 
   const primaryAccount = accounts.find((account) => account.id === primaryId);
   const otherAccounts = accounts.filter((account) => account.id !== primaryId);
