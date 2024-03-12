@@ -2,7 +2,7 @@ import { getDetailedAccounts } from '@/lib/accounts';
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, ComponentType } from 'discord-api-types/v10';
 
 export async function switchCommand(interaction?: APIChatInputApplicationCommandInteraction) {
-    const ownerId = await interaction?.user?.id
+    const ownerId = await interaction?.member?.user.id
 
     if (!ownerId) {
         return {
