@@ -97,7 +97,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     </Block>
                     {guild && (
                         <Block className='flex space-x-4 px-4 py-2 justify-center items-center' href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`}>
-                            <span>Add RoLinker</span>
+                            <span>Add Guild</span>
                             <PlusIcon className="h-16 w-6" />
                         </Block>
                     )

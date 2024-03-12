@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth';
 import db from '@/lib/db';
-import { rest } from '@/lib/discord';
+import { rest } from '@/lib/discord/rest';
 import { getRoles } from '@/lib/roblox';
 import { RESTGetAPIGuildRolesResult, Routes } from 'discord-api-types/v10';
 

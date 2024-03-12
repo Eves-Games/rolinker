@@ -80,7 +80,7 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                 setInitialGroup(selectedGroup);
                 await updateGuildGroup(id, selectedGroup.id.toString());
             }}>
-                <button className={`bg-green-700 font-bold py-2 px-4 rounded ${canSubmit ? 'hover:bg-green-600' : 'opacity-50 cursor-not-allowed'}`} disabled={!canSubmit}>
+                <button className={`bg-green-700 py-2 px-4 rounded ${canSubmit ? 'hover:bg-green-600' : 'opacity-50 cursor-not-allowed'}`} disabled={!canSubmit}>
                     Save Changes
                 </button>
             </form>
