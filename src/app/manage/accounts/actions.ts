@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import db from "@/lib/db";
 
-export async function setPrimaryAccount(accountId: string) {
+export async function updatePrimaryAccount(accountId: string) {
     const session = await auth();
 
     if (!session?.user) return;

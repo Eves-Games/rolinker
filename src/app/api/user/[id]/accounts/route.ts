@@ -1,5 +1,7 @@
+import { getDetailedAccounts } from "@/lib/accounts";
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import { ThumbnailBatchResponse, GetUserResponse } from "roblox-api-types";
 
 export const runtime = "edge";
 
@@ -11,11 +13,7 @@ export async function GET(
         status: 400,
     });
 
-    const accounts = await db.account.findMany({
-        where: {
-            ownerId: params.id
-        }
-    });
+    const detailedAccounts = await getDetailedAccounts(params.id)
 
-    return NextResponse.json(accounts)
+    return NextResponse.json(detailedAccounts);
 };

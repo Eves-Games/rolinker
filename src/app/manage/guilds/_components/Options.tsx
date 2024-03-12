@@ -29,10 +29,10 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                     <div className='rounded bg-neutral-800 shadow-lg'>
                         <Disclosure.Button className='flex items-center justify-between space-x-4 w-full px-4 py-2 hover:bg-neutral-700 rounded'>
                             <div className='flex items-center space-x-4'>
-                                <UserGroupIcon className='h-6 w-6' />
+                                <UserGroupIcon className='size-6' />
                                 <span className='text-lg'>Group Options</span>
                             </div>
-                            {open ? <MinusIcon className='h-6 w-6' /> : <PlusIcon className='h-6 w-6' />}
+                            {open ? <MinusIcon className='size-6' /> : <PlusIcon className='size-6' />}
                         </Disclosure.Button>
                         <Disclosure.Panel className='gap-4 grid grid-cols-1 md:grid-cols-3 py-2 px-4'>
                             <div className='space-y-2'>
@@ -42,7 +42,7 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                                 }}>
                                     <button className='flex justify-between w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg'>
                                         <span className='truncate'>Generate Discord Roles</span>
-                                        <ArrowPathIcon className='h-6' aria-hidden='true' />
+                                        <ArrowPathIcon className='size-6' aria-hidden='true' />
                                     </button>
                                 </form>
                             </div>
@@ -51,7 +51,7 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                                 <Listbox value={selectedGroup} onChange={setSelectedGroup}>
                                     <Listbox.Button className='w-full flex justify-between rounded-lg bg-neutral-700 hover:bg-neutral-600 py-2 px-4 shadow-lg'>
                                         <span className='truncate'>{selectedGroup.name} ({selectedGroup.id})</span>
-                                        <ChevronUpDownIcon className='h-6' aria-hidden='true' />
+                                        <ChevronUpDownIcon className='size-6' aria-hidden='true' />
                                     </Listbox.Button>
                                     <Listbox.Options className='absolute mt-2 max-h-60 w-full overflow-auto rounded-md bg-neutral-700 shadow-lg'>
                                         {groups.map((group, index) => (
@@ -64,7 +64,7 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                                                 {({ selected }) => (
                                                     <>
                                                         <span className='block truncate'>{group.name} ({group.id})</span>
-                                                        {selected && <CheckIcon className='h-6' aria-hidden='true' />}
+                                                        {selected && <CheckIcon className='size-6' aria-hidden='true' />}
                                                     </>
                                                 )}
                                             </Listbox.Option>
