@@ -11,7 +11,7 @@ export async function GET(
         status: 400,
     });
 
-    const account = db.account.findUnique({
+    const account = await db.account.findUnique({
         where: {
             id: params.id,
         }
