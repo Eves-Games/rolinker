@@ -8,15 +8,34 @@ datasource db {
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
+model User {
+  id        String    @id @map("_id")
+  email     String    @unique
+  name      String
+  apiKeys   API_Key[]
+  accounts  Account[]
+  guilds    Guild[]
+}
+
+model API_Key {
+  id        String @id @map("_id")
+  userId    String
+  guildId   String @unique
+  createdAt DateTime @default(now())
+  user      User   @relation(fields: [userId], references: [id])
+  guild     Guild  @relation(fields: [guildId], references: [id])
+}
+
 model Account {
   id        String   @id @map("_id")
-  ownerId   String
+  userId    String
   isPrimary Boolean  @default(false)
   guildIds  String[]
   guilds    Guild[]  @relation(fields: [guildIds], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
-  @@unique([ownerId, isPrimary], name: "oneAccountPerUserPrimary")
-  @@index([ownerId])
+  @@unique([userId, isPrimary], name: "onePrimaryAccountPerUser")
+  @@index([userId])
 }
 
 model Guild {
@@ -28,9 +47,11 @@ model Guild {
   inviteChannelId String?
   parentGuildId   String?
   accountIds      String[]
+  apiKey          API_Key?
   parentGuild     Guild?    @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   childGuilds     Guild[]   @relation("ParentChild")
   accounts        Account[] @relation(fields: [accountIds], references: [id])
+  owner           User      @relation(fields: [ownerId], references: [id])
 
   @@index([ownerId])
 }
