@@ -4,7 +4,7 @@ import { GetUserResponse, ThumbnailBatchResponse } from 'roblox-api-types';
 export async function getDetailedAccounts(ownerId: string) {
     const accounts = await db.account.findMany({
         where: {
-            ownerId: ownerId
+            userId: ownerId
         }
     });
 

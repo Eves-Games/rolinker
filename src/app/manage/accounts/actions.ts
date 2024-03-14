@@ -11,8 +11,8 @@ export async function updatePrimaryAccount(accountId: string) {
     await db.$transaction([
         db.account.update({
             where: {
-                oneAccountPerUserPrimary: {
-                    ownerId: session.user.id,
+                onePrimaryAccountPerUser: {
+                    userId: session.user.id,
                     isPrimary: true
                 }
             },
@@ -23,7 +23,7 @@ export async function updatePrimaryAccount(accountId: string) {
         db.account.update({
             where: {
                 id: accountId,
-                ownerId: session.user.id
+                userId: session.user.id
             },
             data: {
                 isPrimary: true
@@ -40,7 +40,7 @@ export async function deleteAccount(accountId: string) {
     await db.account.delete({
         where: {
             id: accountId,
-            ownerId: session.user.id
+            userId: session.user.id
         }
     }).catch((error) => console.log(error))
 };
