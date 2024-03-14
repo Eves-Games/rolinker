@@ -1,7 +1,7 @@
 'use client';
 
 import useSWR from 'swr';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { deleteAccount, updatePrimaryAccount } from './actions';
@@ -22,10 +22,8 @@ interface Account {
 const fetcher = async (url: string) => fetch(url).then(async r => await r.json() as Account[]);
 
 export default function Page() {
-  const session = useSession();
-
   const { data: initialAccounts, error, isLoading } = useSWR(
-    session.data ? `/api/user/${session.data?.user.id}/accounts` : null,
+    `/api/users/authenticated/accounts`,
     fetcher
   );
 
@@ -76,7 +74,7 @@ export default function Page() {
               setPrimaryId(account.id);
               await updatePrimaryAccount(account.id);
             }}>
-              <button className='px-2 py-2 rounded hover:bg-neutral-600'>
+              <button className='px-2 py-2 rounded hover:bg-neutral-700'>
                 <StarIcon className='size-6' />
               </button>
             </form>
@@ -85,7 +83,7 @@ export default function Page() {
               setAccounts((prevAccounts) => prevAccounts.filter((accountEntry) => accountEntry.id !== account.id));
               await deleteAccount(account.id);
             }}>
-              <button className='px-2 py-2 rounded hover:bg-neutral-600'>
+              <button className='px-2 py-2 rounded hover:bg-neutral-700'>
                 <TrashIcon className='size-6 stroke-red-500' />
               </button>
             </form>
@@ -96,8 +94,8 @@ export default function Page() {
         await signIn('roblox');
       }}>
         <button className='flex space-x-4 px-4 py-2 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 w-full h-20'>
-          <span>Add Account</span>
           <PlusIcon className='size-6' />
+          <span>Add Account</span>
         </button>
       </form>
     </div>
