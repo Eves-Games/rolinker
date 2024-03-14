@@ -46,8 +46,8 @@ export default async function Page() {
                 </Block>
             ))}
             <Link className='flex space-x-4 px-4 py-2 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 h-20' href='https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code'>
-                <span>Add Guild</span>
                 <PlusIcon className='size-6' />
+                <span>Add Guild</span>
             </Link>
         </div>
     );

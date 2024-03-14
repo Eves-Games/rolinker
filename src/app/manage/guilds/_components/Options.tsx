@@ -30,13 +30,13 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                         <Disclosure.Button className='flex items-center justify-between space-x-4 w-full px-4 py-2 hover:bg-neutral-700 rounded'>
                             <div className='flex items-center space-x-4'>
                                 <UserGroupIcon className='size-6' />
-                                <span className='text-lg'>Group Options</span>
+                                <span>Group Options</span>
                             </div>
                             {open ? <MinusIcon className='size-6' /> : <PlusIcon className='size-6' />}
                         </Disclosure.Button>
                         <Disclosure.Panel className='gap-4 grid grid-cols-1 md:grid-cols-3 py-2 px-4'>
                             <div className='space-y-2'>
-                                <span className='text-lg'>Discord Roles</span>
+                                <span>Discord Roles</span>
                                 <form action={async () => {
                                     await genDiscordRoles(id);
                                 }}>
@@ -47,13 +47,13 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                                 </form>
                             </div>
                             <div className='col-span-2 space-y-2 relative'>
-                                <span className='text-lg'>Roblox Group</span>
+                                <span>Roblox Group</span>
                                 <Listbox value={selectedGroup} onChange={setSelectedGroup}>
                                     <Listbox.Button className='w-full flex justify-between rounded-lg bg-neutral-700 hover:bg-neutral-600 py-2 px-4 shadow-lg'>
                                         <span className='truncate'>{selectedGroup.name} ({selectedGroup.id})</span>
                                         <ChevronUpDownIcon className='size-6' aria-hidden='true' />
                                     </Listbox.Button>
-                                    <Listbox.Options className='absolute mt-2 max-h-60 w-full overflow-auto rounded-md bg-neutral-700 shadow-lg'>
+                                    <Listbox.Options className='absolute mt-2 max-h-60 w-full overflow-auto rounded-md bg-neutral-700 shadow-lg z-50'>
                                         {groups.map((group, index) => (
                                             <Listbox.Option
                                                 as='button'

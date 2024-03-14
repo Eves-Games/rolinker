@@ -7,6 +7,7 @@ import db from '@/lib/db';
 import { GroupBasicResponse, GroupMembershipResponse } from 'roblox-api-types';
 import Block from '@/app/_components/Block';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export const runtime = 'edge';
 
@@ -90,18 +91,17 @@ export default async function Page({ params }: { params: { id: string } }) {
                         <div className='flex items-center space-x-4'>
                             {guildContent}
                         </div>
-                        <div className='flex items-center space-x-4 h-20'>
+                        <div className='flex items-center space-x-4'>
                             <ExclamationTriangleIcon className='size-6' />
                             <span>RoLinker bot is not a member of this guild.</span>
                         </div>
+                        {guild && (
+                            <Link className='flex space-x-4 p-2 hover:bg-neutral-700 rounded' href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`}>
+                                <PlusIcon className='size-6' />
+                                <span>Add Guild</span>
+                            </Link>
+                        )}
                     </Block>
-                    {guild && (
-                        <Block className='flex space-x-4 px-4 py-2 justify-center items-center h-20' href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${params.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`}>
-                            <span>Add Guild</span>
-                            <PlusIcon className='size-6' />
-                        </Block>
-                    )
-                    }
                 </div>
             </>
         );
@@ -109,7 +109,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const accounts = await db.account.findMany({
         where: {
-            ownerId: session?.user.id
+            userId: session?.user.id
         }
     });
 
