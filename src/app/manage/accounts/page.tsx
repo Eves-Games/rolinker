@@ -7,19 +7,16 @@ import Image from 'next/image';
 import { deleteAccount, updatePrimaryAccount } from './actions';
 import { StarIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
+import { Account } from '@prisma/client/edge';
 
 export const runtime = 'edge';
 
-interface Account {
-  id: string;
-  ownerId: string;
-  isPrimary: boolean;
-  guildIds: string[];
+interface DetailedAccount extends Account {
   name: string;
-  imageUrl: string;
+  imageUrl: string
 }
 
-const fetcher = async (url: string) => fetch(url).then(async r => await r.json() as Account[]);
+const fetcher = async (url: string) => fetch(url).then(async r => await r.json() as DetailedAccount[]);
 
 export default function Page() {
   const { data: initialAccounts, error, isLoading } = useSWR(
@@ -28,7 +25,7 @@ export default function Page() {
   );
 
   const [primaryId, setPrimaryId] = useState<string | null>(null);
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [accounts, setAccounts] = useState<DetailedAccount[]>([]);
 
   useEffect(() => {
     if (initialAccounts) {
@@ -40,11 +37,11 @@ export default function Page() {
 
   if (isLoading || !primaryId) {
     return <div>Loading...</div>;
-  }
+  };
 
   if (error) {
     return <div>Error loading accounts</div>;
-  }
+  };
 
   const primaryAccount = accounts.find((account) => account.id === primaryId);
   const otherAccounts = accounts.filter((account) => account.id !== primaryId);
@@ -62,7 +59,7 @@ export default function Page() {
           </div>
         </div>
       )}
-      {otherAccounts.map((account) => (
+    {otherAccounts.map((account) => (
         <div className='flex justify-between items-center bg-neutral-800 px-4 py-2 rounded shadow-lg' key={account.id}>
           <div className='flex items-center space-x-4'>
             <Image src={account.imageUrl} alt='Avatar Icon' className='size-16 rounded' width={100} height={100} />
@@ -74,7 +71,7 @@ export default function Page() {
               setPrimaryId(account.id);
               await updatePrimaryAccount(account.id);
             }}>
-              <button className='px-2 py-2 rounded hover:bg-neutral-700'>
+              <button className='p-2 rounded-lg hover:bg-neutral-700'>
                 <StarIcon className='size-6' />
               </button>
             </form>
@@ -83,7 +80,7 @@ export default function Page() {
               setAccounts((prevAccounts) => prevAccounts.filter((accountEntry) => accountEntry.id !== account.id));
               await deleteAccount(account.id);
             }}>
-              <button className='px-2 py-2 rounded hover:bg-neutral-700'>
+              <button className='p-2 rounded-lg hover:bg-neutral-700'>
                 <TrashIcon className='size-6 stroke-red-500' />
               </button>
             </form>

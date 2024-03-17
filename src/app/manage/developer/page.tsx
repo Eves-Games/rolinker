@@ -1,81 +1,121 @@
 'use client';
 
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { useEffect, useState } from 'react';
-import { TrashIcon, PlusIcon, KeyIcon, PresentationChartLineIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, CheckIcon, ChevronUpDownIcon, XMarkIcon, PencilIcon, EyeIcon, ArrowPathIcon, EyeSlashIcon, ChevronDoubleUpIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { Dialog, Listbox } from '@headlessui/react';
+import { Guild } from '@prisma/client/edge';
+import Image from 'next/image';
+import { createApiKey } from './actions';
+
+interface GuildWithApiKey extends Guild {
+    apiKey?: {
+        id: string;
+        userId: string;
+        key: string;
+        guildId: string;
+        createdAt: Date;
+    }
+}
 
 export const runtime = 'edge';
 
+const fetcher = async (url: string) => fetch(url).then(async r => await r.json() as GuildWithApiKey[]);
+
 export default function Page() {
-    /**const code = (
-        {accounts.map((account) => (
-            <div className='grid grid-cols-2 lg:grid-cols-3 gap-2 items-center bg-neutral-800 px-4 py-2 rounded shadow-lg' key={account.id}>
-                <div className='flex items-center space-x-4'>
-                    <Image src={account.imageUrl} alt='Guild Icon' className='size-16 rounded' width={100} height={100} />
-                    <span className='text-lg'>{account.name}</span>
-                </div>
-                <span className='p-2 text-center'>Usage: 0/750</span>
-                <div className='flex space-x-2 justify-start md:justify-end items-center'>
-                    <form onSubmit={async (e) => {
-                        e.preventDefault();
-                    }}>
-                        <button className='flex space-x-2 p-2 rounded hover:bg-neutral-700'>
-                            <PresentationChartLineIcon className='size-6' />
-                            <span>Upgrade</span>
-                        </button>
-                    </form>
-                    <form onSubmit={async (e) => {
-                        e.preventDefault();
-                    }}>
-                        <button className='flex space-x-2 p-2 rounded hover:bg-neutral-700'>
-                            <KeyIcon className='size-6' />
-                            <span>View Key</span>
-                        </button>
-                    </form>
-                    <form onSubmit={async (e) => {
-                        e.preventDefault();
-                        setAccounts((prevAccounts) => prevAccounts.filter((accountEntry) => accountEntry.id !== account.id));
-                    }}>
-                        <button className='p2 rounded hover:bg-neutral-700'>
-                            <TrashIcon className='size-6 stroke-red-500' />
-                        </button>
-                    </form>
-                </div>
-            </div>
-        ))}
-    )*/
+    const { data: guilds, error, isLoading } = useSWR(
+        `/api/users/authenticated/guilds?includeApiKeys=true`,
+        fetcher
+    );
 
-    const guilds = [
-        {
-            name: 'Guild 1',
-            id: '1'
-        },
-        {
-            name: 'Guild 2',
-            id: '2'
-        },
-        {
-            name: 'Guild 3',
-            id: '3'
-        },
-    ]
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedGuild, setSelectedGuild] = useState<Guild | null>(null);
+    const [apiGuilds, setApiGuilds] = useState<GuildWithApiKey[]>([]);
+    const [isGuildOpen, setIsGuildOpen] = useState({ open: false, guild: null as GuildWithApiKey | null });
+    const [showApiKey, setShowApiKey] = useState(false);
+    const [resetTimer, setResetTimer] = useState('');
 
-    const [isOpen, setIsOpen] = useState(false)
-    const [selectedGuild, setSelectedGuild] = useState(guilds[0])
+    const getTimeUntilReset = () => {
+        const now = new Date();
+        const resetTime = new Date(now);
+        resetTime.setUTCHours(24, 0, 0, 0);
+        const timeUntilReset = resetTime.getTime() - now.getTime();
+        const hours = Math.floor(timeUntilReset / (1000 * 60 * 60));
+        const minutes = Math.floor((timeUntilReset % (1000 * 60 * 60)) / (1000 * 60));
+        return `${hours.toString().padStart(2, '0')} hours and ${minutes.toString().padStart(2, '0')} minutes`;
+    };
+
+    useEffect(() => {
+        if (guilds) {
+            setApiGuilds(guilds.filter(guild => guild.apiKey));
+            setSelectedGuild(guilds.filter(guild => !guild.apiKey)[0] || null)
+        }
+    }, [guilds]);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setResetTimer(getTimeUntilReset());
+        }, 1000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
+
+    if (isLoading) {
+        return <div className='flex justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg w-full h-20 animate-pulse'>Loading...</div>;
+    };
+
+    if (error) {
+        return <div>Error loading API Keys</div>;
+    };
 
     return (
         <>
             <div className='w-full space-y-2'>
-                <button onClick={() => setIsOpen(true)} className='flex space-x-4 px-4 py-2 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 w-full h-20'>
-                    <PlusIcon className='size-6' />
-                    <span>Create API Key</span>
-                </button>
+                {apiGuilds.map((guild) => (
+                    <div className='flex flex-col lg:flex-row lg:items-center justify-between gap-2 bg-neutral-800 px-4 py-2 rounded shadow-lg w-full' key={guild.id}>
+                        <div className='flex space-x-4 items-center'>
+                            {guild.iconUrl ? (
+                                <Image src={guild.iconUrl} alt={`${guild.name} Icon`} className='size-16 rounded' width={100} height={100} />
+                            ) : (
+                                <div className=' flex items-center justify-center'>
+                                    <span className='text-4xl'>{guild.name.charAt(0)}</span>
+                                </div>
+                            )}
+                            <span className='text-lg'>{guild.name}</span>
+                        </div>
+                        <div className='flex space-x-2 items-center justify-end'>
+                            <span className='p-2'>Usage: 0/750</span>
+                            <button className='flex space-x-2 items-center bg-indigo-700 p-2 rounded-lg opacity-50 cursor-not-allowed'>
+                                <ChevronDoubleUpIcon className='size-6' />
+                                <span>Upgrade</span>
+                            </button>
+                            <button onClick={() => setIsGuildOpen({ open: true, guild: guild })} className='flex space-x-2 items-center p-2 rounded-lg hover:bg-neutral-700'>
+                                <PencilIcon className='size-6' />
+                                <span>View/Edit</span>
+                            </button>
+                        </div>
+                    </div>
+                ))}
+                {guilds!.filter(guild => !guild.apiKey).length != 0 && (
+                    <button onClick={() => setIsOpen(true)} className='flex space-x-4 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 w-full h-20'>
+                        <PlusIcon className='size-6' />
+                        <span>Create API key</span>
+                    </button>
+                )}
             </div>
+
+            {/* Create API Key Dialog */}
             <Dialog open={isOpen} onClose={() => setIsOpen(false)} className='fixed inset-0 flex items-center justify-center z-50 px-4'>
-                <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-                <div className="space-y-4 relative bg-neutral-800 rounded-lg max-w-lg w-fit mx-auto px-6 py-4">
-                    <Dialog.Title className='text-2xl font-bold mb-4'>Create API Key</Dialog.Title>
+                <Dialog.Overlay className='fixed inset-0 bg-black opacity-30' />
+                <div className='space-y-4 relative bg-neutral-800 rounded-lg max-w-lg w-fit mx-auto px-6 py-4'>
+                    <div className='flex space-x-4 justify-between items-center'>
+                        <Dialog.Title className='text-2xl font-bold'>Create API Key</Dialog.Title>
+                        <button onClick={() => setIsOpen(false)} className='p-2 text-gray-400 hover:text-gray-200'>
+                            <XMarkIcon className='size-6' />
+                        </button>
+                    </div>
 
                     <Dialog.Description>
                         This will create an API key for the selected Discord guild.
@@ -85,15 +125,15 @@ export default function Page() {
                         <span>Discord Servers</span>
                         <Listbox value={selectedGuild} onChange={setSelectedGuild}>
                             <Listbox.Button className='w-full flex justify-between rounded-lg bg-neutral-700 hover:bg-neutral-600 py-2 px-4 shadow-lg'>
-                                <span className='truncate'>{selectedGuild.name} ({selectedGuild.id})</span>
+                                <span className='truncate'>{selectedGuild?.name}</span>
                                 <ChevronUpDownIcon className='size-6' aria-hidden='true' />
                             </Listbox.Button>
-                            <Listbox.Options className='absolute mt-2 max-h-60 w-full overflow-auto rounded-md bg-neutral-700 shadow-lg'>
-                                {guilds.map((guild, index) => (
+                            <Listbox.Options className='absolute mt-2 max-h-60 w-full overflow-auto rounded-lg bg-neutral-700 shadow-lg'>
+                                {guilds!.filter(guild => !apiGuilds.some(apiGuild => apiGuild.id === guild.id)).map((guild, index) => (
                                     <Listbox.Option as='button' key={index} className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-600' value={guild}>
                                         {({ selected }) => (
                                             <>
-                                                <span className='block truncate'>{guild.name} ({guild.id})</span>
+                                                <span className='block truncate'>{guild.name}</span>
                                                 {selected && <CheckIcon className='size-6' aria-hidden='true' />}
                                             </>
                                         )}
@@ -104,14 +144,60 @@ export default function Page() {
                     </div>
 
                     <p className='text-sm'>Please note that there is a daily limit of 750 uses for the API key. If you require more, you can upgrade after key creation.</p>
-                    <p className='text-sm'>Refer to our <a href="/fair-use-policy" className='text-blue-400 hover:underline'>Fair Use Policy</a> for more information.</p>
+                    <p className='text-sm'>Refer to our <a href='/fair-use-policy' className='text-blue-400 hover:underline'>Fair Use Policy</a> for more information.</p>
 
-                    <button className={`bg-green-700 py-2 px-4 rounded-lg hover:bg-green-600`} onClick={() => setIsOpen(false)}>
-                        Create Key
-                    </button>
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        setIsOpen(false)
+                        await createApiKey(selectedGuild!.ownerId, selectedGuild!.id);
+                        mutate(`/api/users/authenticated/guilds?includeApiKeys=true`);
+                    }}>
+                        <button className={`bg-green-700 py-2 px-4 rounded-lg hover:bg-green-600`}>
+                            Create Key
+                        </button>
+                    </form>
+
+                </div>
+            </Dialog>
+
+            {/* View Key Dialog */}
+            <Dialog open={isGuildOpen.open} onClose={() => setIsGuildOpen({ open: false, guild: null })} className='fixed inset-0 flex items-center justify-center z-50 px-4'>
+                <Dialog.Overlay className='fixed inset-0 bg-black opacity-30' />
+                <div className='space-y-4 relative bg-neutral-800 rounded-lg px-6 py-4'>
+                    <div className='flex space-x-4 justify-between items-center'>
+                        <Dialog.Title className='text-2xl font-bold'>{isGuildOpen.guild?.name || 'Guild'}'s API key</Dialog.Title>
+                        <button onClick={() => setIsGuildOpen({ open: false, guild: null })} className='p-2 text-gray-400 hover:text-gray-200'>
+                            <XMarkIcon className='size-6' />
+                        </button>
+                    </div>
+
+                    <div className='space-y-2'>
+                        <div className='flex items-center space-x-2'>
+                            <div className={`bg-neutral-700 px-4 py-2 rounded-lg`}>
+                                <span className={`${!showApiKey && 'blur select-none'} break-all`}>{isGuildOpen.guild?.apiKey?.key}</span>
+                            </div>
+                            <button className='p-2 rounded-lg bg-neutral-700 hover:bg-neutral-600' onClick={() => setShowApiKey(!showApiKey)}>
+                                {showApiKey ? (
+                                    <EyeSlashIcon className='size-6' />
+                                ) : (
+                                    <EyeIcon className='size-6' />
+                                )}
+                            </button>
+                            <button className='p-2 rounded-lg bg-neutral-700 hover:bg-neutral-600'>
+                                <ArrowPathIcon className='size-6' />
+                            </button>
+                        </div>
+                        <p className='text-sm text-yellow-500'>Do not share your API key publicly. Keep it secure.</p>
+                    </div>
+
+                    <div className='flex justify-between items-center'>
+                        <span>Usage resets in {resetTimer}</span>
+                        <button className='p-2 rounded hover:bg-neutral-700'>
+                            <TrashIcon className='size-6 stroke-red-500' />
+                        </button>
+                    </div>
                 </div>
             </Dialog>
         </>
-
     );
 }
