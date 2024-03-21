@@ -26,7 +26,10 @@ export async function POST(request: Request) {
     };
 
     if (interaction.type === InteractionType.MessageComponent) {
-        console.log(interaction.message, interaction.data)
+        return NextResponse.json({
+            type: InteractionResponseType.UpdateMessage,
+            data: { content: 'test' }
+        })
     }
 
     if (interaction.type === InteractionType.ApplicationCommand) {
@@ -41,7 +44,7 @@ export async function POST(request: Request) {
 
             case commands.link.name:
                 return NextResponse.json(await linkCommand(interaction));
-            
+
             case commands.switch.name:
                 return NextResponse.json(await switchCommand(interaction));
 
