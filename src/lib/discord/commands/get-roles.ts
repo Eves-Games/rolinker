@@ -16,7 +16,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
 
     const account = await db.account.findFirst({
         where: {
-            ownerId: interaction.user?.id
+            userId: interaction.user?.id
         }
     })
 
