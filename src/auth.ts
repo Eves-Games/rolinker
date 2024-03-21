@@ -46,7 +46,7 @@ export const {
 
                 const existingAccounts = await db.account.findMany({
                     where: {
-                        ownerId: session?.user.id,
+                        userId: session?.user.id,
                     },
                 });
 
@@ -55,7 +55,7 @@ export const {
                 await db.account.create({
                     data: {
                         id: profile?.sub as string,
-                        ownerId: session?.user.id,
+                        userId: session?.user.id,
                         isPrimary: isPrimary,
                     },
                 });
