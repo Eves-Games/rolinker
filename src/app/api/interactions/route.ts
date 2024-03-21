@@ -25,6 +25,10 @@ export async function POST(request: Request) {
         return NextResponse.json({ type: InteractionResponseType.Pong })
     };
 
+    if (interaction.type === InteractionType.MessageComponent) {
+        console.log(interaction.message, interaction.data)
+    }
+
     if (interaction.type === InteractionType.ApplicationCommand) {
         const { name } = interaction.data
 
