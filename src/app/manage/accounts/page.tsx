@@ -5,7 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { deleteAccount, updatePrimaryAccount } from './actions';
-import { StarIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { StarIcon, TrashIcon, PlusIcon, ArrowPathIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { StarIcon as SolidStarIcon } from '@heroicons/react/24/solid';
 import { Account } from '@prisma/client/edge';
 
@@ -36,12 +36,21 @@ export default function Page() {
   }, [initialAccounts]);
 
   if (isLoading || !primaryId) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg w-full h-20'>
+        <ArrowPathIcon className='size-6 animate-spin' />
+      </div>
+    );
   };
 
   if (error) {
-    return <div>Error loading accounts</div>;
-  };
+    return (
+      <div className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 rounded shadow-lg w-full h-20'>
+        <ExclamationTriangleIcon className='size-6' />
+        <span>Error loading accounts</span>
+      </div>
+    );
+  }
 
   const primaryAccount = accounts.find((account) => account.id === primaryId);
   const otherAccounts = accounts.filter((account) => account.id !== primaryId);
@@ -59,7 +68,7 @@ export default function Page() {
           </div>
         </div>
       )}
-    {otherAccounts.map((account) => (
+      {otherAccounts.map((account) => (
         <div className='flex justify-between items-center bg-neutral-800 px-4 py-2 rounded shadow-lg' key={account.id}>
           <div className='flex items-center space-x-4'>
             <Image src={account.imageUrl} alt='Avatar Icon' className='size-16 rounded' width={100} height={100} />

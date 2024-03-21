@@ -37,8 +37,8 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                         <Disclosure.Panel className='gap-4 grid grid-cols-1 md:grid-cols-3 py-2 px-4'>
                             <div className='space-y-2'>
                                 <span>Discord Roles</span>
-                                <form action={async () => {
-                                    await genDiscordRoles(id);
+                                <form action={() => {
+                                    genDiscordRoles(id);
                                 }}>
                                     <button className='flex justify-between w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg'>
                                         <span className='truncate'>Generate Discord Roles</span>
@@ -76,9 +76,9 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                     </div>
                 )}
             </Disclosure>
-            <form action={async () => {
+            <form action={() => {
                 setInitialGroup(selectedGroup);
-                await updateGuildGroup(id, selectedGroup.id.toString());
+                updateGuildGroup(id, selectedGroup.id.toString());
             }}>
                 <button className={`bg-green-700 py-2 px-4 rounded ${canSubmit ? 'hover:bg-green-600' : 'opacity-50 cursor-not-allowed'}`} disabled={!canSubmit}>
                     Save Changes

@@ -42,21 +42,15 @@ export async function getUserGuilds(access_token: string) {
 };
 
 export async function updateGuildGroup(guildId: string, groupId: string) {
-    const session = await auth()
+    const session = await auth();
 
-    try {
-        await db.guild.update({
-            where: {
-                id: guildId,
-                ownerId: session?.user.id
-            },
-            data: {
-                groupId: groupId
-            }
-        })
-    } catch {
-        return false;
-    };
-
-    return true;
+    db.guild.update({
+        where: {
+            id: guildId,
+            ownerId: session?.user.id
+        },
+        data: {
+            groupId: groupId
+        }
+    }).catch();
 };

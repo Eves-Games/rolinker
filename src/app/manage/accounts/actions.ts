@@ -42,5 +42,5 @@ export async function deleteAccount(accountId: string) {
             id: accountId,
             userId: session.user.id
         }
-    }).catch((error) => console.log(error))
+    }).catch((error) => console.log(error));
 };
