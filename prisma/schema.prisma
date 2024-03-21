@@ -11,6 +11,7 @@ datasource db {
 model ApiKey {
   id        String   @id @default(uuid()) @map("_id")
   userId    String
+  usage     Int      @default(0)
   key       String   @unique
   guildId   String   @unique
   createdAt DateTime @default(now())
