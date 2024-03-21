@@ -19,14 +19,14 @@ export async function POST(request: Request) {
     };
     const { interaction } = verifyResult;
 
+    console.log(interaction.data)
+
     if (interaction.type === InteractionType.Ping) {
         return NextResponse.json({ type: InteractionResponseType.Pong })
     };
 
     if (interaction.type === InteractionType.ApplicationCommand) {
         const { name } = interaction.data
-
-        console.log(interaction.data)
 
         switch (name) {
             case commands.ping.name:
