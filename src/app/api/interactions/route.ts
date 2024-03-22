@@ -20,8 +20,6 @@ export async function POST(request: Request) {
     };
     const { interaction } = verifyResult;
 
-    console.log(interaction)
-
     if (interaction.type === InteractionType.Ping) {
         return NextResponse.json({ type: InteractionResponseType.Pong })
     };
@@ -30,19 +28,34 @@ export async function POST(request: Request) {
         const { guild_id, member } = interaction
         const { custom_id, values } = interaction.data
 
+        if (!member || !guild_id) {
+            return NextResponse.json({
+                type: InteractionResponseType.UpdateMessage,
+                data: {
+                    embeds: [
+                        {
+                            title: 'Something went wrong!',
+                            color: 15548997,
+                        }
+                    ],
+                    components: []
+                }
+            });
+        }
+
         switch (custom_id) {
             case 'account_switch':
-                if (values[0] == 'default') {
+                if (values[0] === 'default') {
                     db.accountGuild.delete({
                         where: {
-                            userId: member?.user.id,
+                            userId: member.user.id,
                             guildId: guild_id
                         }
                     }).catch();
                 } else {
                     db.accountGuild.delete({
                         where: {
-                            userId: member?.user.id,
+                            userId: member.user.id,
                             guildId: guild_id,
                             NOT: {
                                 accountId: values[0]
@@ -50,11 +63,11 @@ export async function POST(request: Request) {
                         }
                     }).catch();
 
-                    db.accountGuild.create({
+                    await db.accountGuild.create({
                         data: {
-                            userId: member!.user.id,
+                            userId: member.user.id,
                             accountId: values[0],
-                            guildId: guild_id!
+                            guildId: guild_id
                         }
                     })
                 };
@@ -70,7 +83,7 @@ export async function POST(request: Request) {
                         ],
                         components: []
                     }
-                })
+                });
         }
 
 
