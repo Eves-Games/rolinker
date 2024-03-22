@@ -65,7 +65,7 @@ export async function switchCommand(interaction?: APIChatInputApplicationCommand
                     components: [
                         {
                             type: ComponentType.StringSelect,
-                            custom_id: 'option_select',
+                            custom_id: 'account_switch',
                             options: accountOptions,
                         },
                     ],

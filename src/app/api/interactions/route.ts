@@ -1,4 +1,5 @@
 import { commands } from "@/commands"
+import db from "@/lib/db"
 import { getRolesCommand } from "@/lib/discord/commands/get-roles"
 import { linkCommand } from '@/lib/discord/commands/link'
 import { switchCommand } from '@/lib/discord/commands/switch'
@@ -26,10 +27,41 @@ export async function POST(request: Request) {
     };
 
     if (interaction.type === InteractionType.MessageComponent) {
-        return NextResponse.json({
-            type: InteractionResponseType.UpdateMessage,
-            data: { content: 'test' }
-        })
+        const { guild_id, member } = interaction
+        const { custom_id, values } = interaction.data
+
+        switch (custom_id) {
+            case 'account_switch':
+                await db.$transaction([
+                    db.accountGuild.deleteMany({
+                        where: {
+                            userId: member?.user.id,
+                            guildId: guild_id
+                        }
+                    }),
+                    db.accountGuild.create({
+                        data: {
+                            userId: member!.user.id,
+                            accountId: values[0],
+                            guildId: guild_id!
+                        }
+                    })
+                ]);
+
+                return NextResponse.json({
+                    type: InteractionResponseType.UpdateMessage,
+                    data: {
+                        embeds: [
+                            {
+                                title: 'Success!',
+                                color: 5763719,
+                            }
+                        ]
+                    }
+                })
+        }
+
+
     }
 
     if (interaction.type === InteractionType.ApplicationCommand) {

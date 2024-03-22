@@ -19,29 +19,39 @@ model ApiKey {
 }
 
 model Account {
-  id        String   @id @map("_id")
-  userId    String
-  isPrimary Boolean  @default(false)
-  guildIds  String[]
-  guilds    Guild[]  @relation(fields: [guildIds], references: [id])
+  id         String         @id @map("_id")
+  userId     String
+  isPrimary  Boolean        @default(false)
+  userGuilds AccountGuild[]
 
   @@unique([userId, isPrimary], name: "onePrimaryAccountPerUser")
   @@index([userId])
 }
 
+model AccountGuild {
+  userId    String  @id @map("_id")
+  accountId String  
+  guildId   String
+  account   Account @relation(fields: [accountId], references: [id])
+  guild     Guild   @relation(fields: [guildId], references: [id])
+
+  @@unique([accountId, guildId])
+  @@index([accountId])
+  @@index([guildId])
+}
+
 model Guild {
-  id              String    @id @map("_id")
+  id              String         @id @map("_id")
   name            String
   ownerId         String
   iconUrl         String?
   groupId         String?
   inviteChannelId String?
   parentGuildId   String?
-  accountIds      String[]
   apiKey          ApiKey?
-  parentGuild     Guild?    @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childGuilds     Guild[]   @relation("ParentChild")
-  accounts        Account[] @relation(fields: [accountIds], references: [id])
+  parentGuild     Guild?         @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childGuilds     Guild[]        @relation("ParentChild")
+  userAccounts    AccountGuild[]
 
   @@index([ownerId])
 }
