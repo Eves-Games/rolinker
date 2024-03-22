@@ -40,7 +40,7 @@ export async function POST(request: Request) {
                         }
                     }).catch();
                 } else {
-                    db.$transaction([
+                    await db.$transaction([
                         db.accountGuild.delete({
                             where: {
                                 userId: member?.user.id,
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
                                 guildId: guild_id!
                             }
                         })
-                    ]).catch();
+                    ]);
                 };
 
                 return NextResponse.json({
