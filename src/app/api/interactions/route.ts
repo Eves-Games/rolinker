@@ -53,23 +53,21 @@ export async function POST(request: Request) {
                         }
                     }).catch();
                 } else {
-                    db.accountGuild.delete({
-                        where: {
-                            userId: member.user.id,
-                            guildId: guild_id,
-                            NOT: {
-                                accountId: values[0]
+                    db.$transaction([
+                        db.accountGuild.delete({
+                            where: {
+                                userId: member.user.id,
+                                guildId: guild_id
                             }
-                        }
-                    }).catch();
-
-                    await db.accountGuild.create({
-                        data: {
-                            userId: member.user.id,
-                            accountId: values[0],
-                            guildId: guild_id
-                        }
-                    })
+                        }),
+                        db.accountGuild.create({
+                            data: {
+                                userId: member.user.id,
+                                accountId: values[0],
+                                guildId: guild_id
+                            }
+                        })
+                    ]).catch();
                 };
 
                 return NextResponse.json({
