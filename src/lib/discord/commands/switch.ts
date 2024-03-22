@@ -1,25 +1,15 @@
 import { getDetailedAccounts } from '@/lib/accounts';
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, ComponentType } from 'discord-api-types/v10';
+import { errorMessage } from '../messages';
 
-export async function switchCommand(interaction?: APIChatInputApplicationCommandInteraction) {
-    const ownerId = await interaction?.member?.user.id
+export async function switchCommand(interaction: APIChatInputApplicationCommandInteraction) {
+    const { member } = interaction
 
-    if (!ownerId) {
-        return {
-            type: InteractionResponseType.ChannelMessageWithSource,
-            data: {
-                embeds: [
-                    {
-                        title: 'Something went wrong!',
-                        color: 15548997,
-                    },
-                ],
-                flags: MessageFlags.Ephemeral,
-            },
-        } satisfies APIInteractionResponse;
+    if (!member) {
+        return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource);
     }
 
-    const detailedAccounts = await getDetailedAccounts(ownerId);
+    const detailedAccounts = await getDetailedAccounts(member.user.id);
 
     if (!detailedAccounts) {
         return {

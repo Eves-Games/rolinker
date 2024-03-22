@@ -30,14 +30,12 @@ model Account {
 
 model AccountGuild {
   userId    String  @id @map("_id")
-  accountId String  
-  guildId   String
+  accountId String  @unique
+  guildId   String 
   account   Account @relation(fields: [accountId], references: [id])
   guild     Guild   @relation(fields: [guildId], references: [id])
 
   @@unique([accountId, guildId])
-  @@index([accountId])
-  @@index([guildId])
 }
 
 model Guild {

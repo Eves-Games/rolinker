@@ -1,7 +1,7 @@
 import db from "@/lib/db";
-import { rest } from '@/lib/discord/rest';
 import { getRoles, getUserRoles } from "@/lib/roblox";
-import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
+import { APIChatInputApplicationCommandInteraction, InteractionResponseType } from "discord-api-types/v10";
+import { errorMessage, successMessage } from "@/lib/discord/messages";
 
 export async function getRolesCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const guildId = interaction.guild_id;
@@ -48,36 +48,8 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
     if (!res.ok) {
         const responseText = (await res.text()).substring(0, 1024)
 
-        return {
-            type: InteractionResponseType.ChannelMessageWithSource,
-            data: {
-                embeds: [
-                    {
-                        title: 'Something went wrong!',
-                        color: 15548997,
-                        fields: [
-                            { name: 'Status', value: res.status.toString(), inline: false },
-                            { name: 'Error', value: `\`\`\`${responseText}\`\`\``, inline: false },
-                            { name: 'Guild ID', value: interaction.guild_id || 'Null', inline: true },
-                            { name: 'User ID', value: interaction.member?.user.id || 'Null', inline: true },
-                        ],
-                    },
-                ],
-                flags: MessageFlags.Ephemeral,
-            },
-        } satisfies APIInteractionResponse;
+        return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, responseText);
     };
 
-    return {
-        type: InteractionResponseType.ChannelMessageWithSource,
-        data: {
-            embeds: [
-                {
-                    title: 'Success!',
-                    color: 5763719,
-                }
-            ],
-            flags: MessageFlags.Ephemeral,
-        },
-    } satisfies APIInteractionResponse;
+    return successMessage(InteractionResponseType.ChannelMessageWithSource);
 }

@@ -1,10 +1,12 @@
 import { commands } from "@/commands"
-import db from "@/lib/db"
 import { getRolesCommand } from "@/lib/discord/commands/get-roles"
 import { linkCommand } from '@/lib/discord/commands/link'
 import { switchCommand } from '@/lib/discord/commands/switch'
+import { switchComponent } from "@/lib/discord/components/switch"
+import { errorMessage } from "@/lib/discord/messages"
 import { verifyInteractionRequest } from "@/lib/discord/verify-discord-request"
 import {
+    APIInteractionResponse,
     InteractionResponseType,
     InteractionType,
     MessageFlags,
@@ -25,66 +27,12 @@ export async function POST(request: Request) {
     };
 
     if (interaction.type === InteractionType.MessageComponent) {
-        const { guild_id, member } = interaction
-        const { custom_id, values } = interaction.data
-
-        if (!member || !guild_id) {
-            return NextResponse.json({
-                type: InteractionResponseType.UpdateMessage,
-                data: {
-                    embeds: [
-                        {
-                            title: 'Something went wrong!',
-                            color: 15548997,
-                        }
-                    ],
-                    components: []
-                }
-            });
-        }
+        const { custom_id } = interaction.data
 
         switch (custom_id) {
             case 'account_switch':
-                if (values[0] === 'default') {
-                    db.accountGuild.delete({
-                        where: {
-                            userId: member.user.id,
-                            guildId: guild_id
-                        }
-                    }).catch();
-                } else {
-                    db.$transaction([
-                        db.accountGuild.delete({
-                            where: {
-                                userId: member.user.id,
-                                guildId: guild_id
-                            }
-                        }),
-                        db.accountGuild.create({
-                            data: {
-                                userId: member.user.id,
-                                accountId: values[0],
-                                guildId: guild_id
-                            }
-                        })
-                    ]).catch();
-                };
-
-                return NextResponse.json({
-                    type: InteractionResponseType.UpdateMessage,
-                    data: {
-                        embeds: [
-                            {
-                                title: 'Success!',
-                                color: 5763719,
-                            }
-                        ],
-                        components: []
-                    }
-                });
+                return NextResponse.json(await switchComponent(interaction))
         }
-
-
     }
 
     if (interaction.type === InteractionType.ApplicationCommand) {
@@ -95,7 +43,7 @@ export async function POST(request: Request) {
                 return NextResponse.json({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: { content: 'Pong' },
-                });
+                } satisfies APIInteractionResponse);
 
             case commands.link.name:
                 return NextResponse.json(await linkCommand(interaction));
