@@ -8,7 +8,7 @@ export async function getDetailedAccounts(ownerId: string) {
         }
     });
 
-    if (accounts.length === 0) return null;
+    if (accounts.length === 0) return [];
 
     const userIds = accounts.map((account) => parseInt(account.id));
 

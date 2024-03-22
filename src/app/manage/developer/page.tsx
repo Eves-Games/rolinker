@@ -80,6 +80,15 @@ export default function Page() {
         );
     };
 
+    if (guilds?.length == 0) {
+        return (
+            <div className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 rounded shadow-lg w-full h-20'>
+                <ExclamationTriangleIcon className='size-6' />
+                <span>RoLinker bot is not a member of any of your guilds.</span>
+            </div>
+        );
+    }
+
     return (
         <>
             <div className='w-full space-y-2'>

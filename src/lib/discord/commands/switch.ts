@@ -11,7 +11,7 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
 
     const detailedAccounts = await getDetailedAccounts(member.user.id);
 
-    if (!detailedAccounts) {
+    if (detailedAccounts.length === 0) {
         return {
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
