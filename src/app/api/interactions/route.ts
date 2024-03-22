@@ -33,14 +33,14 @@ export async function POST(request: Request) {
         switch (custom_id) {
             case 'account_switch':
                 if (values[0] == 'default') {
-                    await db.accountGuild.delete({
+                    db.accountGuild.delete({
                         where: {
                             userId: member?.user.id,
                             guildId: guild_id
                         }
-                    })
+                    }).catch();
                 } else {
-                    await db.$transaction([
+                    db.$transaction([
                         db.accountGuild.delete({
                             where: {
                                 userId: member?.user.id,
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
                                 guildId: guild_id!
                             }
                         })
-                    ]);
+                    ]).catch();
                 };
 
                 return NextResponse.json({
