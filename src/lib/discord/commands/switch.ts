@@ -46,9 +46,13 @@ export async function switchCommand(interaction?: APIChatInputApplicationCommand
         } satisfies APIInteractionResponse;
     };
 
+    const primaryAccount = detailedAccounts.filter(account => !account.isPrimary)[0]
+
     const accountOptions = detailedAccounts.map(account => {
         return { label: account.name, value: account.id }
     })
+
+    accountOptions.unshift({label: `Default (${primaryAccount.name})`, value: 'default'})
 
     return {
         type: InteractionResponseType.ChannelMessageWithSource,

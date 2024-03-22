@@ -32,21 +32,30 @@ export async function POST(request: Request) {
 
         switch (custom_id) {
             case 'account_switch':
-                await db.$transaction([
-                    db.accountGuild.deleteMany({
+                if (values[0] == 'default') {
+                    await db.accountGuild.delete({
                         where: {
                             userId: member?.user.id,
                             guildId: guild_id
                         }
-                    }),
-                    db.accountGuild.create({
-                        data: {
-                            userId: member!.user.id,
-                            accountId: values[0],
-                            guildId: guild_id!
-                        }
                     })
-                ]);
+                } else {
+                    await db.$transaction([
+                        db.accountGuild.delete({
+                            where: {
+                                userId: member?.user.id,
+                                guildId: guild_id
+                            }
+                        }),
+                        db.accountGuild.create({
+                            data: {
+                                userId: member!.user.id,
+                                accountId: values[0],
+                                guildId: guild_id!
+                            }
+                        })
+                    ]);
+                };
 
                 return NextResponse.json({
                     type: InteractionResponseType.UpdateMessage,
@@ -56,7 +65,8 @@ export async function POST(request: Request) {
                                 title: 'Success!',
                                 color: 5763719,
                             }
-                        ]
+                        ],
+                        components: []
                     }
                 })
         }
