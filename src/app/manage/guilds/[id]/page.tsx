@@ -45,8 +45,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 iconUrl: userGuild.icon ? `https://cdn.discordapp.com/icons/${userGuild.id}/${userGuild.icon}.png` : null,
                 groupId: null,
                 inviteChannelId: null,
-                parentGuildId: null,
-                accountIds: []
+                parentGuildId: null
             };
         };
     };
