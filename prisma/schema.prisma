@@ -8,16 +8,6 @@ datasource db {
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
-model ApiKey {
-  id        String   @id @default(uuid()) @map("_id")
-  userId    String
-  usage     Int      @default(0)
-  key       String   @unique
-  guildId   String   @unique
-  createdAt DateTime @default(now())
-  guild     Guild    @relation(fields: [guildId], references: [id])
-}
-
 model Account {
   id         String         @id @map("_id")
   userId     String
@@ -46,7 +36,8 @@ model Guild {
   groupId         String?
   inviteChannelId String?
   parentGuildId   String?
-  apiKey          ApiKey?
+  apiKey          String?        @unique
+  apiKeyUsage     Int            @default(0)
   parentGuild     Guild?         @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   childGuilds     Guild[]        @relation("ParentChild")
   userAccounts    AccountGuild[]
