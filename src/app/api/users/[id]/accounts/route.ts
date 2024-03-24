@@ -22,31 +22,31 @@ export async function GET(
         status: 400,
     });
 
-    const apiKey = await db.apiKey.findUnique({
+    const guildApiKey = await db.guild.findUnique({
         where: {
-            key: apiKeyHeader
+            apiKey: apiKeyHeader
         }
     });
 
-    if (!apiKey) return new NextResponse('Invalid API key', {
+    if (!guildApiKey) return new NextResponse('Invalid API key', {
         status: 401,
     });
 
-    if (apiKey.usage == 750) return new NextResponse('API key usage limit reached (750)', {
+    if (guildApiKey.apiKeyUsage == 750) return new NextResponse('API key usage limit reached (750)', {
         status: 401,
     });
 
-    db.apiKey.update({
+    db.guild.update({
         where: {
-            key: apiKeyHeader
+            apiKey: apiKeyHeader
         },
         data: {
-            usage: { increment: 1 }
+            apiKeyUsage: { increment: 1 }
         }
     }).catch();
 
     try {
-        await rest.get(Routes.guildMember(apiKey.guildId, params.id));
+        await rest.get(Routes.guildMember(guildApiKey.id, params.id));
     } catch {
         return new NextResponse('User not apart of guild API key is linked too', {
             status: 404,
