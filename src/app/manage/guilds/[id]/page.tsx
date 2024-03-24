@@ -45,7 +45,9 @@ export default async function Page({ params }: { params: { id: string } }) {
                 iconUrl: userGuild.icon ? `https://cdn.discordapp.com/icons/${userGuild.id}/${userGuild.icon}.png` : null,
                 groupId: null,
                 inviteChannelId: null,
-                parentGuildId: null
+                parentGuildId: null,
+                apiKey: null,
+                apiKeyUsage: 0
             };
         };
     };
@@ -124,7 +126,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     };
 
     ownedGroups.unshift({
-        id: 0,
+        id: null!,
         name: 'None',
         memberCount: 0,
         hasVerifiedBadge: false

@@ -50,7 +50,7 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                                 <span>Roblox Group</span>
                                 <Listbox value={selectedGroup} onChange={setSelectedGroup}>
                                     <Listbox.Button className='w-full flex justify-between rounded-lg bg-neutral-700 hover:bg-neutral-600 py-2 px-4 shadow-lg'>
-                                        <span className='truncate'>{selectedGroup.name} ({selectedGroup.id})</span>
+                                        <span className='truncate'>{selectedGroup.name} ({selectedGroup.id || 0})</span>
                                         <ChevronUpDownIcon className='size-6' aria-hidden='true' />
                                     </Listbox.Button>
                                     <Listbox.Options className='absolute mt-2 max-h-60 w-full overflow-auto rounded-md bg-neutral-700 shadow-lg z-50'>
@@ -58,12 +58,12 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
                                             <Listbox.Option
                                                 as='button'
                                                 key={index}
-                                                className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-600'
+                                                className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-600 rounded-lg'
                                                 value={group}
                                             >
                                                 {({ selected }) => (
                                                     <>
-                                                        <span className='block truncate'>{group.name} ({group.id})</span>
+                                                        <span className='block truncate'>{group.name} ({group.id || 0})</span>
                                                         {selected && <CheckIcon className='size-6' aria-hidden='true' />}
                                                     </>
                                                 )}
@@ -78,7 +78,7 @@ export const Options: React.FC<OptionsProps> = ({ id, currentGroupId, groups }) 
             </Disclosure>
             <form action={() => {
                 setInitialGroup(selectedGroup);
-                updateGuildGroup(id, selectedGroup.id.toString());
+                updateGuildGroup(id, selectedGroup.id ? selectedGroup.id.toString() : null);
             }}>
                 <button className={`bg-green-700 py-2 px-4 rounded ${canSubmit ? 'hover:bg-green-600' : 'opacity-50 cursor-not-allowed'}`} disabled={!canSubmit}>
                     Save Changes

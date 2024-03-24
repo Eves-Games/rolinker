@@ -2,57 +2,40 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
-import { ApiKey } from "@prisma/client/edge";
+import { Guild } from "@prisma/client/edge";
 
 export async function disableApiKey(guildId: string) {
     const session = await auth();
 
     if (!session?.user.id) return;
 
-    await db.apiKey.update({
+    await db.guild.update({
         where: {
-            guildId
+            id: guildId
         },
         data: {
-            key: ''
+            apiKey: null
         }
     });
 };
 
-export async function enableApiKey(guildId: string): Promise<ApiKey | undefined> {
+export async function generateApiKey(guildId: string): Promise<Guild | undefined> {
     const session = await auth();
 
     if (!session?.user.id) return;
 
-    const apiKeyGuild = await db.apiKey.findUnique({
+    const newApiKey = await generateUniqueKey();
+
+    const guildWithKey = await db.guild.update({
         where: {
-            guildId
+            id: guildId
+        },
+        data: {
+            apiKey: newApiKey
         }
     });
 
-    const newApiKey = await generateUniqueKey();
-    let newApiKeyObj: ApiKey
-
-    if (apiKeyGuild) {
-        newApiKeyObj = await db.apiKey.update({
-            where: {
-                guildId
-            },
-            data: {
-                key: newApiKey
-            }
-        });
-    } else {
-        newApiKeyObj = await db.apiKey.create({
-            data: {
-                userId: session!.user.id,
-                guildId,
-                key: newApiKey
-            }
-        });
-    }
-
-    return newApiKeyObj;
+    return guildWithKey;
 };
 
 async function generateUniqueKey(): Promise<string> {
@@ -61,9 +44,9 @@ async function generateUniqueKey(): Promise<string> {
     crypto.getRandomValues(randomBytes);
     const apiKey = Array.from(randomBytes, byte => byte.toString(16).padStart(2, '0')).join('');
 
-    const apiKeyExists = await db.apiKey.findUnique({
+    const apiKeyExists = await db.guild.findUnique({
         where: {
-            key: apiKey
+            apiKey: apiKey
         }
     });
 

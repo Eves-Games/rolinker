@@ -41,7 +41,7 @@ export async function getUserGuilds(access_token: string) {
     return guilds;
 };
 
-export async function updateGuildGroup(guildId: string, groupId: string) {
+export async function updateGuildGroup(guildId: string, groupId: string | null) {
     const session = await auth();
 
     db.guild.update({
