@@ -20,13 +20,13 @@ export default function UserCard({ name, image }: Props) {
             </Menu.Button>
             <Menu.Items className='absolute right-0 rounded mt-2 bg-neutral-800 min-w-full shadow-lg'>
                 <Menu.Item>
-                    <Link href='/manage/accounts' className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700 rounded-t'>
+                    <Link href='/manage/accounts' className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700 rounded'>
                         <span>Manage</span>
                         <AdjustmentsHorizontalIcon className='h-6' />
                     </Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <button onClick={() => signOut()} className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700 rounded-b'>
+                    <button onClick={() => signOut()} className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700 rounded'>
                         Logout
                         <ArrowLeftEndOnRectangleIcon className='h-6' />
                     </button>

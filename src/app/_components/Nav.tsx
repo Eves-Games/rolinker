@@ -24,7 +24,7 @@ export default async function Nav() {
     <nav className='flex justify-between py-4 container'>
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-4 py-2'>
-          <RoLinkerLogo />
+          <RoLinkerLogo className='size-8' />
           <span className='font-bold text-xl'>RoLinker</span>
         </div>
         <div className='hidden flex items-center gap-2 md:flex'>
