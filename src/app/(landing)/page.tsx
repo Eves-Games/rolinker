@@ -33,7 +33,7 @@ export default async function Page() {
             </Link>
           </div>
           <div className='space-y-12'>
-          <h2 className='font-semibold text-4xl'>What we're linking</h2>
+          <h2 className='font-semibold text-4xl'>What we&#39;re linking</h2>
             <div className='space-x-2'>
               <span className='font-semibold text-2xl px-2 border-dashed border-2 rounded w-fit'>{guildsCount}</span>
               <span className='text-2xl'>Discord servers to Roblox groups</span>
