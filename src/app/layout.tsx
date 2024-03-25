@@ -30,8 +30,7 @@ export default async function RootLayout({
         <body className={`${open_sans.className} bg-neutral-900 text-neutral-100 tracking-wide overflow-y-auto`}>
           <div className='min-h-screen'>
             <Nav />
-            <hr className='border-neutral-800' />
-            <div className='py-4'>{children}</div>
+            {children}
           </div>
           <hr className='border-neutral-800' />
           <Footer />

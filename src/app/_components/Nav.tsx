@@ -21,34 +21,37 @@ export default async function Nav() {
   const session = await auth();
 
   return (
-    <nav className='flex justify-between py-4 container'>
-      <div className='flex items-center gap-4'>
-        <div className='flex items-center gap-4 py-2'>
-          <RoLinkerLogo className='size-8' />
-          <span className='font-bold text-xl'>RoLinker</span>
+    <nav className='sticky top-0 bg-neutral-900'>
+      <div className='flex justify-between py-4 container'>
+        <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-3 py-2'>
+            <RoLinkerLogo className='size-8' />
+            <span className='font-black text-xl'>RoLinker</span>
+          </div>
+          <div className='hidden flex items-center gap-2 md:flex'>
+            {NavLinks.map((navLink, index) => (
+              <Link key={index} href={navLink.href} className='px-4 py-2 rounded hover:bg-neutral-800 hover:shadow-lg'>{navLink.name}</Link>
+            ))}
+          </div>
         </div>
-        <div className='hidden flex items-center gap-2 md:flex'>
-          {NavLinks.map((navLink, index) => (
-            <Link key={index} href={navLink.href} className='px-4 py-2 rounded hover:bg-neutral-800 hover:shadow-lg'>{navLink.name}</Link>
-          ))}
-        </div>
+        <div className='flex items-center gap-2'>
+          {session?.user ? (
+            <UserCard {...session.user} />
+          ) : (
+            <form action={async () => {
+              'use server';
+              await signIn('discord')
+            }}>
+              <button className='flex items-center gap-4 px-4 py-2 rounded transition-colors bg-[#5865F2] hover:bg-opacity-75 whitespace-nowrap'>
+                <DiscordLogo />
+                <span>Sign in</span>
+              </button>
+            </form>
+          )}
+          <NavButton navLinks={NavLinks} />
+        </div >
       </div>
-      <div className='flex items-center gap-2'>
-        {session?.user ? (
-          <UserCard {...session.user} />
-        ) : (
-          <form action={async () => {
-            'use server';
-            await signIn('discord')
-          }}>
-            <button className='flex items-center gap-4 px-4 py-2 rounded transition-colors bg-[#5865F2] hover:bg-opacity-75 whitespace-nowrap'>
-              <DiscordLogo />
-              <span>Sign in</span>
-            </button>
-          </form>
-        )}
-        <NavButton navLinks={NavLinks} />
-      </div >
+      <hr className='border-neutral-800' />
     </nav >
   );
 };
