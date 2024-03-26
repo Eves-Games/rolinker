@@ -43,7 +43,7 @@ export default async function Nav() {
               await signIn('discord')
             }}>
               <button className='flex items-center gap-4 px-4 py-2 rounded transition-colors bg-[#5865F2] hover:bg-opacity-75 whitespace-nowrap'>
-                <DiscordLogo />
+                <DiscordLogo className='size-8' />
                 <span>Sign in</span>
               </button>
             </form>

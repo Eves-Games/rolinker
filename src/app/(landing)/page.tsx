@@ -14,7 +14,7 @@ export default async function Page() {
   const accountsCount = await db.account.count();
 
   return (
-    <div className='space-y-16 py-16'>
+    <div className='space-y-16 mb-16'>
       <section className='bg-gradient-to-r from-red-800 to-[#E12626] py-16 shadow-lg'>
         <div className='container flex flex-col lg:flex-row justify-between items-center space-y-8 lg:space-x-4 lg:space-y-0 text-center lg:text-left'>
           <div className='flex flex-col gap-8 items-center lg:items-start'>
