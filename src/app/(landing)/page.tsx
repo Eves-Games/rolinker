@@ -90,7 +90,7 @@ export default async function Page() {
         <div className='container flex flex-col lg:flex-row justify-between items-center gap-8 text-center lg:text-left'>
           <div className='space-y-2'>
             <h1 className='font-bold text-5xl'>We&#39;re new!</h1>
-            <h2 className='font-semibold text-2xl'>There are going to be a lot of bugs.</h2>
+            <h2 className='font-semibold text-2xl'>There are going to be bugs.</h2>
           </div>
           <h1 className='font-black text-7xl'>So...</h1>
           <div className='space-y-2'>
