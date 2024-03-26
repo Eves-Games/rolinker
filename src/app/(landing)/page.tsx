@@ -19,8 +19,8 @@ export default async function Page() {
         <div className='container flex flex-col lg:flex-row justify-between items-center space-y-8 lg:space-x-4 lg:space-y-0 text-center lg:text-left'>
           <div className='flex flex-col gap-8 items-center lg:items-start'>
             <div className='flex items-center space-x-4'>
-              <RoLinkerLogo className='size-20' />
-              <h1 className='font-black text-6xl'>RoLinker</h1>
+              <RoLinkerLogo className='size-16 sm:size-20' />
+              <h1 className='font-black text-5xl sm:6-xl'>RoLinker</h1>
             </div>
             <div>
               <h2 className='font-semibold text-2xl'>Connecting Roblox to Discord</h2>
@@ -32,17 +32,17 @@ export default async function Page() {
               <ArrowRightIcon className='size-8 lg:size-6' />
             </Link>
           </div>
-          <div className='space-y-8'>
+          <div className='space-y-4 sm:space-y-8'>
             <h2 className='font-bold text-4xl'>What we&#39;re linking</h2>
             <div className='space-x-2'>
-              <span className='font-semibold text-2xl px-2 border-dashed border-2 rounded w-fit'>{guildsCount}</span>
-              <span className='text-2xl'>Discord servers to Roblox groups</span>
+              <span className='font-semibold text-xl sm:text-2xl px-2 border-dashed border-2 rounded w-fit'>{guildsCount}</span>
+              <span className='text-xl sm:text-2xl'>Discord servers to Roblox groups</span>
             </div>
             <div className='space-x-2'>
-              <span className='font-semibold text-2xl px-2 border-dashed border-2 rounded w-fit'>{usersCount.length}</span>
-              <span className='text-2xl'>Discord users to</span>
-              <span className='font-semibold text-2xl px-2 border-dashed border-2 rounded w-fit'>{accountsCount}</span>
-              <span className='text-2xl'>Roblox accounts</span>
+              <span className='font-semibold text-xl sm:text-2xl px-2 border-dashed border-2 rounded w-fit'>{usersCount.length}</span>
+              <span className='text-xl sm:text-2xl'>Discord users to</span>
+              <span className='font-semibold text-xl sm:text-2xl px-2 border-dashed border-2 rounded w-fit'>{accountsCount}</span>
+              <span className='text-xl sm:text-2xl'>Roblox accounts</span>
             </div>
           </div>
         </div>

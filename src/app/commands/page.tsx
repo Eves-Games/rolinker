@@ -21,8 +21,8 @@ export default async function Page() {
                 <div className='container text-center md:text-left'>
                     <div className='flex flex-col gap-4 items-center md:items-start'>
                         <div className='flex items-center space-x-4'>
-                            <DiscordLogo className='size-20' />
-                            <h1 className='font-black text-6xl'>Commands</h1>
+                            <DiscordLogo className='size-16 sm:size-20' />
+                            <h1 className='font-black text-5xl sm:6-xl'>Commands</h1>
                         </div>
                         <h2 className='font-semibold text-2xl'>List of Discord slash commands</h2>
                     </div>
