@@ -6,7 +6,7 @@ export default function Page() {
 		<section className='container space-y-4 mt-4 mb-16 max-w-screen-md'>
 			<h1 className='font-bold text-3xl mb-4'>Privacy Policy</h1>
 			<p>Last Updated: 27/03/2024</p>
-			<p>At Eve&#39;s Games, SP, the operator of RoLinker, we highly value the privacy of our users. This Privacy Policy outlines the collection, usage, and sharing of personal information gathered from users of the RoLinker service. By accessing or utilizing the RoLinker service, you explicitly acknowledge that you have reviewed, comprehended, and accepted the terms of this Privacy Policy. If you disagree with any part of this policy, you are not authorized to access or use the RoLinker service. Should you have any inquiries or concerns, please feel free to reach out to us.</p>
+			<p>At Eve&apos;s Games, SP, the operator of RoLinker, we highly value the privacy of our users. This Privacy Policy outlines the collection, usage, and sharing of personal information gathered from users of the RoLinker service. By accessing or utilizing the RoLinker service, you explicitly acknowledge that you have reviewed, comprehended, and accepted the terms of this Privacy Policy. If you disagree with any part of this policy, you are not authorized to access or use the RoLinker service. Should you have any inquiries or concerns, please feel free to reach out to us.</p>
 			<hr/>
 			<h2 className="text-2xl font-semibold">Information Collection</h2>
 			<p>RoLinker collects minimal user data necessary for providing our linking services.</p>
@@ -30,7 +30,7 @@ export default function Page() {
 				<li>Navigate to the <Link className='text-blue-500 hover:underline' href='/manage/guilds'>manage guilds page</Link></li>
 				<li>Click on whichever Discord guild has intended the Roblox group linked too it</li>
 				<li>Open the group options disclosure</li>
-				<li>Select &#39;none&#39; from the Roblox group listbox</li>
+				<li>Select &apos;none&apos; from the Roblox group listbox</li>
 			</ul>
 			<h4 className='font-semibold'>Discord Guilds</h4>
 			<ul className='list-disc list-inside'>
