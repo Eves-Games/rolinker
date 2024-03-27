@@ -5,7 +5,7 @@ export default function Page() {
 	return (
 		<section className='container space-y-4 mt-4 mb-16 max-w-screen-md'>
 			<h1 className='font-bold text-3xl mb-4'>Privacy Policy</h1>
-			<p>Last Updated: 16/01/2024</p>
+			<p>Last Updated: 27/03/2024</p>
 			<p>At Eve&#39;s Games, SP, the operator of RoLinker, we highly value the privacy of our users. This Privacy Policy outlines the collection, usage, and sharing of personal information gathered from users of the RoLinker service. By accessing or utilizing the RoLinker service, you explicitly acknowledge that you have reviewed, comprehended, and accepted the terms of this Privacy Policy. If you disagree with any part of this policy, you are not authorized to access or use the RoLinker service. Should you have any inquiries or concerns, please feel free to reach out to us.</p>
 			<hr/>
 			<h2 className="text-2xl font-semibold">Information Collection</h2>
