@@ -11,9 +11,7 @@ export interface NavLink {
 };
 
 const NavLinks = [
-  { name: 'Landing', href: '/' },
   { name: 'Commands', href: '/commands' },
-  { name: 'Pricing', href: '/pricing' },
   { name: 'Support', href: 'https://discord.gg/CJDuGzwFX4' },
 ] satisfies Array<NavLink>;
 
@@ -24,10 +22,10 @@ export default async function Nav() {
     <nav className='sticky top-0 bg-neutral-900'>
       <div className='flex justify-between py-4 container'>
         <div className='flex items-center gap-4'>
-          <div className='flex items-center gap-3 py-2'>
+          <Link className='flex items-center gap-3 py-2' href='/'>
             <RoLinkerLogo className='size-8' />
             <span className='font-black text-xl'>RoLinker</span>
-          </div>
+          </Link>
           <div className='hidden flex items-center gap-2 md:flex'>
             {NavLinks.map((navLink, index) => (
               <Link key={index} href={navLink.href} className='px-4 py-2 rounded hover:bg-neutral-800 hover:shadow-lg'>{navLink.name}</Link>
