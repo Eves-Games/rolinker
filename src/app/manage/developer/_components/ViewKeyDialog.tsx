@@ -40,7 +40,7 @@ export default function ViewKeyDialog({ isGuildOpen, setIsGuildOpen }: ViewKeyDi
     return (
         <Dialog open={isGuildOpen.open} onClose={() => setIsGuildOpen({ open: false, guild: null })} className='fixed inset-0 flex items-center justify-center z-50 px-4'>
             <Dialog.Overlay className='fixed inset-0 bg-black opacity-30' />
-            <div className='space-y-4 relative bg-neutral-800 rounded-lg px-6 py-4'>
+            <div className='space-y-4 relative bg-neutral-800 rounded-lg px-6 py-4 shadow-lg'>
                 <div className='flex space-x-4 justify-between items-center'>
                     <Dialog.Title className='text-2xl font-bold'>{isGuildOpen.guild?.name || 'Guild'}&#39;s API key</Dialog.Title>
                     <button onClick={() => setIsGuildOpen({ open: false, guild: null })} className='p-2 text-gray-400 hover:text-gray-200'>

@@ -18,7 +18,7 @@ export default function ViewKeyDialog({ isOpen, setIsOpen, guilds, apiGuilds, se
     return (
         <Dialog open={isOpen} onClose={() => setIsOpen(false)} className='fixed inset-0 flex items-center justify-center z-50 px-4'>
           <Dialog.Overlay className='fixed inset-0 bg-black opacity-30' />
-          <div className='space-y-4 relative bg-neutral-800 rounded-lg max-w-lg w-fit mx-auto px-6 py-4'>
+          <div className='space-y-4 relative bg-neutral-800 rounded-lg max-w-lg w-fit mx-auto px-6 py-4 shadow-lg'>
             <div className='flex space-x-4 justify-between items-center'>
               <Dialog.Title className='text-2xl font-bold'>Create API Key</Dialog.Title>
               <button onClick={() => setIsOpen(false)} className='p-2 text-gray-400 hover:text-gray-200'>
@@ -52,8 +52,8 @@ export default function ViewKeyDialog({ isOpen, setIsOpen, guilds, apiGuilds, se
               </Listbox>
             </div>
     
-            <p className='text-sm'>Please note that there is a daily limit of 750 uses for the API key. If you require more, you can upgrade after key creation.</p>
-            <p className='text-sm'>Refer to our <a href='/fair-use-policy' className='text-blue-400 hover:underline'>Fair Use Policy</a> for more information.</p>
+            <p className='text-sm'>Please note that there is a daily limit of 750 uses for the API key. <span className='line-through'>If you require more, you can upgrade after key creation.</span></p>
+            <p className='text-sm'>Refer to our <a href='/terms-of-service' className='text-blue-400 hover:underline'>Terms of Service</a> for more information.</p>
     
             <form onSubmit={async (e) => {
               e.preventDefault();
