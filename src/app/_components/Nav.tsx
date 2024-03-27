@@ -24,7 +24,7 @@ export default async function Nav() {
         <div className='flex items-center gap-4'>
           <Link className='flex items-center gap-3 py-2' href='/'>
             <RoLinkerLogo className='size-8' />
-            <span className='font-black text-xl'>RoLinker</span>
+            <span className='font-black text-2xl'>RoLinker</span>
           </Link>
           <div className='hidden flex items-center gap-2 md:flex'>
             {NavLinks.map((navLink, index) => (
@@ -40,7 +40,7 @@ export default async function Nav() {
               'use server';
               await signIn('discord')
             }}>
-              <button className='flex items-center gap-4 px-4 py-2 rounded transition-colors bg-[#5865F2] hover:bg-opacity-75 whitespace-nowrap'>
+              <button className='flex items-center gap-4 px-4 py-2 rounded bg-[#5865F2] hover:bg-opacity-75 whitespace-nowrap'>
                 <DiscordLogo className='size-8' />
                 <span>Sign in</span>
               </button>
