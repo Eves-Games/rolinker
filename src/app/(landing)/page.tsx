@@ -81,7 +81,7 @@ export default async function Page() {
             <InformationCircleIcon className='size-24' />
             <div>
               <h2 className='text-4xl mb-2'>Endless Support</h2>
-              <p className='text-lg'>RoLinker has a 24/7 support team and rich community involvement in improving the servers - From bug hunts, to partnerships.</p>
+              <p className='text-lg'>RoLinker has a 24/7 support team and rich community involvement in improving the service - From bug hunts, to partnerships.</p>
             </div>
           </div>
         </div>
