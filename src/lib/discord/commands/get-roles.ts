@@ -42,10 +42,10 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
     const removeRoles = guildRolesData.filter(role => removeRanks.some(rank => rank.name === role.name)).filter(role => memberRoles.includes(role.name));
     const addRole = guildRolesData.find(role => role.name == userRank.name);
 
-    rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();
+    await rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();
 
     for (const role of removeRoles) {
-        rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
+        await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
     };
 
     return successMessage(InteractionResponseType.ChannelMessageWithSource);
