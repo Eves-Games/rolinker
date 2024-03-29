@@ -20,7 +20,7 @@ export default async function Page() {
           <div className='flex flex-col gap-8 items-center lg:items-start'>
             <div className='flex items-center space-x-4'>
               <RoLinkerLogo className='size-16 sm:size-20' />
-              <h1 className='font-black text-5xl sm:6-xl'>RoLinker</h1>
+              <h1 className='font-black text-5xl sm:text-6xl'>RoLinker</h1>
             </div>
             <div>
               <h2 className='font-semibold text-2xl'>Connecting Roblox to Discord</h2>
