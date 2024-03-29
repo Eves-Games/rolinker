@@ -67,9 +67,9 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
 
     rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();
 
-    removeRoles.forEach(role => {
+    for (const role of removeRoles) {
         rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role)).catch();
-    });
+    };
 
     return successMessage(InteractionResponseType.ChannelMessageWithSource);
 }
