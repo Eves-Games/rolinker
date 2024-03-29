@@ -25,7 +25,7 @@ export default {
             clientId: process.env.ROBLOX_ID as string,
             clientSecret: process.env.ROBLOX_SECRET as string,
             issuer: 'https://apis.roblox.com/oauth/',
-            authorization: { params: { scope: 'openid', redirect_uri: 'https://rolinker.net/auth' } },
+            authorization: { params: { scope: 'openid', redirect_uri: 'https://rolinker.net/api/auth/callback/roblox' } },
             client: {
                 authorization_signed_response_alg: 'ES256',
                 id_token_signed_response_alg: 'ES256',
