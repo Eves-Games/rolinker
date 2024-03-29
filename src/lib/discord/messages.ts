@@ -19,6 +19,7 @@ export function notInGroup(responseType: InteractionResponseType.UpdateMessage |
                     ],
                 },
             ],
+            components: [],
             flags: MessageFlags.Ephemeral,
         },
     } satisfies APIInteractionResponse;
@@ -34,6 +35,7 @@ export function noLinkedGroup(responseType: InteractionResponseType.UpdateMessag
                     color: 15548997,
                 },
             ],
+            components: [],
             flags: MessageFlags.Ephemeral,
         },
     } satisfies APIInteractionResponse;
@@ -59,6 +61,7 @@ export function noLinkedAccounts(responseType: InteractionResponseType.UpdateMes
                     ],
                 },
             ],
+            components: [],
             flags: MessageFlags.Ephemeral,
         },
     } satisfies APIInteractionResponse;
@@ -79,6 +82,7 @@ export function errorMessage(interaction: APIInteraction, responseType: Interact
                     ] : [],
                 },
             ],
+            components: [],
             flags: MessageFlags.Ephemeral,
         },
     };
@@ -94,7 +98,8 @@ export function successMessage(responseType: InteractionResponseType.UpdateMessa
                     color: 5763719,
                 }
             ],
-            components: []
+            components: [],
+            flags: MessageFlags.Ephemeral,
         }
     };
 };
