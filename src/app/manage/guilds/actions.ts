@@ -26,7 +26,7 @@ export async function genDiscordRoles(guildId: string) {
     const newGroupRoles = groupRoles.filter(groupRole => !guildRoleSet.has(groupRole.name));
 
     for (const groupRole of newGroupRoles) {
-        rest.post(Routes.guildRoles(guildId), {
+        await rest.post(Routes.guildRoles(guildId), {
             body: {
                 name: groupRole.name,
                 hoist: true
