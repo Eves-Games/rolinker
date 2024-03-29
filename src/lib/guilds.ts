@@ -44,6 +44,8 @@ export async function getUserGuilds(access_token: string) {
 export async function updateGuildGroup(guildId: string, groupId: string | null) {
     const session = await auth();
 
+    console.log(guildId, session?.user.id)
+
     db.guild.update({
         where: {
             id: guildId,
