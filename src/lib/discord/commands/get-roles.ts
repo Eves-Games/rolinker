@@ -1,55 +1,75 @@
 import db from "@/lib/db";
-import { getRoles, getUserRoles } from "@/lib/roblox";
-import { APIChatInputApplicationCommandInteraction, InteractionResponseType } from "discord-api-types/v10";
-import { errorMessage, successMessage } from "@/lib/discord/messages";
+import { getGroups, getRoles, getUserRoleInGroup } from "@/lib/roblox";
+import { APIChatInputApplicationCommandInteraction, InteractionResponseType, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
+import { errorMessage, noLinkedAccounts, noLinkedGroup, notInGroup, successMessage } from "@/lib/discord/messages";
+import { rest } from "@/lib/discord/rest";
 
 export async function getRolesCommand(interaction: APIChatInputApplicationCommandInteraction) {
-    const guildId = interaction.guild_id;
+    const { member, guild_id } = interaction
 
-    if (!guildId) return;
+    if (!guild_id || !member) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Interaction objects not found');
 
     const guild = await db.guild.findFirst({
         where: {
-            id: guildId
+            id: guild_id
         }
     });
 
-    const account = await db.account.findFirst({
+    if (!guild?.groupId) return noLinkedGroup(InteractionResponseType.ChannelMessageWithSource);
+
+    let account
+    const accountGuild = await db.accountGuild.findUnique({
         where: {
-            userId: interaction.user?.id
-        }
-    })
-
-    if (!guild?.groupId || !account) return;
-
-    const userRoles = await getUserRoles(account.id) || [];
-    const userRoleNames = userRoles.filter(userRole => userRole.group.id.toString() === guild.groupId).map(userRole => userRole.role.name)
-
-    const groupRoles = await getRoles(guild.groupId);
-    const groupRoleNames = groupRoles?.map(groupRole => groupRole.name);
-
-    const memberRoles = interaction.member?.roles || [];
-
-    if (!userRoles || !groupRoles || !groupRoleNames) return;
-
-    const memberGroupRoles = memberRoles.filter(memberRole => groupRoleNames.includes(memberRole));
-    const removeRoles = memberGroupRoles.map(memberGroupRole => userRoleNames.includes(memberGroupRole))
-    const addRole = memberGroupRoles.map(memberGroupRole => !userRoleNames.includes(memberGroupRole))
-
-    console.log(removeRoles, addRole);
-    
-    const res = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/members/${interaction.member?.user.id}/roles/1197897676692398170`, {
-        method: 'PUT',
-        headers: {
-            Authorization: 'Bot ' + process.env.DISCORD_BOT_TOKEN,
+            userId_guildId: {
+                userId: member.user.id,
+                guildId: guild_id
+            }
+        },
+        include: {
+            account: true
         }
     });
 
-    if (!res.ok) {
-        const responseText = (await res.text()).substring(0, 1024)
+    if (accountGuild) {
+        account = accountGuild.account
+    } else {
+        account = await db.account.findUnique({
+            where: {
+                onePrimaryAccountPerUser: {
+                    userId: member.user.id,
+                    isPrimary: true
+                }
+            }
+        });
 
-        return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, responseText);
+        if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
     };
+
+    const groupRanks = await getRoles(guild.groupId);
+    const userRank = await getUserRoleInGroup(account.id, guild.groupId);
+    const memberRoles = member.roles;
+
+    if (!groupRanks || !userRank) {
+        const group = await getGroups([guild.groupId]);
+
+        if (!group) {
+            return notInGroup(InteractionResponseType.ChannelMessageWithSource, { name: 'this group', id: guild.groupId, })
+        } else {
+            return notInGroup(InteractionResponseType.ChannelMessageWithSource, group.data[0]);
+        }
+    };
+
+    const guildRolesData = await rest.get(Routes.guildRoles(guild_id)).catch(() => { return []; }) as RESTGetAPIGuildRolesResult;
+
+    const removeRanks = groupRanks.filter(rank => rank.id == userRank.id);
+    const removeRoles = memberRoles.filter(role => removeRanks.some(rank => rank.name === role));
+    const addRole = guildRolesData.find(role => role.name == userRank.name);
+
+    rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();
+
+    removeRoles.forEach(role => {
+        rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role)).catch();
+    });
 
     return successMessage(InteractionResponseType.ChannelMessageWithSource);
 }

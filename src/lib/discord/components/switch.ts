@@ -25,7 +25,10 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
         try {
             await db.accountGuild.upsert({
                 where: {
-                    accountId: values[0]
+                    userId_guildId: {
+                        userId: member.user.id,
+                        guildId: guild_id
+                    }
                 },
                 create: {
                     userId: member.user.id,
@@ -33,7 +36,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
                     guildId: guild_id
                 },
                 update: {
-                    guildId: guild_id
+                    accountId: values[0]
                 }
             })
         } catch (error) {
