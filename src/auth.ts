@@ -29,7 +29,7 @@ export const {
         },
         async signIn({ user, account, profile }) {
             if (account?.provider === "discord" && profile) {
-                user.image = profile.avatar ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png` : `https://cdn.discordapp.com/embed/avatars/${Math.abs(Number(profile.id) >> 22) % 5}.png`;
+                user.image = profile.image_url as string;
                 user.name = profile.username as string;
 
                 return true;

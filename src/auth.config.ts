@@ -12,11 +12,17 @@ export default {
         DiscordProvider({
             clientId: process.env.DISCORD_CLIENT_ID as string,
             clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
-            authorization: {
-                params: {
-                    scope: 'identify guilds'
-                }
-            },
+            authorization: 'https://discord.com/api/oauth2/authorize?scope=identify+guilds',
+            profile(profile) {
+                if (profile.avatar === null) {
+                    const defaultAvatarNumber = Math.abs(parseInt(profile.id) >> 22) % 5
+                    profile.image_url = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`
+                } else {
+                    const format = profile.avatar.startsWith('_a') ? 'gif' : 'png'
+                    profile.image_url = `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${format}`
+                };
+                return profile;
+            }
         }),
         {
             id: 'roblox',
