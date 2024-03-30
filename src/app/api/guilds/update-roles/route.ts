@@ -51,16 +51,10 @@ export async function GET(request: NextRequest) {
         status: 400,
     });
 
-    const memberData = await rest.get(Routes.guildMember(guildApiKey.id, query));
+    const member = await rest.get(Routes.guildMember(guildApiKey.id, query)).catch(() => { return null; }) as APIGuildMember;
 
-    if (!isAPIGuildMember(memberData)) {
+    if (!member) {
         return new NextResponse('User not apart of guild API key is linked too', { status: 404, });
-    }
-
-    const member: APIGuildMember = memberData;
-
-    function isAPIGuildMember(obj: any): obj is APIGuildMember {
-        return obj && typeof obj === 'object' && 'user' in obj && 'roles' in obj;
     }
 
     const account = await findAssociatedAccount(query, id);
