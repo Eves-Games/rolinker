@@ -12,6 +12,7 @@ export enum MessageTitles {
     UnableRole = 'Unable to give roles!',
 
     NoLinkedAccounts = 'You have no linked accounts!',
+    NotInDivisions = 'You are not in any divisions!',
     NotInGroup = 'You are not in this guilds linked group!'
 };
 

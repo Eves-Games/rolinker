@@ -17,7 +17,7 @@ import { RequestData } from "@discordjs/rest";
 
 export async function getDivisionsCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction;
-    if (!guild_id || !member) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' }});
+    if (!guild_id || !member) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' } });
 
     const guild = await db.guild.findUnique({ where: { id: guild_id }, include: { childGuilds: true } });
     if (!guild?.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
@@ -27,10 +27,11 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
 
     const userRanks = await getUserRoles(account.id);
-    if (!userRanks) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: {interaction, message: 'User ranks not found. The account might be banned.'} });
+    if (!userRanks) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'User ranks not found. The account might be banned.' } });
 
     const userGroupIds = userRanks.map(userRank => userRank.group.id);
     const applicableGuilds = guild.childGuilds.filter(guild => guild.groupId && guild.inviteChannelId && userGroupIds.includes(parseInt(guild.groupId)));
+    if (applicableGuilds.length === 0) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NotInDivisions, flags: MessageFlags.Ephemeral });
 
     const invites = await Promise.all(
         applicableGuilds.map(async (guild) => {
