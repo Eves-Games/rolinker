@@ -1,13 +1,23 @@
 import { getDetailedAccounts } from '@/lib/accounts';
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, ComponentType } from 'discord-api-types/v10';
-import { errorMessage } from '../messages';
+import { errorMessage, noLinkedGroup } from '../messages';
+import db from '@/lib/db';
 
 export async function switchCommand(interaction: APIChatInputApplicationCommandInteraction) {
-    const { member } = interaction
+    const { member, guild_id } = interaction
 
-    if (!member) {
-        return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource);
-    }
+    if (!guild_id || !member) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Interaction objects not found');
+
+    let guild = await db.guild.findUnique({
+        where: {
+            id: guild_id
+        },
+        include: {
+            parentGuild: true
+        }
+    });
+
+    if (!guild?.groupId) return noLinkedGroup(InteractionResponseType.ChannelMessageWithSource);
 
     const detailedAccounts = await getDetailedAccounts(member.user.id);
 
@@ -50,7 +60,7 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
             embeds: [
                 {
                     title: 'Select a Roblox Account',
-                    description: 'This will change what account is being used only in this server.'
+                    description: guild?.parentGuild ? `This will change what account is being used in this server, ${guild.parentGuild.name}, and its divisions.` : 'This will change what account is being used only in this server.'
                 },
             ],
             components: [

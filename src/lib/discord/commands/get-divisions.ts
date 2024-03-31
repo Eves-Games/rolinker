@@ -5,7 +5,7 @@ import { errorMessage, noLinkedAccounts, noLinkedGroup, notInGroup, successMessa
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
 
-export async function getRolesCommand(interaction: APIChatInputApplicationCommandInteraction) {
+export async function getDivisionsCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction
 
     if (!guild_id || !member) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Interaction objects not found');
@@ -13,6 +13,10 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
     const guild = await db.guild.findUnique({
         where: {
             id: guild_id
+        },
+        include: {
+            childGuilds: true,
+            parentGuild: true
         }
     });
 

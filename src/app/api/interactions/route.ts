@@ -1,4 +1,5 @@
 import { commands } from "@/commands"
+import { getDivisionsCommand } from "@/lib/discord/commands/get-divisions"
 import { getRolesCommand } from "@/lib/discord/commands/get-roles"
 import { linkCommand } from '@/lib/discord/commands/link'
 import { switchCommand } from '@/lib/discord/commands/switch'
@@ -55,13 +56,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(await getRolesCommand(interaction));
 
             case commands.getdivisions.name:
-                return NextResponse.json({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        content: 'Get divisions',
-                        flags: MessageFlags.Ephemeral,
-                    },
-                });
+                return NextResponse.json(await getDivisionsCommand(interaction));
 
             default:
         }
