@@ -19,8 +19,6 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
     const relatedGuilds = await getRelatedGuilds(guild_id);
     const relatedGuildIds = relatedGuilds.map((guild) => guild.id);
 
-    console.log(relatedGuildIds)
-
     if (values[0] === 'default') {
         try {
             await db.accountGuild.deleteMany({
@@ -34,32 +32,15 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
         }
     } else {
         try {
-            await db.accountGuild.updateMany({
+            await db.accountGuild.deleteMany({
                 where: {
                     userId: member.user.id,
                     guildId: { in: relatedGuildIds },
                 },
-                data: {
-                    accountId: values[0],
-                },
             });
-
-            const existingGuildIds = await db.accountGuild.findMany({
-                where: {
-                    userId: member.user.id,
-                    guildId: { in: relatedGuildIds },
-                },
-                select: {
-                    guildId: true,
-                },
-            });
-
-            const newGuildIds = relatedGuildIds.filter(
-                (guildId) => !existingGuildIds.some((existingGuild) => existingGuild.guildId === guildId)
-            );
 
             await db.accountGuild.createMany({
-                data: newGuildIds.map((guildId) => ({
+                data: relatedGuildIds.map((guildId) => ({
                     userId: member.user.id,
                     accountId: values[0],
                     guildId,
@@ -67,7 +48,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
             });
         } catch (error) {
             return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
-        };
+        }
     };
 
     return successMessage(InteractionResponseType.UpdateMessage);
