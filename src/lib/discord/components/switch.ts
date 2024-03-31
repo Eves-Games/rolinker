@@ -1,6 +1,6 @@
 import db from '@/lib/db';
 import { InteractionResponseType, APIMessageComponentSelectMenuInteraction } from 'discord-api-types/v10';
-import { errorMessage, permissionlessMessage, successMessage } from '@/lib/discord/messages';
+import { errorMessage, message, MessageTypes, successMessage } from '@/lib/discord/messages';
 import { getRelatedGuilds } from '../util';
 
 export async function switchComponent(interaction: APIMessageComponentSelectMenuInteraction) {
@@ -14,7 +14,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
         include: { parentGuild: true, childGuilds: true },
     });
 
-    if (!guild?.groupId) return permissionlessMessage(InteractionResponseType.ChannelMessageWithSource, 'This guild has no linked group');
+    if (!guild?.groupId) return message(InteractionResponseType.ChannelMessageWithSource, MessageTypes.NoGroupId);
 
     const relatedGuilds = await getRelatedGuilds(guild_id);
     const relatedGuildIds = relatedGuilds.map((guild) => guild.id);

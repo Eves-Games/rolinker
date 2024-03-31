@@ -1,6 +1,29 @@
 import { APIInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
 import { GroupResponseV2 } from "roblox-api-types";
 
+export enum MessageTypes {
+    NoGroupId = 'This guild has no linked group!',
+    NoDivisions = 'This guild has no linked divisions!',
+    UnableInvites = 'Unable to create invites!',
+    UnableRole = 'Unable to give roles!'
+};
+
+export enum MessageColors {
+    Red = 15548997,
+    Green = 5763719
+};
+
+export function message(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, title: MessageTypes, color?: MessageColors): APIInteractionResponse {
+    return {
+        type: responseType,
+        data: {
+            embeds: [{ title, color }],
+            components: [],
+            flags: MessageFlags.Ephemeral,
+        },
+    };
+};
+
 export function notInGroup(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, group: { id: string; name: string } | GroupResponseV2): APIInteractionResponse {
     return {
         type: responseType,
@@ -23,23 +46,6 @@ export function notInGroup(responseType: InteractionResponseType.UpdateMessage |
             flags: MessageFlags.Ephemeral,
         },
     } satisfies APIInteractionResponse;
-};
-
-export function permissionlessMessage(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, message: string): APIInteractionResponse {
-    return {
-        type: responseType,
-        data: {
-            embeds: [
-                {
-                    title: 'Cannot perform function!',
-                    description: message,
-                    color: 15548997,
-                },
-            ],
-            components: [],
-            flags: MessageFlags.Ephemeral,
-        },
-    };
 };
 
 export function noLinkedAccounts(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource): APIInteractionResponse {
