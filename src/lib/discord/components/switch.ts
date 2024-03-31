@@ -19,6 +19,8 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
     const relatedGuilds = await getRelatedGuilds(guild_id);
     const relatedGuildIds = relatedGuilds.map((guild) => guild.id);
 
+    console.log(relatedGuildIds)
+
     if (values[0] === 'default') {
         try {
             await db.accountGuild.deleteMany({
