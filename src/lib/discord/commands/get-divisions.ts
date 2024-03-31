@@ -10,7 +10,7 @@ import {
     ButtonStyle,
     APIInvite,
 } from "discord-api-types/v10";
-import { errorMessage, message, ConfigurationErrorTypes, PermissionErrorTypes, noLinkedAccounts } from "@/lib/discord/messages";
+import { errorMessage, message, noLinkedAccounts, MessageTitles, MessageColors } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
 import { RequestData } from "@discordjs/rest";
@@ -20,8 +20,8 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     if (!guild_id || !member) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Interaction objects not found');
 
     const guild = await db.guild.findUnique({ where: { id: guild_id }, include: { childGuilds: true } });
-    if (!guild?.groupId) return message(InteractionResponseType.ChannelMessageWithSource, ConfigurationErrorTypes.NoGroupId);
-    if (guild.childGuilds.length === 0) return message(InteractionResponseType.ChannelMessageWithSource, ConfigurationErrorTypes.NoDivisions);
+    if (!guild?.groupId) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
+    if (guild.childGuilds.length === 0) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoDivisions, flags: MessageFlags.Ephemeral });
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
@@ -40,7 +40,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     );
 
     const validInvites = invites.filter((invite): invite is { guild: typeof guild.childGuilds[number]; invite: APIInvite } => invite.invite !== null) as { guild: typeof guild.childGuilds[number]; invite: APIInvite }[];
-    if (validInvites.length === 0) return message(InteractionResponseType.ChannelMessageWithSource, PermissionErrorTypes.UnableInvites);
+    if (validInvites.length === 0) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableInvites, color: MessageColors.Red });
 
     return {
         type: InteractionResponseType.ChannelMessageWithSource,

@@ -1,6 +1,6 @@
 import db from '@/lib/db';
-import { InteractionResponseType, APIMessageComponentSelectMenuInteraction } from 'discord-api-types/v10';
-import { errorMessage, message, ConfigurationErrorTypes, successMessage } from '@/lib/discord/messages';
+import { InteractionResponseType, APIMessageComponentSelectMenuInteraction, MessageFlags } from 'discord-api-types/v10';
+import { errorMessage, message, MessageTitles, MessageColors } from '@/lib/discord/messages';
 import { getRelatedGuilds } from '../util';
 
 export async function switchComponent(interaction: APIMessageComponentSelectMenuInteraction) {
@@ -14,7 +14,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
         include: { parentGuild: true, childGuilds: true },
     });
 
-    if (!guild?.groupId) return message(InteractionResponseType.ChannelMessageWithSource, ConfigurationErrorTypes.NoGroupId);
+    if (!guild?.groupId) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
     const relatedGuilds = await getRelatedGuilds(guild_id);
     const relatedGuildIds = relatedGuilds.map((guild) => guild.id);
@@ -44,5 +44,5 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
         }
     };
 
-    return successMessage(InteractionResponseType.UpdateMessage);
+    return message({ responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Success, color: MessageColors.Green, flags: MessageFlags.Ephemeral });
 };

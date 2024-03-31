@@ -1,31 +1,27 @@
 import { APIInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
 import { GroupResponseV2 } from "roblox-api-types";
 
-export enum PermissionErrorTypes {
-    UnableInvites = 'Unable to create invites!',
-    UnableRole = 'Unable to give roles!',
-}
+export enum MessageTitles {
+    Success = 'Success!',
 
-export enum ConfigurationErrorTypes {
     NoGroupId = 'This guild has no linked group!',
     NoDivisions = 'This guild has no linked divisions!',
-}
 
-export enum UserErrorTypes {
-    NotInGroup = 'You are not in this guilds linked group!',
-    NotLinked = 'You have no linked accounts!',
-}
+    UnableInvites = 'Unable to create invites!',
+    UnableRole = 'Unable to give roles!',
+
+    NoLinkedAccounts = 'You have no linked accounts!',
+    NotInGroup = 'You are not in this guilds linked group!'
+};
 
 export enum MessageColors {
     Red = 15548997,
     Green = 5763719
-}
+};
 
-export function message(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, type: PermissionErrorTypes | ConfigurationErrorTypes): APIInteractionResponse {
-    const color = type in PermissionErrorTypes ? undefined : MessageColors.Red;
-    const flags = type in PermissionErrorTypes ? undefined : MessageFlags.Ephemeral;
-    const title = type;
+interface MessageProps { responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, title: MessageTitles, color?: MessageColors, flags?: MessageFlags }
 
+export function message({ responseType, title, color, flags }: MessageProps): APIInteractionResponse {
     return {
         type: responseType,
         data: {
@@ -34,7 +30,7 @@ export function message(responseType: InteractionResponseType.UpdateMessage | In
             flags
         },
     };
-}
+};
 
 export function notInGroup(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, group: { id: string; name: string } | GroupResponseV2): APIInteractionResponse {
     return {
@@ -104,21 +100,5 @@ export function errorMessage(interaction: APIInteraction, responseType: Interact
             components: [],
             flags: MessageFlags.Ephemeral,
         },
-    };
-};
-
-export function successMessage(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource): APIInteractionResponse {
-    return {
-        type: responseType,
-        data: {
-            embeds: [
-                {
-                    title: 'Success!',
-                    color: 5763719,
-                }
-            ],
-            components: [],
-            flags: MessageFlags.Ephemeral,
-        }
     };
 };

@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { getGroups, getRoles, getUserRoleInGroup } from "@/lib/roblox";
-import { APIChatInputApplicationCommandInteraction, InteractionResponseType, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
-import { errorMessage, message, ConfigurationErrorTypes, PermissionErrorTypes, noLinkedAccounts, notInGroup, successMessage } from "@/lib/discord/messages";
+import { APIChatInputApplicationCommandInteraction, InteractionResponseType, MessageFlags, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
+import { errorMessage, message, MessageColors, MessageTitles, noLinkedAccounts, notInGroup } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
 
@@ -16,7 +16,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
         }
     });
 
-    if (!guild?.groupId) return message(InteractionResponseType.ChannelMessageWithSource, ConfigurationErrorTypes.NoGroupId);
+    if (!guild?.groupId) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
 
@@ -41,7 +41,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
     const removeRanks = groupRanks.filter(rank => rank.id == userRank.id);
     const removeRoles = guildRolesData.filter(role => removeRanks.some(rank => rank.name === role.name)).filter(role => memberRoles.includes(role.name));
     const addRole = guildRolesData.find(role => role.name == userRank.name);
-    
+
     try {
         await rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();
 
@@ -49,8 +49,8 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
             await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
         };
     } catch {
-        return message(InteractionResponseType.ChannelMessageWithSource, PermissionErrorTypes.UnableRole);
+        return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableRole, color: MessageColors.Red });
     };
 
-    return successMessage(InteractionResponseType.ChannelMessageWithSource);
+    return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, color: MessageColors.Green, flags: MessageFlags.Ephemeral });
 }

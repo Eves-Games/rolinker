@@ -1,6 +1,6 @@
 import { getDetailedAccounts } from '@/lib/accounts';
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, ComponentType } from 'discord-api-types/v10';
-import { errorMessage, message, ConfigurationErrorTypes, PermissionErrorTypes } from '../messages';
+import { errorMessage, message, MessageTitles } from '../messages';
 import db from '@/lib/db';
 
 export async function switchCommand(interaction: APIChatInputApplicationCommandInteraction) {
@@ -18,7 +18,7 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
         }
     });
 
-    if (!guild?.groupId) return message(InteractionResponseType.ChannelMessageWithSource, ConfigurationErrorTypes.NoGroupId);
+    if (!guild?.groupId) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
     const detailedAccounts = await getDetailedAccounts(member.user.id);
 
