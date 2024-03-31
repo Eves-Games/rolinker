@@ -13,6 +13,7 @@ import {
 import { errorMessage, noLinkedAccounts, noLinkedGroup, notInGroup, successMessage } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
+import { RequestData } from "@discordjs/rest";
 
 export async function getDivisionsCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction;
@@ -40,7 +41,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
 
     const invites = await Promise.all(
         applicableGuilds.map(async (guild) => {
-            const invite = await rest.post(Routes.channelInvites(guild.inviteChannelId!)).catch(() => null);
+            const invite = await rest.post(Routes.channelInvites(guild.inviteChannelId!), { max_age: 120, max_uses: 1, unique: true } as RequestData).catch(() => null);
             return { guild, invite };
         })
     );
