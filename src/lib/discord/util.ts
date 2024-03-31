@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import { Account } from "@prisma/client/edge";
+import { Account, Guild } from "@prisma/client/edge";
 
 export async function findAssociatedAccount(userId: string, guildId: string) {
     let account: Account | null;
@@ -29,4 +29,41 @@ export async function findAssociatedAccount(userId: string, guildId: string) {
     };
 
     return account;
-}
+};
+
+export async function getRelatedGuilds(guildId: string): Promise<Guild[]> {
+    const visitedGuildIds = new Set<string>();
+    const relatedGuilds: Guild[] = [];
+
+    async function fetchRelatedGuilds(currentGuildId: string) {
+        if (visitedGuildIds.has(currentGuildId) || currentGuildId === guildId) {
+            return;
+        }
+
+        visitedGuildIds.add(currentGuildId);
+
+        const guild = await db.guild.findUnique({
+            where: { id: currentGuildId },
+            include: {
+                parentGuild: true,
+                childGuilds: true,
+            },
+        });
+
+        if (guild) {
+            relatedGuilds.push(guild);
+
+            if (guild.parentGuild) {
+                await fetchRelatedGuilds(guild.parentGuild.id);
+            }
+
+            for (const childGuild of guild.childGuilds) {
+                await fetchRelatedGuilds(childGuild.id);
+            }
+        }
+    }
+
+    await fetchRelatedGuilds(guildId);
+
+    return relatedGuilds;
+};

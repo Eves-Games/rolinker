@@ -13,7 +13,8 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
             id: guild_id
         },
         include: {
-            parentGuild: true
+            parentGuild: true,
+            childGuilds: true
         }
     });
 
@@ -60,7 +61,7 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
             embeds: [
                 {
                     title: 'Select a Roblox Account',
-                    description: guild?.parentGuild ? `This will change what account is being used in this server, ${guild.parentGuild.name}, and its divisions.` : 'This will change what account is being used only in this server.'
+                    description: guild.parentGuild || guild.childGuilds ? `This will change what account is being used in this server, and all servers affiliating with it.` : 'This will change what account is being used only in this server.'
                 },
             ],
             components: [

@@ -1,47 +1,47 @@
 import db from '@/lib/db';
-import { APIInteractionResponse, InteractionResponseType, APIMessageComponentSelectMenuInteraction } from 'discord-api-types/v10';
-import { errorMessage, successMessage } from '@/lib/discord/messages';
+import { InteractionResponseType, APIMessageComponentSelectMenuInteraction } from 'discord-api-types/v10';
+import { errorMessage, noLinkedGroup, successMessage } from '@/lib/discord/messages';
+import { getRelatedGuilds } from '../util';
 
 export async function switchComponent(interaction: APIMessageComponentSelectMenuInteraction) {
-    const { guild_id, member } = interaction
-    const { values } = interaction.data
+    const { guild_id, member } = interaction;
+    const { values } = interaction.data;
 
-    if (!member || !guild_id) {
-        return errorMessage(interaction, InteractionResponseType.UpdateMessage);
-    }
+    if (!member || !guild_id) return errorMessage(interaction, InteractionResponseType.UpdateMessage);
+
+    const guild = await db.guild.findUnique({
+        where: { id: guild_id },
+        include: { parentGuild: true, childGuilds: true },
+    });
+
+    if (!guild?.groupId) return noLinkedGroup(InteractionResponseType.ChannelMessageWithSource);
+
+    const relatedGuilds = await getRelatedGuilds(guild_id);
+    const relatedGuildIds = relatedGuilds.map((guild) => guild.id);
 
     if (values[0] === 'default') {
         try {
-            await db.accountGuild.delete({
+            await db.accountGuild.deleteMany({
                 where: {
                     userId: member.user.id,
-                    guildId: guild_id
-                }
-            })
+                    guildId: { in: relatedGuildIds },
+                },
+            });
         } catch (error) {
             return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
-        };
+        }
     } else {
         try {
-            await db.accountGuild.upsert({
-                where: {
-                    userId_guildId: {
-                        userId: member.user.id,
-                        guildId: guild_id
-                    }
-                },
-                create: {
-                    userId: member.user.id,
-                    accountId: values[0],
-                    guildId: guild_id
-                },
-                update: {
-                    accountId: values[0]
-                }
-            })
+            for (const guildId of relatedGuildIds) {
+                await db.accountGuild.upsert({
+                    where: { userId_guildId: { userId: member.user.id, guildId } },
+                    create: { userId: member.user.id, accountId: values[0], guildId },
+                    update: { accountId: values[0] },
+                });
+            }
         } catch (error) {
             return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
-        };
+        }
     };
 
     return successMessage(InteractionResponseType.UpdateMessage);
