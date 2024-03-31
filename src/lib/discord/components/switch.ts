@@ -34,16 +34,40 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
         }
     } else {
         try {
-            for (const guildId of relatedGuildIds) {
-                await db.accountGuild.upsert({
-                    where: { userId: member.user.id, guildId },
-                    create: { userId: member.user.id, accountId: values[0], guildId },
-                    update: { accountId: values[0] },
-                });
-            }
+            await db.accountGuild.updateMany({
+                where: {
+                    userId: member.user.id,
+                    guildId: { in: relatedGuildIds },
+                },
+                data: {
+                    accountId: values[0],
+                },
+            });
+
+            const existingGuildIds = await db.accountGuild.findMany({
+                where: {
+                    userId: member.user.id,
+                    guildId: { in: relatedGuildIds },
+                },
+                select: {
+                    guildId: true,
+                },
+            });
+
+            const newGuildIds = relatedGuildIds.filter(
+                (guildId) => !existingGuildIds.some((existingGuild) => existingGuild.guildId === guildId)
+            );
+
+            await db.accountGuild.createMany({
+                data: newGuildIds.map((guildId) => ({
+                    userId: member.user.id,
+                    accountId: values[0],
+                    guildId,
+                })),
+            });
         } catch (error) {
             return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
-        }
+        };
     };
 
     return successMessage(InteractionResponseType.UpdateMessage);
