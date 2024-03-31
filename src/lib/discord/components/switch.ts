@@ -19,26 +19,17 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
     const relatedGuilds = await getRelatedGuilds(guild_id);
     const relatedGuildIds = relatedGuilds.map((guild) => guild.id);
 
-    if (values[0] === 'default') {
-        try {
-            await db.accountGuild.deleteMany({
-                where: {
-                    userId: member.user.id,
-                    guildId: { in: relatedGuildIds },
-                },
-            });
-        } catch (error) {
-            return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
-        }
-    } else {
-        try {
-            await db.accountGuild.deleteMany({
-                where: {
-                    userId: member.user.id,
-                    guildId: { in: relatedGuildIds },
-                },
-            });
+    console.log(relatedGuildIds, member.user.id, values[0])
 
+    try {
+        await db.accountGuild.deleteMany({
+            where: {
+                userId: member.user.id,
+                guildId: { in: relatedGuildIds },
+            },
+        });
+
+        if (values[0] !== 'default') {
             await db.accountGuild.createMany({
                 data: relatedGuildIds.map((guildId) => ({
                     userId: member.user.id,
@@ -46,10 +37,10 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
                     guildId,
                 })),
             });
-        } catch (error) {
-            return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
         }
-    };
+    } catch (error) {
+        return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
+    }
 
     return successMessage(InteractionResponseType.UpdateMessage);
-};
+}
