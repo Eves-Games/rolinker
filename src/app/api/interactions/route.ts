@@ -4,7 +4,6 @@ import { getRolesCommand } from "@/lib/discord/commands/get-roles"
 import { linkCommand } from '@/lib/discord/commands/link'
 import { switchCommand } from '@/lib/discord/commands/switch'
 import { switchComponent } from "@/lib/discord/components/switch"
-import { errorMessage } from "@/lib/discord/messages"
 import { verifyInteractionRequest } from "@/lib/discord/verify-discord-request"
 import {
     APIInteractionResponse,

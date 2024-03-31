@@ -10,24 +10,24 @@ import {
     ButtonStyle,
     APIInvite,
 } from "discord-api-types/v10";
-import { errorMessage, message, noLinkedAccounts, MessageTitles, MessageColors } from "@/lib/discord/messages";
+import { generateMessage, noLinkedAccounts, MessageTitles, MessageColors } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
 import { RequestData } from "@discordjs/rest";
 
 export async function getDivisionsCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction;
-    if (!guild_id || !member) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Interaction objects not found');
+    if (!guild_id || !member) return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, interaction, error: 'Interaction objects not found'});
 
     const guild = await db.guild.findUnique({ where: { id: guild_id }, include: { childGuilds: true } });
-    if (!guild?.groupId) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
-    if (guild.childGuilds.length === 0) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoDivisions, flags: MessageFlags.Ephemeral });
+    if (!guild?.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
+    if (guild.childGuilds.length === 0) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoDivisions, flags: MessageFlags.Ephemeral });
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
 
     const userRanks = await getUserRoles(account.id);
-    if (!userRanks) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'User ranks not found');
+    if (!userRanks) return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, interaction, error: 'User ranks not found'});
 
     const userGroupIds = userRanks.map(userRank => userRank.group.id);
     const applicableGuilds = guild.childGuilds.filter(guild => guild.groupId && guild.inviteChannelId && userGroupIds.includes(parseInt(guild.groupId)));
@@ -40,7 +40,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     );
 
     const validInvites = invites.filter((invite): invite is { guild: typeof guild.childGuilds[number]; invite: APIInvite } => invite.invite !== null) as { guild: typeof guild.childGuilds[number]; invite: APIInvite }[];
-    if (validInvites.length === 0) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableInvites, color: MessageColors.Red });
+    if (validInvites.length === 0) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableInvites, color: MessageColors.Red });
 
     return {
         type: InteractionResponseType.ChannelMessageWithSource,

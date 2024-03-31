@@ -1,20 +1,20 @@
 import db from '@/lib/db';
 import { InteractionResponseType, APIMessageComponentSelectMenuInteraction, MessageFlags } from 'discord-api-types/v10';
-import { errorMessage, message, MessageTitles, MessageColors } from '@/lib/discord/messages';
+import { generateMessage, MessageTitles, MessageColors } from '@/lib/discord/messages';
 import { getRelatedGuilds } from '../util';
 
 export async function switchComponent(interaction: APIMessageComponentSelectMenuInteraction) {
     const { guild_id, member } = interaction;
     const { values } = interaction.data;
 
-    if (!member || !guild_id) return errorMessage(interaction, InteractionResponseType.UpdateMessage);
+    if (!member || !guild_id) return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, interaction, error: 'Interaction objects not found'});
 
     const guild = await db.guild.findUnique({
         where: { id: guild_id },
         include: { parentGuild: true, childGuilds: true },
     });
 
-    if (!guild?.groupId) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
+    if (!guild?.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
     const relatedGuilds = await getRelatedGuilds(guild_id);
     const relatedGuildIds = relatedGuilds.map((guild) => guild.id);
@@ -28,7 +28,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
                 },
             });
         } catch (error) {
-            return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
+            return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, interaction, error});
         }
     } else {
         try {
@@ -40,9 +40,9 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
                 });
             }
         } catch (error) {
-            return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
+            return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, interaction, error});
         }
     };
 
-    return message({ responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Success, color: MessageColors.Green, flags: MessageFlags.Ephemeral });
+    return generateMessage({ responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Success, color: MessageColors.Green, flags: MessageFlags.Ephemeral });
 };

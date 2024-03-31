@@ -1,14 +1,14 @@
 import db from "@/lib/db";
 import { getGroups, getRoles, getUserRoleInGroup } from "@/lib/roblox";
 import { APIChatInputApplicationCommandInteraction, InteractionResponseType, MessageFlags, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
-import { errorMessage, message, MessageColors, MessageTitles, noLinkedAccounts, notInGroup } from "@/lib/discord/messages";
+import { generateMessage, MessageColors, MessageTitles, noLinkedAccounts, notInGroup } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
 
 export async function getRolesCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction
 
-    if (!guild_id || !member) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Interaction objects not found');
+    if (!guild_id || !member) return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, interaction, error: 'Interaction objects not found'});
 
     const guild = await db.guild.findUnique({
         where: {
@@ -16,7 +16,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
         }
     });
 
-    if (!guild?.groupId) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
+    if (!guild?.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
 
@@ -49,8 +49,8 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
             await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
         };
     } catch {
-        return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableRole, color: MessageColors.Red });
+        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableRole, color: MessageColors.Red });
     };
 
-    return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, color: MessageColors.Green, flags: MessageFlags.Ephemeral });
+    return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, color: MessageColors.Green, flags: MessageFlags.Ephemeral });
 }

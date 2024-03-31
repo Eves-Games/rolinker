@@ -3,6 +3,7 @@ import { GroupResponseV2 } from "roblox-api-types";
 
 export enum MessageTitles {
     Success = 'Success!',
+    Error = 'Something went wrong!',
 
     NoGroupId = 'This guild has no linked group!',
     NoDivisions = 'This guild has no linked divisions!',
@@ -19,13 +20,19 @@ export enum MessageColors {
     Green = 5763719
 };
 
-interface MessageProps { responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, title: MessageTitles, color?: MessageColors, flags?: MessageFlags }
+interface MessageProps { responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, title: MessageTitles, color?: MessageColors, flags?: MessageFlags, error?: any, interaction?: APIInteraction }
 
-export function message({ responseType, title, color, flags }: MessageProps): APIInteractionResponse {
+export function generateMessage({ responseType, title, color, flags, interaction, error }: MessageProps): APIInteractionResponse {
     return {
         type: responseType,
         data: {
-            embeds: [{ title, color }],
+            embeds: [{
+                title, color, fields: error && interaction ? [
+                    { name: 'Error', value: `\`\`\`${error}\`\`\``, inline: false },
+                    { name: 'Guild ID', value: interaction.guild_id || 'Null', inline: true },
+                    { name: 'User ID', value: interaction.member?.user.id || 'Null', inline: true },
+                ] : [],
+            }],
             components: [],
             flags
         },
@@ -80,25 +87,4 @@ export function noLinkedAccounts(responseType: InteractionResponseType.UpdateMes
             flags: MessageFlags.Ephemeral,
         },
     } satisfies APIInteractionResponse;
-};
-
-export function errorMessage(interaction: APIInteraction, responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, error?: any): APIInteractionResponse {
-    return {
-        type: responseType,
-        data: {
-            embeds: [
-                {
-                    title: 'Something went wrong!',
-                    color: 15548997,
-                    fields: error ? [
-                        { name: 'Error', value: `\`\`\`${error}\`\`\``, inline: false },
-                        { name: 'Guild ID', value: interaction.guild_id || 'Null', inline: true },
-                        { name: 'User ID', value: interaction.member?.user.id || 'Null', inline: true },
-                    ] : [],
-                },
-            ],
-            components: [],
-            flags: MessageFlags.Ephemeral,
-        },
-    };
 };

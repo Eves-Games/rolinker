@@ -1,12 +1,12 @@
 import { getDetailedAccounts } from '@/lib/accounts';
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, ComponentType } from 'discord-api-types/v10';
-import { errorMessage, message, MessageTitles } from '../messages';
+import { generateMessage, MessageTitles } from '../messages';
 import db from '@/lib/db';
 
 export async function switchCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction
 
-    if (!guild_id || !member) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Interaction objects not found');
+    if (!guild_id || !member) return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, interaction, error: 'Interaction objects not found'});
 
     let guild = await db.guild.findUnique({
         where: {
@@ -18,7 +18,7 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
         }
     });
 
-    if (!guild?.groupId) return message({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
+    if (!guild?.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
     const detailedAccounts = await getDetailedAccounts(member.user.id);
 
