@@ -41,11 +41,15 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
     const removeRanks = groupRanks.filter(rank => rank.id == userRank.id);
     const removeRoles = guildRolesData.filter(role => removeRanks.some(rank => rank.name === role.name)).filter(role => memberRoles.includes(role.name));
     const addRole = guildRolesData.find(role => role.name == userRank.name);
+    
+    try {
+        await rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();
 
-    await rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();
-
-    for (const role of removeRoles) {
-        await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
+        for (const role of removeRoles) {
+            await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
+        };
+    } catch {
+        return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Unable to give role, check if RoLinker bot has permission to give roles');
     };
 
     return successMessage(InteractionResponseType.ChannelMessageWithSource);
