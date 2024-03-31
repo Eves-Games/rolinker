@@ -1,28 +1,35 @@
 import { APIInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
 import { GroupResponseV2 } from "roblox-api-types";
 
-export enum MessageTypes {
-    NoGroupId = 'This guild has no linked group!',
-    NoDivisions = 'This guild has no linked divisions!',
-    UnableInvites = 'Unable to create invites!',
-    UnableRole = 'Unable to give roles!'
-};
+export enum PermissionErrorTypes {
+  UnableInvites = 'Unable to create invites!',
+  UnableRole = 'Unable to give roles!'
+}
+
+export enum ConfigurationErrorTypes {
+  NoGroupId = 'This guild has no linked group!',
+  NoDivisions = 'This guild has no linked divisions!',
+}
 
 export enum MessageColors {
-    Red = 15548997,
-    Green = 5763719
-};
+  Red = 15548997,
+  Green = 5763719
+}
 
-export function message(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, title: MessageTypes, color?: MessageColors): APIInteractionResponse {
-    return {
-        type: responseType,
-        data: {
-            embeds: [{ title, color }],
-            components: [],
-            flags: MessageFlags.Ephemeral,
-        },
-    };
-};
+export function message(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, type: PermissionErrorTypes | ConfigurationErrorTypes): APIInteractionResponse {
+  const color = type in PermissionErrorTypes ? MessageColors.Red : undefined;
+  const flags = type in PermissionErrorTypes ? MessageFlags.Ephemeral : undefined;
+  const title = type;
+
+  return {
+    type: responseType,
+    data: {
+      embeds: [{ title, color }],
+      components: [],
+      flags
+    },
+  };
+}
 
 export function notInGroup(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, group: { id: string; name: string } | GroupResponseV2): APIInteractionResponse {
     return {

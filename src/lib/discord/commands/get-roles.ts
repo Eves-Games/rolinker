@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { getGroups, getRoles, getUserRoleInGroup } from "@/lib/roblox";
 import { APIChatInputApplicationCommandInteraction, InteractionResponseType, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
-import { errorMessage, message, MessageColors, MessageTypes, noLinkedAccounts, notInGroup, successMessage } from "@/lib/discord/messages";
+import { errorMessage, message, ConfigurationErrorTypes, PermissionErrorTypes, noLinkedAccounts, notInGroup, successMessage } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
 
@@ -16,7 +16,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
         }
     });
 
-    if (!guild?.groupId) return message(InteractionResponseType.ChannelMessageWithSource, MessageTypes.NoGroupId);
+    if (!guild?.groupId) return message(InteractionResponseType.ChannelMessageWithSource, ConfigurationErrorTypes.NoGroupId);
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
 
@@ -49,7 +49,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
             await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
         };
     } catch {
-        return message(InteractionResponseType.ChannelMessageWithSource, MessageTypes.UnableRole, MessageColors.Red);
+        return message(InteractionResponseType.ChannelMessageWithSource, PermissionErrorTypes.UnableRole);
     };
 
     return successMessage(InteractionResponseType.ChannelMessageWithSource);
