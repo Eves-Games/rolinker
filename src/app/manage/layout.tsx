@@ -8,7 +8,7 @@ export default function ManageLayout({
     children: React.ReactNode
 }) {
     return (
-        <section className='container my-4'>
+        <section className='container my-4 max-w-screen-lg'>
             <h1 className='font-bold text-3xl mb-4'>Manage</h1>
 
             <div className='md:flex gap-4 items-start'>

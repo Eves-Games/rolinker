@@ -58,7 +58,7 @@ export default function Page() {
   const otherAccounts = accounts.filter((account) => account.id !== primaryId);
 
   return (
-    <div className='grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-2 w-full'>
+    <div className='flex flex-col gap-2 w-full'>
       {primaryAccount && (
         <div className='flex justify-between items-center bg-neutral-800 px-4 py-2 rounded shadow-lg'>
           <div className='flex items-center space-x-4'>

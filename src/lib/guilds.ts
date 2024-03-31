@@ -54,3 +54,17 @@ export async function updateGuildGroup(guildId: string, groupId: string | null) 
         }
     }).catch();
 };
+
+export async function updateGuildParent(guildId: string, parentGuildId: string | null) {
+    const session = await auth();
+
+    await db.guild.update({
+        where: {
+            id: guildId,
+            ownerId: session?.user.id
+        },
+        data: {
+            parentGuildId: parentGuildId
+        }
+    }).catch();
+};
