@@ -19,12 +19,13 @@ model Account {
 }
 
 model AccountGuild {
-  userId    String  @id @map("_id")
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
   accountId String
-  guildId   String 
+  guildId   String
   account   Account @relation(fields: [accountId], references: [id])
   guild     Guild   @relation(fields: [guildId], references: [id])
-
+  
   @@unique([accountId, guildId])
   @@unique([userId, guildId])
 }

@@ -22,7 +22,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
     if (values[0] === 'default') {
         try {
             await db.accountGuild.deleteMany({
-                where: {
+                where: { 
                     userId: member.user.id,
                     guildId: { in: relatedGuildIds },
                 },
@@ -33,7 +33,6 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
     } else {
         try {
             for (const guildId of relatedGuildIds) {
-                console.log(member.user.id, values[0], guildId)
                 await db.accountGuild.upsert({
                     where: { userId_guildId: { userId: member.user.id, guildId } },
                     update: { accountId: values[0] },
