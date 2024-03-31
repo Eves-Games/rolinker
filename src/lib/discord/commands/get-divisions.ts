@@ -21,6 +21,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
 
     const guild = await db.guild.findUnique({ where: { id: guild_id }, include: { childGuilds: true } });
     if (!guild?.groupId) return noLinkedGroup(InteractionResponseType.ChannelMessageWithSource);
+    if (guild.childGuilds.length === 0) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'This guild does not have any divisions');
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
