@@ -22,22 +22,14 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     const guild = await db.guild.findUnique({ where: { id: guild_id }, include: { childGuilds: true } });
     if (!guild?.groupId) return noLinkedGroup(InteractionResponseType.ChannelMessageWithSource);
 
-    console.log(guild.groupId)
-
     const account = await findAssociatedAccount(member.user.id, guild_id);
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
-
-    console.log(account)
 
     const userRanks = await getUserRoles(account.id);
     if (!userRanks) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'User ranks not found');
 
-    console.log(userRanks)
-
     const userGroupIds = userRanks.map(userRank => userRank.group.id);
     const applicableGuilds = guild.childGuilds.filter(guild => guild.groupId && guild.inviteChannelId && userGroupIds.includes(parseInt(guild.groupId)));
-
-    console.log(applicableGuilds)
 
     const invites = await Promise.all(
         applicableGuilds.map(async (guild) => {
