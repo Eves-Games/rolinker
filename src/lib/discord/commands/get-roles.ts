@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { getGroups, getRoles, getUserRoleInGroup } from "@/lib/roblox";
 import { APIChatInputApplicationCommandInteraction, InteractionResponseType, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
-import { errorMessage, noLinkedAccounts, noLinkedGroup, notInGroup, successMessage } from "@/lib/discord/messages";
+import { errorMessage, noLinkedAccounts, notInGroup, permissionlessMessage, successMessage } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
 
@@ -16,7 +16,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
         }
     });
 
-    if (!guild?.groupId) return noLinkedGroup(InteractionResponseType.ChannelMessageWithSource);
+    if (!guild?.groupId) return permissionlessMessage(InteractionResponseType.ChannelMessageWithSource, 'This guild has no linked group');
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
 
@@ -49,7 +49,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
             await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
         };
     } catch {
-        return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Unable to give role, check if RoLinker bot has permission to give roles');
+        return permissionlessMessage(InteractionResponseType.ChannelMessageWithSource, 'Unable to give role, check if RoLinker bot has permission to give roles');
     };
 
     return successMessage(InteractionResponseType.ChannelMessageWithSource);

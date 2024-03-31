@@ -1,6 +1,6 @@
 import { getDetailedAccounts } from '@/lib/accounts';
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, ComponentType } from 'discord-api-types/v10';
-import { errorMessage, noLinkedGroup } from '../messages';
+import { errorMessage, permissionlessMessage } from '../messages';
 import db from '@/lib/db';
 
 export async function switchCommand(interaction: APIChatInputApplicationCommandInteraction) {
@@ -18,7 +18,7 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
         }
     });
 
-    if (!guild?.groupId) return noLinkedGroup(InteractionResponseType.ChannelMessageWithSource);
+    if (!guild?.groupId) return permissionlessMessage(InteractionResponseType.ChannelMessageWithSource, 'This guild has no linked group');
 
     const detailedAccounts = await getDetailedAccounts(member.user.id);
 

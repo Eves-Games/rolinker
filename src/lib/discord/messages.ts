@@ -25,20 +25,21 @@ export function notInGroup(responseType: InteractionResponseType.UpdateMessage |
     } satisfies APIInteractionResponse;
 };
 
-export function noLinkedGroup(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource): APIInteractionResponse {
+export function permissionlessMessage(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, message: string): APIInteractionResponse {
     return {
         type: responseType,
         data: {
             embeds: [
                 {
-                    title: 'This guild has no linked group!',
+                    title: 'Cannot perform function!',
+                    description: message,
                     color: 15548997,
                 },
             ],
             components: [],
             flags: MessageFlags.Ephemeral,
         },
-    } satisfies APIInteractionResponse;
+    };
 };
 
 export function noLinkedAccounts(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource): APIInteractionResponse {
