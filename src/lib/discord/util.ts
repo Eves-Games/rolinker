@@ -36,7 +36,7 @@ export async function getRelatedGuilds(guildId: string): Promise<Guild[]> {
     const relatedGuilds: Guild[] = [];
 
     async function fetchRelatedGuilds(currentGuildId: string) {
-        if (visitedGuildIds.has(currentGuildId) || currentGuildId === guildId) {
+        if (visitedGuildIds.has(currentGuildId)) {
             return;
         }
 
