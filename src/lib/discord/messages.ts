@@ -22,8 +22,8 @@ export enum MessageColors {
 }
 
 export function message(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, type: PermissionErrorTypes | ConfigurationErrorTypes): APIInteractionResponse {
-    const color = type in PermissionErrorTypes ? MessageColors.Red : undefined;
-    const flags = type in PermissionErrorTypes ? MessageFlags.Ephemeral : undefined;
+    const color = type in PermissionErrorTypes ? undefined : MessageColors.Red;
+    const flags = type in PermissionErrorTypes ? undefined : MessageFlags.Ephemeral;
     const title = type;
 
     return {
