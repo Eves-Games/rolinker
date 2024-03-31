@@ -19,28 +19,31 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
     const relatedGuilds = await getRelatedGuilds(guild_id);
     const relatedGuildIds = relatedGuilds.map((guild) => guild.id);
 
-    console.log(relatedGuildIds, member.user.id, values[0])
-
-    try {
-        await db.accountGuild.deleteMany({
-            where: {
-                userId: member.user.id,
-                guildId: { in: relatedGuildIds },
-            },
-        });
-
-        if (values[0] !== 'default') {
-            await db.accountGuild.createMany({
-                data: relatedGuildIds.map((guildId) => ({
+    if (values[0] === 'default') {
+        try {
+            await db.accountGuild.deleteMany({
+                where: {
                     userId: member.user.id,
-                    accountId: values[0],
-                    guildId,
-                })),
+                    guildId: { in: relatedGuildIds },
+                },
             });
+        } catch (error) {
+            return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
         }
-    } catch (error) {
-        return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
-    }
+    } else {
+        try {
+            for (const guildId of relatedGuildIds) {
+                console.log(member.user.id, values[0], guildId)
+                await db.accountGuild.upsert({
+                    where: { userId_guildId: { userId: member.user.id, guildId } },
+                    update: { accountId: values[0] },
+                    create: { userId: member.user.id, accountId: values[0], guildId },
+                });
+            }
+        } catch (error) {
+            return errorMessage(interaction, InteractionResponseType.UpdateMessage, error);
+        }
+    };
 
     return successMessage(InteractionResponseType.UpdateMessage);
-}
+};
