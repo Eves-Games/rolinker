@@ -1,13 +1,11 @@
 import db from "@/lib/db";
-import { getGroups, getRoles, getUserRoleInGroup, getUserRoles } from "@/lib/roblox";
+import { getUserRoles } from "@/lib/roblox";
 import {
     APIChatInputApplicationCommandInteraction,
     APIInteractionResponse,
     InteractionResponseType,
     MessageFlags,
-    RESTGetAPIGuildRolesResult,
     Routes,
-    APIMessageComponentEmoji,
     ComponentType,
     ButtonStyle,
     APIInvite,
@@ -23,16 +21,22 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     const guild = await db.guild.findUnique({ where: { id: guild_id }, include: { childGuilds: true } });
     if (!guild?.groupId) return noLinkedGroup(InteractionResponseType.ChannelMessageWithSource);
 
+    console.log(guild.groupId)
+
     const account = await findAssociatedAccount(member.user.id, guild_id);
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
 
+    console.log(account)
+
     const userRanks = await getUserRoles(account.id);
-    if (!userRanks) {
-        return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'User ranks not found');
-    }
+    if (!userRanks) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'User ranks not found');
+
+    console.log(userRanks)
 
     const userGroupIds = userRanks.map(userRank => userRank.group.id);
     const applicableGuilds = guild.childGuilds.filter(guild => guild.groupId && guild.inviteChannelId && userGroupIds.includes(parseInt(guild.groupId)));
+
+    console.log(applicableGuilds)
 
     const invites = await Promise.all(
         applicableGuilds.map(async (guild) => {
@@ -42,6 +46,8 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     );
 
     const validInvites = invites.filter((invite): invite is { guild: typeof guild.childGuilds[number]; invite: APIInvite } => invite.invite !== null) as { guild: typeof guild.childGuilds[number]; invite: APIInvite }[];
+
+    console.log(validInvites)
 
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
@@ -59,7 +65,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
                         type: ComponentType.Button,
                         style: ButtonStyle.Link,
                         label: guild.name,
-                        url: `https://discord.gg/${invite}`,
+                        url: `https://discord.gg/${invite.code}`,
                         disabled: !invite,
                     })),
                 },
