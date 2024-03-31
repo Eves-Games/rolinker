@@ -20,17 +20,17 @@ export enum MessageColors {
     Green = 5763719
 };
 
-interface MessageProps { responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, title: MessageTitles, color?: MessageColors, flags?: MessageFlags, error?: any, interaction?: APIInteraction }
+interface MessageProps { responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, title: MessageTitles, color?: MessageColors, flags?: MessageFlags, error?: { message: any, interaction: APIInteraction } }
 
-export function generateMessage({ responseType, title, color, flags, interaction, error }: MessageProps): APIInteractionResponse {
+export function generateMessage({ responseType, title, color, flags, error }: MessageProps): APIInteractionResponse {
     return {
         type: responseType,
         data: {
             embeds: [{
-                title, color, fields: error && interaction ? [
-                    { name: 'Error', value: `\`\`\`${error}\`\`\``, inline: false },
-                    { name: 'Guild ID', value: interaction.guild_id || 'Null', inline: true },
-                    { name: 'User ID', value: interaction.member?.user.id || 'Null', inline: true },
+                title, color, fields: error ? [
+                    { name: 'Error', value: `\`\`\`${error.message}\`\`\``, inline: false },
+                    { name: 'Guild ID', value: error.interaction.guild_id || 'Null', inline: true },
+                    { name: 'User ID', value: error.interaction.member?.user.id || 'Null', inline: true },
                 ] : [],
             }],
             components: [],

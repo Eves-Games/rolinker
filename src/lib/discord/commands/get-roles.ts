@@ -8,7 +8,7 @@ import { findAssociatedAccount } from "@/lib/discord/util";
 export async function getRolesCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction
 
-    if (!guild_id || !member) return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, interaction, error: 'Interaction objects not found'});
+    if (!guild_id || !member) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' }});
 
     const guild = await db.guild.findUnique({
         where: {

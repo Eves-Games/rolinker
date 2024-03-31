@@ -7,7 +7,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
     const { guild_id, member } = interaction;
     const { values } = interaction.data;
 
-    if (!member || !guild_id) return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, interaction, error: 'Interaction objects not found'});
+    if (!member || !guild_id) return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' }});
 
     const guild = await db.guild.findUnique({
         where: { id: guild_id },
@@ -28,7 +28,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
                 },
             });
         } catch (error) {
-            return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, interaction, error});
+            return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: error }});
         }
     } else {
         try {
@@ -40,7 +40,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
                 });
             }
         } catch (error) {
-            return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, interaction, error});
+            return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: error }});
         }
     };
 

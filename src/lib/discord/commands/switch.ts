@@ -6,7 +6,7 @@ import db from '@/lib/db';
 export async function switchCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction
 
-    if (!guild_id || !member) return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, interaction, error: 'Interaction objects not found'});
+    if (!guild_id || !member) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' } });
 
     let guild = await db.guild.findUnique({
         where: {
@@ -53,7 +53,7 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
         return { label: account.name, value: account.id }
     })
 
-    accountOptions.unshift({label: `Default (${primaryAccount.name})`, value: 'default'})
+    accountOptions.unshift({ label: `Default (${primaryAccount.name})`, value: 'default' })
 
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
