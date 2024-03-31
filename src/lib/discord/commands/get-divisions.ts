@@ -31,7 +31,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
 
     const userGroupIds = userRanks.map(userRank => userRank.group.id);
     const applicableGuilds = guild.childGuilds.filter(guild => guild.groupId && guild.inviteChannelId && userGroupIds.includes(parseInt(guild.groupId)));
-
+    
     const invites = await Promise.all(
         applicableGuilds.map(async (guild) => {
             const invite = await rest.post(Routes.channelInvites(guild.inviteChannelId!), { max_age: 60, max_uses: 1, unique: true } as RequestData).catch(() => null);
@@ -40,8 +40,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     );
 
     const validInvites = invites.filter((invite): invite is { guild: typeof guild.childGuilds[number]; invite: APIInvite } => invite.invite !== null) as { guild: typeof guild.childGuilds[number]; invite: APIInvite }[];
-
-    console.log(validInvites)
+    if (validInvites.length === 0) return errorMessage(interaction, InteractionResponseType.ChannelMessageWithSource, 'Unable to generate invites, check if RoLinker bot has permission to create invites');
 
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
