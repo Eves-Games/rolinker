@@ -19,7 +19,7 @@ export default async function Nav() {
   const session = await auth();
 
   return (
-    <nav className='sticky top-0 bg-neutral-900'>
+    <nav className='sticky top-0 bg-neutral-900 z-50'>
       <div className='flex justify-between py-4 container'>
         <div className='flex items-center gap-4'>
           <Link className='flex items-center gap-3 py-2' href='/'>
