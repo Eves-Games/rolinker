@@ -27,5 +27,5 @@ export async function GET(request: NextRequest) {
         return new NextResponse('User not found', { status: 400, });
     };
 
-    return NextResponse.json(account.userId);
+    return NextResponse.json({ userId: account.userId });
 };
