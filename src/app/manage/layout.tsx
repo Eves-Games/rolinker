@@ -23,16 +23,6 @@ export default function ManageLayout({
                             <span>Guilds</span>
                         </Link>
                     </Block>
-                    <Block>
-                        <Link href='/manage/settings' className='flex items-center justify-between gap-4 py-2 px-4 hover:bg-neutral-700 rounded'>
-                            <Cog6ToothIcon className="size-6" />
-                            <span>Settings</span>
-                        </Link>
-                        <Link href='/manage/billing' className='flex items-center justify-between gap-4 py-2 px-4 hover:bg-neutral-700 rounded'>
-                            <CreditCardIcon className="size-6" />
-                            <span>Billing</span>
-                        </Link>
-                    </Block>
                     <Link href='/manage/developer' className='flex items-center justify-between gap-4 py-2 px-4 bg-neutral-800 hover:bg-neutral-700 rounded'>
                         <CodeBracketIcon className="size-6" />
                         <span>Dev API</span>
