@@ -93,7 +93,7 @@ export default function ClientPage({ guilds, groups }: { guilds: GuildWithParent
                         <div className='space-y-2'>
                             <h2>Discord Roles</h2>
                             <form action={() => { genDiscordRoles(guildDialog.guild!.id); }}>
-                                <button className='space-x-4 w-full flex justify-between bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg'>
+                                <button className={`${guildDialog.group === null && 'opacity-50 cursor-not-allowed'} space-x-4 w-full flex justify-between bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg`}>
                                     <span className='truncate'>Generate Discord Roles</span>
                                     <ArrowPathIcon className='size-6 inline-block' aria-hidden='true' />
                                 </button>

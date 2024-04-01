@@ -9,13 +9,14 @@ import { RESTGetAPIGuildRolesResult, Routes } from 'discord-api-types/v10';
 export async function genDiscordRoles(guildId: string) {
     const session = await auth();
 
-    const guild = await db.guild.findFirst({
+    const guild = await db.guild.findUnique({
         where: {
-            id: guildId
+            id: guildId,
+            ownerId: session?.user.id
         }
     });
 
-    if (!guild || guild.ownerId !== session?.user.id || !guild.groupId) return;
+    if (!guild || !guild.groupId) return;
 
     const groupRoles = await getRoles(guild.groupId);
 
