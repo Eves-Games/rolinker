@@ -1,9 +1,7 @@
 import { getDetailedAccounts } from "@/lib/accounts";
 import db from "@/lib/db";
 import { rest } from "@/lib/discord/rest";
-import { findAssociatedAccount } from "@/lib/discord/util";
-import { getGroups, getRoles, getUserRoleInGroup } from "@/lib/roblox";
-import { APIGuildMember, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
+import { APIGuildMember, Routes } from "discord-api-types/v10";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,7 +9,7 @@ export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
     const headersList = headers();
-    const apiKeyHeader = headersList.get('api-key');
+    const apiKeyHeader = headersList.get('Authorization');
     const searchParams = request.nextUrl.searchParams;
     const query = searchParams.get('userId');
 
