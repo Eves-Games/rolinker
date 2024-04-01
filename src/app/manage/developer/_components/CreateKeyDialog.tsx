@@ -59,7 +59,7 @@ export default function ViewKeyDialog({ isOpen, setIsOpen, guilds, apiGuilds, se
               e.preventDefault();
               setIsOpen(false);
               await generateApiKey(selectedGuild!.id);
-              mutate(`/api/users/authenticated/guilds?includeApiKeys=true`);
+              mutate(`/api/authenticated/guilds?includeApiKeys=true`);
             }}>
               <button className='bg-green-700 py-2 px-4 rounded-lg hover:bg-green-600'>
                 Create Key
