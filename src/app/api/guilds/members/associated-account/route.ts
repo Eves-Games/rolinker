@@ -54,5 +54,10 @@ export async function GET(request: NextRequest) {
 
     const account = await findAssociatedAccount(query, id);
 
-    return NextResponse.json(account);
+    if (account) {
+        const { userId, ...refinedAccount } = account;
+        return NextResponse.json(refinedAccount);
+      } else {
+        return new NextResponse('Associated account not found', { status: 404 });
+      }
 };
