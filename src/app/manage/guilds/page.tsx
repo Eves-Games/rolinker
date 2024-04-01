@@ -5,11 +5,15 @@ import ClientPage from './client-page';
 import db from '@/lib/db';
 import { GroupBasicResponse, GroupMembershipResponse } from 'roblox-api-types';
 import { Guild } from '@prisma/client/edge';
+import { rest } from '@/lib/discord/rest';
+import { APITextChannel, RESTGetAPIGuildChannelsResult, Routes } from 'discord-api-types/v10';
 
 export const runtime = 'edge';
 
-interface GuildWithParent extends Guild {
-    parentGuild?: Guild
+interface GuildExtended extends Guild {
+    parentGuild: GuildExtended | null;
+    inviteChannel: APITextChannel | null;
+    channels: APITextChannel[];
 };
 
 export default async function Page() {
@@ -18,13 +22,21 @@ export default async function Page() {
     const guilds = await db.guild.findMany({
         where: { ownerId: session?.user.id },
         include: { parentGuild: true }
-    }) as GuildWithParent[];
+    }) as GuildExtended[];
 
     const accounts = await db.account.findMany({
         where: {
             userId: session?.user.id
         }
     });
+
+    for (const guild of guilds) {
+        const channels = await rest.get(Routes.guildChannels(guild.id)) as RESTGetAPIGuildChannelsResult;
+        const textChannels = channels.filter(channel => channel.type === 0) as APITextChannel[];
+        guild.channels = textChannels;
+        const inviteChannel = textChannels.find(channel => channel.id === guild.inviteChannelId) || null;
+        guild.inviteChannel = inviteChannel;
+    };
 
     const ids = accounts.map(account => account.id);
 

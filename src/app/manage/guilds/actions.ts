@@ -45,7 +45,7 @@ export async function updateGuildGroup(guildId: string, groupId: string | null) 
             ownerId: session?.user.id
         },
         data: {
-            groupId: groupId
+            groupId
         }
     }).catch();
 };
@@ -76,5 +76,19 @@ export async function updateGuildParent(guildId: string, parentGuildId: string |
                 parentGuildId,
             },
         });
+    }).catch();
+};
+
+export async function updateGuildChannel(guildId: string, inviteChannelId: string | null) {
+    const session = await auth();
+
+    await db.guild.update({
+        where: {
+            id: guildId,
+            ownerId: session?.user.id
+        },
+        data: {
+            inviteChannelId
+        }
     }).catch();
 };
