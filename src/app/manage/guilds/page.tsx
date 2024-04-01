@@ -25,9 +25,7 @@ export default async function Page() {
     }) as GuildExtended[];
 
     const accounts = await db.account.findMany({
-        where: {
-            userId: session?.user.id
-        }
+        where: { userId: session?.user.id }
     });
 
     for (const guild of guilds) {

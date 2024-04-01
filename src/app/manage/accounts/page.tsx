@@ -20,7 +20,7 @@ const fetcher = async (url: string) => fetch(url).then(async r => await r.json()
 
 export default function Page() {
   const { data: initialAccounts, error, isLoading } = useSWR(
-    `/api/users/authenticated/accounts`,
+    `/api/authenticated/accounts`,
     fetcher
   );
 

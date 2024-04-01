@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
     const headersList = headers();
     const apiKeyHeader = headersList.get('api-key');
     const searchParams = request.nextUrl.searchParams;

@@ -1,24 +1,25 @@
 import { getDetailedAccounts } from "@/lib/accounts";
 import db from "@/lib/db";
 import { rest } from "@/lib/discord/rest";
-import { Routes } from "discord-api-types/v10";
+import { findAssociatedAccount } from "@/lib/discord/util";
+import { getGroups, getRoles, getUserRoleInGroup } from "@/lib/roblox";
+import { APIGuildMember, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-export async function GET(
-    request: Request,
-    { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest) {
     const headersList = headers();
     const apiKeyHeader = headersList.get('api-key');
+    const searchParams = request.nextUrl.searchParams;
+    const query = searchParams.get('userId');
 
-    if (!apiKeyHeader) return new NextResponse('No API key provided', {
+    if (!query) return new NextResponse('No User ID key provided', {
         status: 400,
     });
 
-    if (!params.id) return new NextResponse('No ID provided', {
+    if (!apiKeyHeader) return new NextResponse('No API key provided', {
         status: 400,
     });
 
@@ -45,15 +46,15 @@ export async function GET(
         }
     }).catch();
 
-    try {
-        await rest.get(Routes.guildMember(guildApiKey.id, params.id));
-    } catch {
-        return new NextResponse('User not apart of guild API key is linked too', {
-            status: 404,
-        });
+    const { id } = guildApiKey
+
+    const member = await rest.get(Routes.guildMember(id, query)).catch(() => { return null; }) as APIGuildMember;
+
+    if (!member) {
+        return new NextResponse('User not apart of guild API key is linked too', { status: 404, });
     };
 
-    const detailedAccounts = await getDetailedAccounts(params.id);
+    const detailedAccounts = await getDetailedAccounts(id);
 
     return NextResponse.json(detailedAccounts);
 };

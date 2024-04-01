@@ -14,7 +14,7 @@ const fetcher = async (url: string) => fetch(url).then(async r => await r.json()
 
 export default function Page() {
     const { data: guilds, error, isLoading } = useSWR(
-        `/api/users/authenticated/guilds?includeApiKeys=true`,
+        `/api/authenticated/guilds?includeApiKeys=true`,
         fetcher
     );
 
