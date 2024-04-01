@@ -40,12 +40,12 @@ export default function ClientPage({ guilds, groups }: { guilds: GuildWithParent
         setCanSubmit(
             (selectedGroup !== guildDialog.group) ||
             (selectedParent !== guildDialog.parentGuild)
-          );
+        );
     }, [selectedGroup, guildDialog.group, selectedParent, guildDialog.parentGuild]);
 
     if (guilds?.length == 0) {
         return (
-            <Link className='flex space-x-4 px-4 py-2 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 h-20' href='https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code'>
+            <Link className='flex space-x-4 px-4 py-2 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 h-20' href='https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&redirect_uri=https://rolinker.net/manage/guilds&response_type=code'>
                 <PlusIcon className='size-6' />
                 <span>Add Guild</span>
             </Link>
@@ -61,7 +61,7 @@ export default function ClientPage({ guilds, groups }: { guilds: GuildWithParent
                             {guild.iconUrl ? (
                                 <Image src={guild.iconUrl} alt={`${guild.name} Icon`} className='size-16 rounded' width={100} height={100} />
                             ) : (
-                                <div className=' flex items-center justify-center'>
+                                <div className='size-16 flex items-center justify-center'>
                                     <span className='text-4xl'>{guild.name.charAt(0)}</span>
                                 </div>
                             )}
@@ -74,7 +74,7 @@ export default function ClientPage({ guilds, groups }: { guilds: GuildWithParent
                         </button>
                     </div>
                 ))}
-                <Link className='flex space-x-4 px-4 py-2 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 h-20' href='https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code'>
+                <Link className='flex space-x-4 px-4 py-2 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 h-20' href='https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&redirect_uri=https://rolinker.net/manage/guilds&response_type=code'>
                     <PlusIcon className='size-6' />
                     <span>Add Guild</span>
                 </Link>
