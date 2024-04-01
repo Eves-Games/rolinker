@@ -28,6 +28,10 @@ export default function ViewKeyDialog({ isGuildOpen, setIsGuildOpen }: ViewKeyDi
     };
 
     useEffect(() => {
+        setShowApiKey(false);
+    }, [isGuildOpen.open]);
+
+    useEffect(() => {
         const timer = setInterval(() => {
             setResetTimer(getTimeUntilReset());
         }, 1000);
