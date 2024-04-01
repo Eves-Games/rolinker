@@ -7,8 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { GroupBasicResponse } from 'roblox-api-types';
 import { Dialog, Listbox } from '@headlessui/react';
-import { genDiscordRoles } from './actions';
-import { updateGuildGroup, updateGuildParent } from '@/lib/guilds';
+import { genDiscordRoles, updateGuildGroup, updateGuildParent } from './actions';
 
 export const runtime = 'edge';
 
@@ -122,9 +121,7 @@ export default function ClientPage({ guilds, groups }: { guilds: GuildWithParent
                                 </Listbox.Options>
                             </Listbox>
                         </div>
-                    </div>
 
-                    <div className='gap-4 grid grid-cols-1 md:grid-cols-2'>
                         <div className='space-y-2 relative'>
                             <h2>Parent Guild</h2>
                             <Listbox value={guildDialog.parentGuild} onChange={setSelectedParent}>
@@ -137,7 +134,7 @@ export default function ClientPage({ guilds, groups }: { guilds: GuildWithParent
                                         <span className='block truncate'>None</span>
                                         {selectedParent === null && <CheckIcon className='size-6' aria-hidden='true' />}
                                     </Listbox.Option>
-                                    {guilds?.map((guild, index) => (
+                                    {guilds?.filter(guild => guild !== guildDialog.guild).map((guild, index) => (
                                         <Listbox.Option as='button' key={index} className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-600 rounded-lg' value={guild}>
                                             <span className='block truncate'>{guild.name}</span>
                                             {guild === selectedParent && <CheckIcon className='size-6' aria-hidden='true' />}

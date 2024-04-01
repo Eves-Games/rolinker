@@ -34,3 +34,46 @@ export async function genDiscordRoles(guildId: string) {
         }).catch();
     };
 };
+
+export async function updateGuildGroup(guildId: string, groupId: string | null) {
+    const session = await auth();
+
+    await db.guild.update({
+        where: {
+            id: guildId,
+            ownerId: session?.user.id
+        },
+        data: {
+            groupId: groupId
+        }
+    }).catch();
+};
+
+export async function updateGuildParent(guildId: string, parentGuildId: string | null) {
+    const session = await auth();
+
+    if (guildId === parentGuildId) return;
+
+    await db.$transaction(async (tx) => {
+        if (parentGuildId) {
+            const parentGuild = await tx.guild.findFirst({
+                where: {
+                    id: parentGuildId,
+                    ownerId: session?.user.id,
+                },
+            });
+
+            if (!parentGuild) return;
+        };
+
+        await tx.guild.update({
+            where: {
+                id: guildId,
+                ownerId: session?.user.id,
+            },
+            data: {
+                parentGuildId,
+            },
+        });
+    }).catch();
+};
