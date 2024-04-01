@@ -9,6 +9,7 @@ import {
     ComponentType,
     ButtonStyle,
     APIInvite,
+    RESTPostAPIChannelInviteJSONBody,
 } from "discord-api-types/v10";
 import { generateMessage, noLinkedAccounts, MessageTitles, MessageColors } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
@@ -35,7 +36,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
 
     const invites = await Promise.all(
         applicableGuilds.map(async (guild) => {
-            const invite = await rest.post(Routes.channelInvites(guild.inviteChannelId!), { max_age: 60, max_uses: 1, unique: true } as RequestData).catch(() => null);
+            const invite = await rest.post(Routes.channelInvites(guild.inviteChannelId!), { body: { max_age: 60, max_uses: 1, unique: true } as RESTPostAPIChannelInviteJSONBody } as RequestData).catch(() => null);
             return { guild, invite };
         })
     );
