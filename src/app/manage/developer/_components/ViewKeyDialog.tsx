@@ -73,7 +73,7 @@ export default function ViewKeyDialog({ isGuildOpen, setIsGuildOpen }: ViewKeyDi
                     <form onSubmit={async () => {
                         setIsGuildOpen({ open: false, guild: null });
                         await disableApiKey(isGuildOpen.guild!.id);
-                        mutate(`/api/users/authenticated/guilds?includeApiKeys=true`);
+                        mutate(`/api/authenticated/guilds?includeApiKeys=true`);
                     }}>
                         <button className='p-2 rounded-lg hover:bg-neutral-700'>
                             <TrashIcon className='size-6 stroke-red-500' />
