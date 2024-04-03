@@ -10,6 +10,7 @@ import {
     ButtonStyle,
     APIInvite,
     RESTPostAPIChannelInviteJSONBody,
+    APIGuildPreview,
 } from "discord-api-types/v10";
 import { generateMessage, noLinkedAccounts, MessageTitles, MessageColors } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
@@ -31,17 +32,17 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     if (!userRanks) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'User ranks not found. The account might be banned.' } });
 
     const userGroupIds = userRanks.map(userRank => userRank.group.id);
-    const applicableGuilds = guild.childGuilds.filter(guild => guild.groupId && guild.inviteChannelId && userGroupIds.includes(parseInt(guild.groupId)));
-    if (applicableGuilds.length === 0) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NotInDivisions, flags: MessageFlags.Ephemeral });
+    const childGuilds = guild.childGuilds.filter(guild => guild.groupId && guild.inviteChannelId && userGroupIds.includes(parseInt(guild.groupId)));
+    if (childGuilds.length === 0) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NotInDivisions, flags: MessageFlags.Ephemeral });
 
     const invites = await Promise.all(
-        applicableGuilds.map(async (guild) => {
-            const invite = await rest.post(Routes.channelInvites(guild.inviteChannelId!), { body: { max_age: 60, max_uses: 1, unique: true } as RESTPostAPIChannelInviteJSONBody } as RequestData).catch(() => null);
-            return { guild, invite };
+        childGuilds.map(async (guild) => {
+            const invite = await rest.post(Routes.channelInvites(guild.inviteChannelId!), { body: { max_age: 60, max_uses: 1, unique: true } as RESTPostAPIChannelInviteJSONBody } as RequestData).catch(() => null) as APIInvite;
+            return invite;
         })
     );
 
-    const validInvites = invites.filter((invite): invite is { guild: typeof guild.childGuilds[number]; invite: APIInvite } => invite.invite !== null) as { guild: typeof guild.childGuilds[number]; invite: APIInvite }[];
+    const validInvites = invites.filter((invite) => invite !== null) as APIInvite  [];
     if (validInvites.length === 0) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableInvites, color: MessageColors.Red });
 
     return {
@@ -57,10 +58,10 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
             components: [
                 {
                     type: ComponentType.ActionRow,
-                    components: validInvites.map(({ guild, invite }) => ({
+                    components: validInvites.map((invite) => ({
                         type: ComponentType.Button,
                         style: ButtonStyle.Link,
-                        label: guild.name,
+                        label: invite.guild?.name,
                         url: `https://discord.gg/${invite.code}`,
                         disabled: !invite,
                     })),
