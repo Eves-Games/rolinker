@@ -45,7 +45,7 @@ export default function Developer({
 
     const handleRegenerateApiKey = async () => {
         const newApiKey = await regenerateApiKey(guildId);
-        setApiKey(newApiKey);
+        if (newApiKey) setApiKey(newApiKey);
     };
 
     return (
