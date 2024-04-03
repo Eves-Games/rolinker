@@ -18,7 +18,7 @@ export default async function Page() {
     return (
         <div className='space-y-16 mb-16'>
             <section className='bg-gradient-to-r from-[#5865F2] to-indigo-700 py-16 shadow-lg'>
-                <div className='container text-center md:text-left'>
+                <div className='container text-center md:text-left max-w-screen-lg'>
                     <div className='flex flex-col gap-4 items-center md:items-start'>
                         <div className='flex items-center space-x-4'>
                             <DiscordLogo className='size-16 sm:size-20' />
@@ -28,7 +28,7 @@ export default async function Page() {
                     </div>
                 </div>
             </section>
-            <section className='container grid grid-cols-1 md:grid-cols-2 text-center md:text-left gap-16'>
+            <section className='container grid grid-cols-1 md:grid-cols-2 text-center md:text-left gap-16 max-w-screen-lg'>
                 {commands.map((command) => (
                     <div key={command.id}>
                         <h2 className='text-4xl font-bold mb-2'>/{command.name}</h2>

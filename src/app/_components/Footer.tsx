@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Footer() {
     return (
-        <footer className='flex flex-col gap-4 py-8 container'>
+        <footer className='flex flex-col gap-4 py-8 container max-w-screen-lg'>
             <div className='grid grid-cols-2 gap-8 md:grid-cols-4'>
                 <section className='flex flex-col gap-1'>
                     <span className='font-bold text-xl'>RoLinker</span>

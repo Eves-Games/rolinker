@@ -16,8 +16,8 @@ export default async function Page() {
   return (
     <div className='space-y-16 mb-16'>
       <section className='bg-gradient-to-r from-red-800 to-[#E12626] py-16 shadow-lg'>
-        <div className='container flex flex-col lg:flex-row justify-between items-center space-y-8 lg:space-x-4 lg:space-y-0 text-center lg:text-left'>
-          <div className='flex flex-col gap-8 items-center lg:items-start'>
+        <div className='container grid grid-cols-1 md:grid-cols-2 gap-16 justify-between items-center max-w-screen-lg'>
+          <div className='flex flex-col gap-8 items-center text-center lg:items-start lg:text-left'>
             <div className='flex items-center space-x-4'>
               <RoLinkerLogo className='size-16 sm:size-20' />
               <h1 className='font-black text-5xl sm:text-6xl'>RoLinker</h1>
@@ -32,7 +32,7 @@ export default async function Page() {
               <ArrowRightIcon className='size-8 lg:size-6' />
             </Link>
           </div>
-          <div className='space-y-4 sm:space-y-8'>
+          <div className='space-y-4 sm:space-y-8 text-center'>
             <h2 className='font-bold text-4xl'>What we&#39;re linking</h2>
             <div className='space-x-2'>
               <span className='font-semibold text-xl sm:text-2xl px-2 border-dashed border-2 rounded w-fit'>{guildsCount}</span>
@@ -47,8 +47,8 @@ export default async function Page() {
           </div>
         </div>
       </section>
-      <section className='container'>
-        <div className='space-y-6 mb-12'>
+      <section className='container max-w-screen-lg'>
+        <div className='space-y-6 mb-12 flex flex-col items-center text-center lg:items-start lg:text-left'>
           <h1 className='font-bold text-5xl'>Why RoLinker?</h1>
           <h2 className='text-3xl flex items-center'>
             Featureful and Easy <CheckBadgeIcon className='size-8 ml-2' />
@@ -87,7 +87,7 @@ export default async function Page() {
         </div>
       </section>
       <section className='bg-gradient-to-r from-[#5865F2] to-indigo-700 py-16 shadow-lg'>
-        <div className='container flex flex-col lg:flex-row justify-between items-center gap-8 text-center lg:text-left'>
+        <div className='container flex flex-col lg:flex-row justify-between items-center gap-8 text-center lg:text-left max-w-screen-lg'>
           <div className='space-y-2'>
             <h1 className='font-bold text-5xl'>We&#39;re new!</h1>
             <h2 className='font-semibold text-2xl'>There are going to be bugs.</h2>
