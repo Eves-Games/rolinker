@@ -27,6 +27,9 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang='en'>
+        <head>
+          <meta name="google-adsense-account" content="ca-pub-5223562584661630" />
+        </head>
         <body className={`${open_sans.className} bg-neutral-900 text-neutral-100 tracking-wide overflow-y-auto`}>
           <div className='min-h-screen'>
             <Nav />
