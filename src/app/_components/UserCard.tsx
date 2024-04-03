@@ -2,7 +2,7 @@
 
 import { Menu } from '@headlessui/react';
 import Image from 'next/image';
-import { Cog6ToothIcon, AdjustmentsHorizontalIcon, ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import { Cog6ToothIcon, AdjustmentsHorizontalIcon, ArrowLeftEndOnRectangleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 
@@ -15,6 +15,7 @@ export default function UserCard({ name, image }: Props) {
     return (
         <Menu as='div' className='relative'>
             <Menu.Button className='flex items-center gap-4 px-4 py-2 rounded hover:shadow-lg hover:bg-neutral-800 ui-open:bg-neutral-800 ui-open:shadow-lg'>
+                <ChevronDownIcon className='size-6 inline-block text-gray-400' />
                 <span className='font-semibold'>{name}</span>
                 <Image src={image || ''} width={32} height={32} alt='Profile Icon' className='h-8 w-8 rounded-full' />
             </Menu.Button>
