@@ -1,61 +1,62 @@
 import { auth } from '@/auth';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { ExclamationTriangleIcon, PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import ClientPage from './client-page';
-import db from '@/lib/db';
-import { GroupBasicResponse, GroupMembershipResponse } from 'roblox-api-types';
-import { Guild } from '@prisma/client/edge';
-import { rest } from '@/lib/discord/rest';
-import { APITextChannel, RESTGetAPIGuildChannelsResult, Routes } from 'discord-api-types/v10';
+import Image from 'next/image';
+import { APIGuild as OriginalAPIGuild, Routes } from 'discord-api-types/v10';
+import { createUserRest } from '@/lib/discord/rest';
+import { RequestBody as OriginalRequestBody } from '@discordjs/rest';
 
 export const runtime = 'edge';
 
-interface GuildExtended extends Guild {
-    parentGuild: GuildExtended | null;
-    inviteChannel: APITextChannel | null;
-    channels: APITextChannel[];
+interface APIGuild extends OriginalAPIGuild {
+    id: string;
 };
 
 export default async function Page() {
     const session = await auth();
 
-    const guilds = await db.guild.findMany({
-        where: { ownerId: session?.user.id },
-        include: { parentGuild: true }
-    }) as GuildExtended[];
+    const userRest = createUserRest(session?.user.access_token);
+    const guilds = await userRest.get(Routes.userGuilds()) as APIGuild[]
 
-    const accounts = await db.account.findMany({
-        where: { userId: session?.user.id }
-    });
-
-    for (const guild of guilds) {
-        const channels = await rest.get(Routes.guildChannels(guild.id)) as RESTGetAPIGuildChannelsResult;
-        const textChannels = channels.filter(channel => channel.type === 0) as APITextChannel[];
-        guild.channels = textChannels;
-        const inviteChannel = textChannels.find(channel => channel.id === guild.inviteChannelId) || null;
-        guild.inviteChannel = inviteChannel;
-    };
-
-    const ids = accounts.map(account => account.id);
-
-    const userGroups: GroupBasicResponse[] = [];
-    for (const id of ids) {
-        const groupsResponse = await fetch(`https://groups.roblox.com/v2/users/${id}/groups/roles`);
-        const groupsData = await groupsResponse.json();
-        const refinedGroups = groupsData.data.map((group: GroupMembershipResponse) => group.group);
-        userGroups.push(...refinedGroups);
-    };
-
-    if (guilds?.length == 0) {
+    if (!guilds) {
         return (
-            <Link className='flex space-x-4 px-4 py-2 justify-center items-center border-dashed border-4 border-neutral-800 rounded shadow-lg hover:border-neutral-700 h-20' href='https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code'>
-                <PlusIcon className='size-6' />
-                <span>Add Guild</span>
-            </Link>
+            <div className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 rounded shadow-lg w-full h-20'>
+                <ExclamationTriangleIcon className='size-6' />
+                <span>Error loading guilds</span>
+            </div>
+        );
+    };
+
+    const ownedGuilds: APIGuild[] = guilds.filter(guild => guild.owner === true);
+
+    if (ownedGuilds.length === 0) {
+        return (
+            <div className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 rounded shadow-lg w-full h-20'>
+                <ExclamationTriangleIcon className='size-6' />
+                <span>You own no guilds</span>
+            </div>
         );
     };
 
     return (
-        <ClientPage guilds={guilds} groups={userGroups} />
+        <div className='w-full space-y-2'>
+            {ownedGuilds?.map((guild) => (
+                <div className='flex items-center justify-between gap-2 bg-neutral-800 px-4 py-2 rounded shadow-lg w-full' key={guild.id}>
+                    <div className='flex space-x-4 items-center'>
+                        {guild.icon ? (
+                            <Image src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`} alt={`${guild.name} Icon`} className='size-16 rounded' width={100} height={100} />
+                        ) : (
+                            <div className='size-16 flex items-center justify-center'>
+                                <span className='text-4xl'>{guild.name.charAt(0)}</span>
+                            </div>
+                        )}
+                        <span className='text-lg'>{guild.name}</span>
+                    </div>
+                    <Link href={`/manage/guilds/${guild.id}`} className='p-2 rounded-lg hover:bg-neutral-700'>
+                        <PencilIcon className='size-6' />
+                    </Link>
+                </div>
+            ))}
+        </div>
     );
 };

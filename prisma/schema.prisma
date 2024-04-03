@@ -31,18 +31,13 @@ model AccountGuild {
 }
 
 model Guild {
-  id              String         @id @map("_id")
-  name            String
-  ownerId         String
-  iconUrl         String?
+  id              String   @id @map("_id")
   groupId         String?
   inviteChannelId String?
   parentGuildId   String?
-  apiKey          String?        @unique
-  apiKeyUsage     Int            @default(0)
-  parentGuild     Guild?         @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childGuilds     Guild[]        @relation("ParentChild")
+  apiKey          String   @unique @default(uuid())
+  apiKeyUsage     Int      @default(0)
+  parentGuild     Guild?   @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childGuilds     Guild[]  @relation("ParentChild")
   userAccounts    AccountGuild[]
-
-  @@index([ownerId])
 }
