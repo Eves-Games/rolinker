@@ -42,7 +42,7 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
         })
     );
 
-    const validInvites = invites.filter((invite) => invite !== null) as APIInvite  [];
+    const validInvites = invites.filter((invite) => invite !== null) as APIInvite[];
     if (validInvites.length === 0) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableInvites, color: MessageColors.Red });
 
     return {
