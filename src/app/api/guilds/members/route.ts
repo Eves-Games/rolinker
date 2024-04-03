@@ -1,7 +1,4 @@
-import { getDetailedAccounts } from "@/lib/accounts";
 import db from "@/lib/db";
-import { rest } from "@/lib/discord/rest";
-import { APIGuildMember, Routes } from "discord-api-types/v10";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
