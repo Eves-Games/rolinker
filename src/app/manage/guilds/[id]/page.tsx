@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         );
     } else if (!botGuild) {
         return (
-            <Link href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${guild.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/invite-callback&response_type=code`} className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 hover:bg-neutral-700 rounded shadow-lg w-full h-20'>
+            <Link href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${guild.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code`} className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 hover:bg-neutral-700 rounded shadow-lg w-full h-20'>
                 <PlusIcon className='size-6' />
                 <span>Add Guild</span>
             </Link>
