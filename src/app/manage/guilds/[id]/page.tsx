@@ -8,6 +8,7 @@ import { GroupBasicResponse } from 'roblox-api-types';
 import { getUserRoles } from '@/lib/roblox';
 import Options from './Options';
 import Developer from './Developer';
+import Link from 'next/link';
 
 export const runtime = 'edge';
 
@@ -18,23 +19,26 @@ export interface APIGuild extends OriginalAPIGuild {
 export default async function Page({ params }: { params: { id: string } }) {
     const session = await auth();
 
-    const guild = await rest.get(Routes.guild(params.id)) as APIGuild;
+    const userRest = createUserRest(session?.user.access_token);
+    let userGuilds = await userRest.get(Routes.userGuilds()) as APIGuild[];
+    userGuilds.filter(guild => guild.owner === true);
+
+    const guild = userGuilds.find(guild => guild.id === params.id)
+    const botGuild = await rest.get(Routes.guild(params.id)).catch(() => null) as APIGuild | null;
 
     if (!guild) {
-        return (
-            <div className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 rounded shadow-lg w-full h-20'>
-                <PlusIcon className='size-6' />
-                <span>Add Guild</span>
-            </div>
-        );
-    };
-
-    if (guild.owner_id !== session?.user.id) {
         return (
             <div className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 rounded shadow-lg w-full h-20'>
                 <ExclamationTriangleIcon className='size-6' />
                 <span>Unauthorized</span>
             </div>
+        );
+    } else if (!botGuild) {
+        return (
+            <Link href={`https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&guild_id=${guild.id}&disable_guild_select=true&redirect_uri=https://rolinker.net/api/invite-callback&response_type=code`} className='flex justify-center items-center space-x-4 border-dashed border-4 border-neutral-800 hover:bg-neutral-700 rounded shadow-lg w-full h-20'>
+                <PlusIcon className='size-6' />
+                <span>Add Guild</span>
+            </Link>
         );
     };
 
@@ -68,13 +72,11 @@ export default async function Page({ params }: { params: { id: string } }) {
         userGroups: userGroups
     };
 
-    const userRest = createUserRest(session?.user.access_token);
-    const userGuilds = await userRest.get(Routes.userGuilds()) as APIGuild[];
-    const ownedGuilds: APIGuild[] = userGuilds.filter(guild => guild.owner === true);
+    
 
     const guilds = {
         currentParentId: parentGuildId,
-        userGuilds: ownedGuilds
+        userGuilds: userGuilds
     };
 
     const guildChannels = await rest.get(Routes.guildChannels(guild.id)) as APITextChannel[];
