@@ -13,7 +13,8 @@ export enum MessageTitles {
 
     NoLinkedAccounts = 'You have no linked accounts!',
     NotInDivisions = 'You are not in any divisions!',
-    NotInGroup = 'You are not in this guilds linked group!'
+    NotInGroup = 'You are not in this guilds linked group!',
+    NotOwner = 'You are not the owner of this guild!'
 };
 
 export enum MessageColors {

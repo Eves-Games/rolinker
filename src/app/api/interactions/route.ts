@@ -3,13 +3,13 @@ import { getDivisionsCommand } from "@/lib/discord/commands/get-divisions"
 import { getRolesCommand } from "@/lib/discord/commands/get-roles"
 import { linkCommand } from '@/lib/discord/commands/link'
 import { switchCommand } from '@/lib/discord/commands/switch'
+import { sendLinkCommand } from '@/lib/discord/commands/send-link'
 import { switchComponent } from "@/lib/discord/components/switch"
 import { verifyInteractionRequest } from "@/lib/discord/verify-discord-request"
 import {
     APIInteractionResponse,
     InteractionResponseType,
     InteractionType,
-    MessageFlags,
 } from "discord-api-types/v10"
 import { NextResponse } from "next/server"
 
@@ -56,6 +56,9 @@ export async function POST(request: Request) {
 
             case commands.getdivisions.name:
                 return NextResponse.json(await getDivisionsCommand(interaction));
+
+            case commands.sendlink.name:
+                return NextResponse.json(await sendLinkCommand(interaction));
 
             default:
         }
