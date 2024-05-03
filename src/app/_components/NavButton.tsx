@@ -18,7 +18,7 @@ export default function NavButton({ navLinks }: NavLinks) {
             <Menu.Items className='absolute right-0 rounded mt-2 bg-neutral-800 min-w-full shadow-lg'>
                 {navLinks.map((navLink, index) => (
                     <Menu.Item key={index}>
-                        <Link href={navLink.href} className='flex items-center w-full px-4 py-2 ui-active:bg-neutral-700 rounded-t'>
+                        <Link href={navLink.href} className='flex items-center w-full px-4 py-2 ui-active:bg-neutral-700 rounded'>
                             {navLink.name}
                         </Link>
                     </Menu.Item>
