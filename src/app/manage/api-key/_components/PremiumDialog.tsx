@@ -6,7 +6,7 @@ import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe
 import { loadStripe } from "@stripe/stripe-js";
 import useSWR from "swr";
 
-const stripePromise = loadStripe('pk_live_51NRFvmDju7hY58JXcc2QF9TfIzvsZLRCP8zVTPEIWn5CbrivwzFPu4eFE8HaCLsF8am73H6axCa87pPs68C7sSXy00mfa9sQ8s');
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 const fetcher = async () => {
     const res = await fetch("/api/embedded-checkout", {
         method: "POST",
