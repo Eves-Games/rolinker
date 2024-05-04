@@ -7,13 +7,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-export async function GET(request: NextRequest) {
+export async function GET(
+    request: NextRequest,
+    { params }: { params: { id: string } }
+) {
     const headersList = headers();
     const apiKeyHeader = headersList.get('Authorization');
     const searchParams = request.nextUrl.searchParams;
-    const query = searchParams.get('userId');
+    const memberId = searchParams.get('memberId')
+    const guildId = params.id
 
-    if (!query) return new NextResponse('No User ID key provided', {
+    if (!memberId || !guildId) return new NextResponse('No User ID key provided', {
         status: 400,
     });
 
@@ -21,38 +25,30 @@ export async function GET(request: NextRequest) {
         status: 400,
     });
 
-    const guildApiKey = await db.guild.findUnique({
-        where: {
-            apiKey: apiKeyHeader
-        }
+    const apiKey = await db.apiKey.findUnique({
+        where: { key: apiKeyHeader }
     });
 
-    if (!guildApiKey) return new NextResponse('Invalid API key', {
+    if (!apiKey) return new NextResponse('Invalid API key', {
         status: 401,
     });
 
-    if (guildApiKey.apiKeyUsage == 750) return new NextResponse('API key usage limit reached (750)', {
+    if (apiKey.usage == 750) return new NextResponse('API key usage limit reached (750)', {
         status: 401,
     });
 
-    db.guild.update({
-        where: {
-            apiKey: apiKeyHeader
-        },
-        data: {
-            apiKeyUsage: { increment: 1 }
-        }
+    db.apiKey.update({
+        where: { key: apiKeyHeader },
+        data: { usage: { increment: 1 } }
     }).catch();
 
-    const { id } = guildApiKey
-
-    const member = await rest.get(Routes.guildMember(id, query)).catch(() => { return null; }) as APIGuildMember;
+    const member = await rest.get(Routes.guildMember(guildId, memberId)).catch(() => { return null; }) as APIGuildMember;
 
     if (!member) {
         return new NextResponse('User not apart of guild API key is linked too', { status: 404, });
     };
 
-    const account = await findAssociatedAccount(query, id);
+    const account = await findAssociatedAccount(memberId, guildId);
 
     if (account) {
         const { userId, ...refinedAccount } = account;
