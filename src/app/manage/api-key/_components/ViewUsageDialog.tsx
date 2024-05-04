@@ -1,25 +1,22 @@
 'use client';
 
 import { Dialog } from "@headlessui/react";
-import { ArrowPathIcon, ChevronDoubleUpIcon, EyeIcon, EyeSlashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDoubleUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { regenerateApiKey } from "../actions";
 
 export default function ViewUsageDialog({
-    guildId,
     dialogOpen,
     setDialogOpen,
-    api,
+    keyData,
 }: {
-    guildId: string;
     dialogOpen: boolean;
     setDialogOpen: (open: boolean) => void;
-    api: {
-        apiKey: string | null;
-        apiKeyUsage: number
-    };
+    keyData: {
+        userId: string;
+        key: string;
+        usage: number;
+    }
 }) {
-    const [apiKey, setApiKey] = useState(api.apiKey);
     const [resetTimer, setResetTimer] = useState('');
 
     const getTimeUntilReset = () => {
@@ -42,11 +39,6 @@ export default function ViewUsageDialog({
         };
     }, []);
 
-    const handleRegenerateApiKey = async () => {
-        const newApiKey = await regenerateApiKey(guildId);
-        if (newApiKey) setApiKey(newApiKey);
-    };
-
     return (
         <Dialog open={dialogOpen} onClose={setDialogOpen} className='fixed inset-0 flex items-center justify-center z-50 px-4'>
             <Dialog.Overlay className='fixed inset-0 bg-black opacity-30' />
@@ -65,7 +57,7 @@ export default function ViewUsageDialog({
 
                 <div>
                     <h2 className='font-semibold text-lg'>Usage Today</h2>
-                    <p>{api.apiKeyUsage}/750</p>
+                    <p>{keyData.usage}/750</p>
                 </div>
 
                 <p>Usage resets in {resetTimer}</p>

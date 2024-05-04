@@ -3,31 +3,30 @@
 import { Dialog } from "@headlessui/react";
 import { ArrowPathIcon, EyeIcon, EyeSlashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { regenerateApiKey } from "../actions";
+import { regenerateApiKey } from '../actions'
 
 export default function EditKeyDialog({
-    guildId,
     dialogOpen,
     setDialogOpen,
-    api,
+    keyData
 }: {
-    guildId: string;
     dialogOpen: boolean;
     setDialogOpen: (open: boolean) => void;
-    api: {
-        apiKey: string | null;
-        apiKeyUsage: number
-    };
+    keyData: {
+        userId: string;
+        key: string;
+        usage: number;
+    }
 }) {
     const [showApiKey, setShowApiKey] = useState(false)
-    const [apiKey, setApiKey] = useState(api.apiKey);
+    const [apiKey, setApiKey] = useState(keyData.key);
 
     useEffect(() => {
         setShowApiKey(false);
     }, [dialogOpen, apiKey]);
 
     const handleRegenerateApiKey = async () => {
-        const newApiKey = await regenerateApiKey(guildId);
+        const newApiKey = await regenerateApiKey(keyData.userId);
         if (newApiKey) setApiKey(newApiKey);
     };
 

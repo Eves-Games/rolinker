@@ -4,7 +4,7 @@ import { GroupBasicResponse } from "roblox-api-types";
 import GroupList from "./_components/GroupList";
 import ParentList from "./_components/ParentList"
 import ChannelList from "./_components/ChannelList"
-import { ArrowPathIcon, CheckIcon, FlagIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, CheckIcon, FlagIcon, UserGroupIcon, WrenchScrewdriverIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { genDiscordRoles, performSave } from "./actions";
 import { APITextChannel } from "discord-api-types/v10";
 import { APIGuild } from "./page";
@@ -125,6 +125,21 @@ export default function Options({
                             selectedChannel={currentChannel}
                             onChange={handleChannelChange}
                         />
+                    </div>
+                </div>
+            </div>
+            <div className='bg-neutral-800 rounded shadow-lg w-full'>
+                <div className='flex items-center space-x-4 px-4 py-2'>
+                    <WrenchScrewdriverIcon className='size-6' />
+                    <span>Rank Bot Options</span>
+                </div>
+                <div className='gap-4 grid grid-cols-1 md:grid-cols-1 py-2 px-4'>
+                    <div className='space-y-2 relative'>
+                        <span>Security Cookie</span>
+                        <form>
+                            <input type="text" placeholder="Enter Bot Cookie" className='flex justify-between space-x-4 w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg'/>
+                        </form>
+                        <p className="text-blue-500 text-center">Read Rank Bot Policy <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></p>
                     </div>
                 </div>
             </div>

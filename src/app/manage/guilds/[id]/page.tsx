@@ -7,7 +7,6 @@ import db from '@/lib/db';
 import { GroupBasicResponse } from 'roblox-api-types';
 import { getUserRoles } from '@/lib/roblox';
 import Options from './Options';
-import Developer from './Developer';
 import Link from 'next/link';
 
 export const runtime = 'edge';
@@ -48,9 +47,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         data: { id: guild.id }
     });
 
-    const { groupId, inviteChannelId, parentGuildId, apiKey, apiKeyUsage } = guildData;
-
-    const api = { apiKey, apiKeyUsage }
+    const { groupId, inviteChannelId, parentGuildId } = guildData;
 
     const accounts = await db.account.findMany({
         where: { userId: session?.user.id }
@@ -99,7 +96,6 @@ export default async function Page({ params }: { params: { id: string } }) {
                 )}
                 <span className='text-lg'>{guild.name}</span>
             </div>
-            <Developer guildId={guild.id} api={api} />
             <Options guildId={guild.id} groups={groups} guilds={guilds} channels={channels} />
         </div>
     );

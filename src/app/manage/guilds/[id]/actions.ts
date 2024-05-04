@@ -83,16 +83,3 @@ export async function performSave(
     };
 };
 
-export async function regenerateApiKey(guildId: string): Promise<string | undefined> {
-    const session = await auth();
-    const guild = await rest.get(Routes.guild(guildId)) as APIGuild;
-
-    if (guild.owner_id !== session?.user.id) return;
-
-    const guildData = await db.guild.update({
-        where: { id: guildId },
-        data: { apiKey: crypto.randomUUID(), },
-    });
-
-    return guildData.apiKey;
-};
