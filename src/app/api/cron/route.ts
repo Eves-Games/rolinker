@@ -10,10 +10,8 @@ export async function GET(request: NextRequest) {
     };
 
     try {
-        await db.guild.updateMany({
-            data: {
-                apiKeyUsage: 0,
-            },
+        await db.apiKey.updateMany({
+            data: { usage: 0 }
         });
 
         console.log('API key usage reset successfully');
