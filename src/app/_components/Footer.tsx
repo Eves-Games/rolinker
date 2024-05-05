@@ -17,7 +17,7 @@ export default function Footer() {
                 </section>
                 <section className='flex flex-col gap-1'>
                     <span className='font-bold text-xl'>Legal</span>
-                    <Link href='https://www.iubenda.com/privacy-policy/42805761'>Privacy Policy</Link>
+                    <Link href='/privacy-policy' target='_blank'>Privacy Policy</Link>
                     <Link href='/terms-of-service'>Terms of Service</Link>
                 </section>
                 <section className='flex flex-col gap-1'>

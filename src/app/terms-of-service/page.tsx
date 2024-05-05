@@ -16,7 +16,7 @@ export default function Page() {
       <h2 className='text-2xl font-semibold'>4. Service Availability</h2>
       <p>We strive to ensure the availability of the service but do not guarantee uninterrupted service. Maintenance and updates may occasionally disrupt service availability. We reserve the right to modify, suspend, or discontinue the service at any time without notice.</p>
       <h2 className='text-2xl font-semibold'>5. Privacy Policy</h2>
-      <p>Our Privacy Policy, which details how we handle user data, is available <Link className='text-blue-500 hover:underline' href='/privacy-policy'>here</Link>. By using RoLinker, you consent to the collection and use of your information as described in our Privacy Policy.</p>
+      <p>Our Privacy Policy, which details how we handle user data, is available <Link className='text-blue-500 hover:underline' href='/privacy-policy' target='_blank'>here</Link>. By using RoLinker, you consent to the collection and use of your information as described in our Privacy Policy.</p>
       <h2 className='text-2xl font-semibold'>6. Changes to Terms</h2>
       <p>We reserve the right to modify these terms at any time. We will notify users of material changes by posting a notice on our website or sending an email. Your continued use of the service following any changes constitutes acceptance of the new terms.</p>
       <h2 className='text-2xl font-semibold'>7. Limitation of Liability</h2>
