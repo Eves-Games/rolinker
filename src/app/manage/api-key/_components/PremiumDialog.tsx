@@ -13,7 +13,7 @@ const fetcher = async () => {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ priceId: "price_1P1i0ADju7hY58JXekQ3iDre" }),
+        body: JSON.stringify({ priceId: "price_1PCZlYDju7hY58JX7vxs4HPE" }),
     });
     const data = await res.json();
     return data.client_secret;
@@ -48,7 +48,7 @@ export default function PremiumDialog({
                 </div>
 
                 <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-                    <EmbeddedCheckout className='rounded-lg bg-white p-2 shadow-lg' />
+                    <EmbeddedCheckout />
                 </EmbeddedCheckoutProvider>
             </div>
         </Dialog>
