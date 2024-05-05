@@ -9,9 +9,9 @@ datasource db {
 }
 
 model ApiKey {
-  userId String @id @map("_id")
-  key    String @default(uuid()) @unique
-  usage  Int    @default(0)
+  userId  String @id @map("_id")
+  key     String @default(uuid()) @unique
+  usage   Int    @default(0)
 }
 
 model Account {
