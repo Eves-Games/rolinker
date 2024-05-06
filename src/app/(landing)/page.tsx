@@ -26,7 +26,7 @@ export default async function Page() {
               <h2 className='font-semibold text-2xl'>Connecting Roblox to Discord</h2>
               <p className='text-base sm:text-lg'>For group owners - divisions, web-management, developer API</p>
             </div>
-            <Link className='flex items-center space-x-2 px-4 py-2 border-dashed border-2 rounded w-fit' href='https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code'>
+            <Link className='flex items-center space-x-2 px-4 py-2 border-dashed border-2 rounded w-fit' href='https://discord.com/api/oauth2/authorize?client_id=990855457885278208&disable_guild_select=true&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code'>
               <PlusIcon className='size-8 lg:size-6' />
               <span className='text-lg lg:text-base'>Add RoLinker bot</span>
               <ArrowRightIcon className='size-8 lg:size-6' />
