@@ -90,7 +90,7 @@ export default function Page({
                 setDialogOpen={setUsageDialogOpen}
             />
 
-            {keyData.premium && <PremiumDialog dialogOpen={premiumDialogOpen} setDialogOpen={setPremiumDialogOpen} />}
+            {!keyData.premium && <PremiumDialog dialogOpen={premiumDialogOpen} setDialogOpen={setPremiumDialogOpen} />}
         </>
     );
 }
