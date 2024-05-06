@@ -53,7 +53,7 @@ export default function Page({
                 </div>
                 <div className='gap-4 grid grid-cols-1 md:grid-cols-2'>
                     <div className='space-y-2'>
-                        <h2 className='text-xl font-semibold'>Premium Plan {keyData.premium && '(Current)'}</h2>
+                        <h2 className='text-xl font-semibold'>Premium Plan {keyData.premium ? '(Current)' : <span className='text-neutral-400'>($2.99/m)</span>}</h2>
                         <ul className='list-disc list-inside'>
                             <li className='font-semibold text-green-500'>Unlimited Requests</li>
                             <li>Access all Endpoints</li>
