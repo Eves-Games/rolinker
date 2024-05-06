@@ -6,30 +6,29 @@ import db from "@/lib/db";
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 
 export async function POST(request: Request) {
-  try {
-    const body = await request.text();
-    console.log(headers())
-    const signature = headers().get("stripe-signature") || "";
+    try {
+        const body = await request.json();
+        const signature = request.headers.get('stripe-signature') || '';
 
-    const event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
+        const event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
 
-    if (!event) return NextResponse.json({ message: "Event cannot be verified" }, { status: 401 });
+        if (!event) return NextResponse.json({ message: "Event cannot be verified" }, { status: 401 });
 
-    const { type, data } = event;
+        const { type, data } = event;
 
-    if (type !== "customer.subscription.created" && type !== "customer.subscription.deleted") return NextResponse.json({ message: "Invalid event" }, { status: 400 });
+        if (type !== "customer.subscription.created" && type !== "customer.subscription.deleted") return NextResponse.json({ message: "Invalid event" }, { status: 400 });
 
-    const { discord_id: discordId } = data.object.metadata;
-    const isPremium = type === "customer.subscription.created";
+        const { userId } = data.object.metadata;
+        const premium = type === "customer.subscription.created";
 
-    await db.apiKey.update({
-      where: { userId: discordId },
-      data: { premium: isPremium },
-    });
+        await db.apiKey.update({
+            where: { userId },
+            data: { premium },
+        });
 
-    return NextResponse.json({ message: "Webhook handled successfully" });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
-  }
+        return NextResponse.json({ message: "Webhook handled successfully" });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    }
 };

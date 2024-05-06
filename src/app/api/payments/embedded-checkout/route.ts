@@ -12,6 +12,7 @@ export async function POST(request: Request) {
 
         const stripeSession = await stripe.checkout.sessions.create({
             ui_mode: 'embedded',
+            payment_method_types: ['card', 'paypal'],
             line_items: [
                 {
                     price: priceId,
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
             ],
             subscription_data: {
                 metadata: {
-                    discord_id: session.user.id
+                    userId: session.user.id
                 }
             },
             mode: 'subscription',
