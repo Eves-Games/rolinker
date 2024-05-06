@@ -12,6 +12,7 @@ export default function Page({
         userId: string;
         key: string;
         usage: number;
+        premium: boolean;
     }
 }) {
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -51,25 +52,25 @@ export default function Page({
                 </div>
                 <div className='gap-4 grid grid-cols-1 md:grid-cols-2'>
                     <div className='space-y-2'>
-                        <h2 className='text-xl font-semibold'>Premium Plan</h2>
+                        <h2 className='text-xl font-semibold'>Premium Plan {keyData.premium && '(Current)'}</h2>
                         <ul className='list-disc list-inside'>
                             <li className='font-semibold text-green-500'>Unlimited Requests</li>
                             <li>Access all Endpoints</li>
                             <li>1-on-1 Support</li>
                         </ul>
-                        <button onClick={() => setPremiumDialogOpen(true)} className={`flex justify-between space-x-4 bg-indigo-700 rounded-lg py-2 px-4 shadow-lg ${false ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-600'}`}>
+                        <button onClick={() => setPremiumDialogOpen(true)} className={`flex justify-between space-x-4 bg-indigo-700 rounded-lg py-2 px-4 shadow-lg ${keyData.premium ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-600'}`}>
                             <span className='truncate'>Select Premium</span>
                             <ChevronDoubleUpIcon className='size-6 flex-shrink-0' aria-hidden='true' />
                         </button>
                     </div>
                     <div className='space-y-2'>
-                        <h2 className='text-xl font-semibold'>Free Plan (Current)</h2>
+                        <h2 className='text-xl font-semibold'>Free Plan {!keyData.premium && '(Current)'}</h2>
                         <ul className='list-disc list-inside'>
                             <li>750 Requests Daily</li>
                             <li>Access all Endpoints</li>
                             <li>1-on-1 Support</li>
                         </ul>
-                        <button className={`flex justify-between space-x-4 bg-neutral-700 rounded-lg py-2 px-4 shadow-lg ${true ? 'opacity-50 cursor-not-allowed' : 'hover:bg-neutral-600'}`}>
+                        <button className={`flex justify-between space-x-4 bg-neutral-700 rounded-lg py-2 px-4 shadow-lg ${!keyData.premium ? 'opacity-50 cursor-not-allowed' : 'hover:bg-neutral-600'}`}>
                             <span className='truncate'>Select Free</span>
                             <Bars2Icon className='size-6 flex-shrink-0' aria-hidden='true' />
                         </button>
@@ -89,7 +90,7 @@ export default function Page({
                 setDialogOpen={setUsageDialogOpen}
             />
 
-            <PremiumDialog dialogOpen={premiumDialogOpen} setDialogOpen={setPremiumDialogOpen} />
+            {keyData.premium && <PremiumDialog dialogOpen={premiumDialogOpen} setDialogOpen={setPremiumDialogOpen} />}
         </>
     );
 }

@@ -11,6 +11,8 @@ export default async function CheckoutReturn({ searchParams }: { searchParams: {
   const sessionId = searchParams.session_id;
   const session = await getSession(sessionId);
 
+  console.log(session)
+
   if (session?.status === "open") {
     return (
       <div className='text-center my-4'>

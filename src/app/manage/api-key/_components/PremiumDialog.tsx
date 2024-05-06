@@ -7,16 +7,16 @@ import { loadStripe } from "@stripe/stripe-js";
 import useSWR from "swr";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-const fetcher = async () => {
-    const res = await fetch("/api/embedded-checkout", {
+const fetcher = async (url: string) => {
+    const res = await fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ priceId: "price_1PCZlYDju7hY58JX7vxs4HPE" }),
+        body: JSON.stringify({ priceId: "price_1P1i0ADju7hY58JXekQ3iDre" }),
     });
-    const data = await res.json();
-    return data.client_secret;
+    const resData = await res.json();
+    return resData.data.client_secret;
 };
 
 export default function PremiumDialog({
@@ -26,7 +26,7 @@ export default function PremiumDialog({
     dialogOpen: boolean;
     setDialogOpen: (open: boolean) => void;
 }) {
-    const { data: clientSecret, error } = useSWR("/api/embedded-checkout", fetcher);
+    const { data: clientSecret, error } = useSWR("/api/payments/embedded-checkout", fetcher);
 
     if (error) {
         return <span>Failed to load client secret</span>;
