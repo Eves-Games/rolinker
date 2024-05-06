@@ -1,15 +1,9 @@
 import { auth } from '@/auth';
-import { APIGuild as OriginalAPIGuild } from 'discord-api-types/v10';
 import db from '@/lib/db';
 import Developer from './Developer';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
 
 export const runtime = 'edge';
-
-export interface APIGuild extends OriginalAPIGuild {
-    id: string;
-};
 
 export default async function Page() {
     const session = await auth();
@@ -31,10 +25,6 @@ export default async function Page() {
 
     return (
         <div className='w-full space-y-2'>
-            <div className='flex items-center space-x-4 bg-neutral-800 px-4 py-2 rounded shadow-lg w-full' key={session.user.image}>
-                <Image src={session.user.image} alt={`${session.user.name} Icon`} className='size-16 rounded-full' width={100} height={100} />
-                <span className='text-lg'>{session.user.name}</span>
-            </div>
             <Developer keyData={keyData} />
         </div>
     );
