@@ -27,6 +27,12 @@ export default function UserCard({ name, image }: Props) {
                     </Link>
                 </Menu.Item>
                 <Menu.Item>
+                    <Link href='/settings/account' className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700 rounded'>
+                        <span>Settings</span>
+                        <Cog6ToothIcon className='h-6' />
+                    </Link>
+                </Menu.Item>
+                <Menu.Item>
                     <button onClick={() => signOut()} className='flex items-center justify-between w-full gap-4 px-4 py-2 ui-active:bg-neutral-700 rounded'>
                         Logout
                         <ArrowLeftEndOnRectangleIcon className='h-6' />
