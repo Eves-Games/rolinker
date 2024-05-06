@@ -41,7 +41,7 @@ export default async function Page() {
     return (
         <div className='w-full space-y-2'>
             {ownedGuilds?.map((guild) => (
-                <div className='flex items-center justify-between gap-2 bg-neutral-800 px-4 py-2 rounded shadow-lg w-full' key={guild.id}>
+                <Link href={`/manage/guilds/${guild.id}`} className='flex items-center justify-between gap-2 bg-neutral-800 hover:bg-neutral-700 px-4 py-2 rounded shadow-lg w-full' key={guild.id}>
                     <div className='flex space-x-4 items-center'>
                         {guild.icon ? (
                             <Image src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`} alt={`${guild.name} Icon`} className='size-16 rounded' width={100} height={100} />
@@ -52,10 +52,7 @@ export default async function Page() {
                         )}
                         <span className='text-lg'>{guild.name}</span>
                     </div>
-                    <Link href={`/manage/guilds/${guild.id}`} className='p-2 rounded-lg hover:bg-neutral-700'>
-                        <PencilIcon className='size-6' />
-                    </Link>
-                </div>
+                </Link>
             ))}
         </div>
     );
