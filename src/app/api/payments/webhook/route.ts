@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { headers } from "next/headers";
 import db from "@/lib/db";
-
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 
 export async function POST(request: Request) {
     try {
         const body = await request.text();
         const signature = request.headers.get('stripe-signature') || '';
 
-        const event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
+        const event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!);
         if (!event) return NextResponse.json({ message: "Event cannot be verified" }, { status: 401 });
 
         const { type, data } = event;
