@@ -7,15 +7,13 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json();
+        const body = await request.text();
         const signature = request.headers.get('stripe-signature') || '';
 
         const event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
-
         if (!event) return NextResponse.json({ message: "Event cannot be verified" }, { status: 401 });
 
         const { type, data } = event;
-
         if (type !== "customer.subscription.created" && type !== "customer.subscription.deleted") return NextResponse.json({ message: "Invalid event" }, { status: 400 });
 
         const { userId } = data.object.metadata;
