@@ -15,6 +15,7 @@ export default function ViewUsageDialog({
         userId: string;
         key: string;
         usage: number;
+        premium: boolean;
     }
 }) {
     const [resetTimer, setResetTimer] = useState('');
@@ -52,20 +53,15 @@ export default function ViewUsageDialog({
 
                 <div>
                     <h2 className='font-semibold text-lg'>Current Plan</h2>
-                    <p>Free (750 Requests)</p>
+                    {keyData.premium ? <p>Premium</p> : <p>Free (750 Requests)</p>}
                 </div>
 
                 <div>
                     <h2 className='font-semibold text-lg'>Usage Today</h2>
-                    <p>{keyData.usage}/750</p>
+                    <p>{keyData.premium ? 'Unlimited' : `${keyData.usage}/750`}</p>
                 </div>
 
-                <p>Usage resets in {resetTimer}</p>
-
-                <button className={`flex justify-between space-x-4 bg-indigo-700 rounded-lg py-2 px-4 shadow-lg ${true ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-600'}`}>
-                    <span className='truncate'>Upgrade Plan</span>
-                    <ChevronDoubleUpIcon className='size-6 flex-shrink-0' aria-hidden='true' />
-                </button>
+                {!keyData.premium && <p>Usage resets in {resetTimer}</p>}
             </div>
         </Dialog>
     );
