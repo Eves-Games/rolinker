@@ -8,6 +8,7 @@ import { ArrowPathIcon, CheckIcon, FlagIcon, UserGroupIcon, WrenchScrewdriverIco
 import { genDiscordRoles, performSave } from "./actions";
 import { APITextChannel } from "discord-api-types/v10";
 import { APIGuild } from "./page";
+import Link from "next/link";
 
 export default function Options({
     guildId,
@@ -139,7 +140,7 @@ export default function Options({
                         <form>
                             <input type="text" placeholder="Enter Bot Cookie" className='flex justify-between space-x-4 w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg'/>
                         </form>
-                        <p className="text-blue-500 text-center">Read Rank Bot Policy <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></p>
+                        <p className='text-center'><Link href='/terms-of-service' className='text-blue-500 hover:underline' target='_blank'>Terms of Service <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></Link></p>
                     </div>
                 </div>
             </div>

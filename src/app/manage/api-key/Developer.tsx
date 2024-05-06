@@ -4,6 +4,7 @@ import { ArrowTopRightOnSquareIcon, ChartBarIcon, ChevronDoubleUpIcon, CodeBrack
 import EditKeyDialog from "./_components/EditKeyDialog"
 import ViewUsageDialog from "./_components/ViewUsageDialog";
 import PremiumDialog from "./_components/PremiumDialog";
+import Link from "next/link";
 
 export default function Page({
     keyData
@@ -42,7 +43,7 @@ export default function Page({
                         </button>
                     </div>
                 </div>
-                <p className="text-blue-500 text-center">API Documentation <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></p>
+                <p className='text-center'><Link href='/documentation' className='text-blue-500 hover:underline' target='_blank'>Documentation <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></Link></p>
             </div>
 
             <div className='bg-neutral-800 rounded shadow-lg w-full px-4 py-2 space-y-4'>
@@ -58,7 +59,7 @@ export default function Page({
                             <li>Access all Endpoints</li>
                             <li>1-on-1 Support</li>
                         </ul>
-                        <button onClick={() => setPremiumDialogOpen(true)} className={`flex justify-between space-x-4 bg-indigo-700 rounded-lg py-2 px-4 shadow-lg ${keyData.premium ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-600'}`}>
+                        <button onClick={() => setPremiumDialogOpen(true)} className={`flex justify-between space-x-4 bg-indigo-700 rounded-lg py-2 px-4 shadow-lg ${keyData.premium ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-600'}`} disabled={keyData.premium}>
                             <span className='truncate'>Select Premium</span>
                             <ChevronDoubleUpIcon className='size-6 flex-shrink-0' aria-hidden='true' />
                         </button>
@@ -70,7 +71,7 @@ export default function Page({
                             <li>Access all Endpoints</li>
                             <li>1-on-1 Support</li>
                         </ul>
-                        <button className={`flex justify-between space-x-4 bg-neutral-700 rounded-lg py-2 px-4 shadow-lg ${!keyData.premium ? 'opacity-50 cursor-not-allowed' : 'hover:bg-neutral-600'}`}>
+                        <button className={`flex justify-between space-x-4 bg-neutral-700 rounded-lg py-2 px-4 shadow-lg ${!keyData.premium ? 'opacity-50 cursor-not-allowed' : 'hover:bg-neutral-600'}`} disabled={!keyData.premium}>
                             <span className='truncate'>Select Free</span>
                             <Bars2Icon className='size-6 flex-shrink-0' aria-hidden='true' />
                         </button>
