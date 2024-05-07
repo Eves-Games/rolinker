@@ -19,7 +19,9 @@ export const revalidate = 600;
 export async function generateStaticParams() {
     const guilds = await db.guild.findMany()
 
-    return guilds.map(guild => guild.id)
+    return guilds.map(guild => ({
+        id: guild.id
+    }))
 }
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
@@ -83,8 +85,6 @@ export default async function Page({ params }: { params: { id: string } }) {
         currentGroupId: groupId,
         userGroups: userGroups
     };
-
-    
 
     const guilds = {
         currentParentId: parentGuildId,
