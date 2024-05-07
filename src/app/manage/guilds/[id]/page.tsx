@@ -16,16 +16,6 @@ export interface APIGuild extends OriginalAPIGuild {
     id: string;
 };
 
-export const revalidate = 600;
-
-export async function generateStaticParams() {
-    const guilds = await db.guild.findMany()
-
-    return guilds.map(guild => ({
-        id: guild.id
-    }))
-}
-
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
     const botGuild = await rest.get(Routes.guild(params.id)).catch(() => null) as APIGuild | null;
 
