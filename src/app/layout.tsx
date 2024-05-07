@@ -12,12 +12,15 @@ const open_sans = Open_Sans({
 });
 
 export const metadata: Metadata = {
+  title: 'RoLinker',
+  description: 'Access your Roblox accounts on Discord',
   openGraph: {
-    title: 'RoLinker',
-    description: 'Access your Roblox accounts on Discord',
-    url: 'https://rolinker.net',
-    siteName: 'RoLinker',
-    images: '/opengraph-image.png',
+    images: [
+      {
+        url: 'https://rolinker.net/opengraph-image.png',
+        alt: 'Logo'
+      }
+    ],
     locale: 'en_US',
     type: 'website'
   }
@@ -33,8 +36,7 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang='en'>
-        <head>
-        </head>
+        <head></head>
         <body className={`${open_sans.className} bg-neutral-900 text-neutral-100 tracking-wide overflow-y-auto`}>
           <div className='min-h-screen'>
             <Nav />
