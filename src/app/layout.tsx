@@ -5,7 +5,6 @@ import { SessionProvider } from 'next-auth/react';
 import Nav from '@/app/_components/Nav';
 import Footer from '@/app/_components/Footer'
 import { auth } from '@/auth';
-import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const open_sans = Open_Sans({
   subsets: ['latin'],
@@ -15,6 +14,9 @@ const open_sans = Open_Sans({
 export const metadata: Metadata = {
   title: 'RoLinker',
   description: 'Access your Roblox accounts on Discord',
+  openGraph: {
+    images: '/opengraph-image.png'
+  }
 };
 
 export default async function RootLayout({
@@ -28,7 +30,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang='en'>
         <head>
-          <meta name="google-adsense-account" content="ca-pub-5223562584661630" />
+          <meta property="og:image" content="https://rolinker.net/opengraph-image.png" />
         </head>
         <body className={`${open_sans.className} bg-neutral-900 text-neutral-100 tracking-wide overflow-y-auto`}>
           <div className='min-h-screen'>
@@ -37,7 +39,6 @@ export default async function RootLayout({
           </div>
           <hr className='border-neutral-800' />
           <Footer />
-          <SpeedInsights />
         </body>
       </html>
     </SessionProvider>
