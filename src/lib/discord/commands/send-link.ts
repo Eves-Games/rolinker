@@ -1,9 +1,9 @@
-import { APIChatInputApplicationCommandInteraction, APIGuild, APIInteractionResponse, ButtonStyle, ComponentType, InteractionResponseType, MessageFlags, Routes } from 'discord-api-types/v10';
+import { APIChatInputApplicationCommandInteraction, APIGuild, APIInteractionResponse, ButtonStyle, ComponentType, InteractionResponseType, MessageFlags, RESTPostAPIChannelMessageJSONBody, Routes } from 'discord-api-types/v10';
 import { rest } from '../rest';
 import { generateMessage, MessageTitles } from '../messages';
 
 export async function sendLinkCommand(interaction: APIChatInputApplicationCommandInteraction) {
-    const { member, guild_id } = interaction
+    const { member, guild_id, channel } = interaction
 
     if (!guild_id || !member) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' }});
 
@@ -13,9 +13,8 @@ export async function sendLinkCommand(interaction: APIChatInputApplicationComman
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NotOwner, flags: MessageFlags.Ephemeral })
     }
 
-    return {
-        type: InteractionResponseType.ChannelMessageWithSource,
-        data: {
+    await rest.post(Routes.channelMessages(channel.id), {
+        body: {
             embeds: [
                 {
                     title: 'Link your Roblox account',
@@ -35,6 +34,8 @@ export async function sendLinkCommand(interaction: APIChatInputApplicationComman
                     ],
                 },
             ]
-        },
-    } satisfies APIInteractionResponse;
+        } satisfies RESTPostAPIChannelMessageJSONBody
+      });
+
+    return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, flags: MessageFlags.Ephemeral})
 };
