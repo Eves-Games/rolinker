@@ -10,8 +10,6 @@ import Options from './Options';
 import Link from 'next/link';
 import { Metadata } from 'next';
 
-export const runtime = 'edge';
-
 export interface APIGuild extends OriginalAPIGuild {
     id: string;
 };
