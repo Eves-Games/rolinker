@@ -4,11 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { APIGuild as OriginalAPIGuild, Routes } from 'discord-api-types/v10';
 import { createUserRest } from '@/lib/discord/rest';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Manage Guilds'
-};
 
 export const runtime = 'edge';
 

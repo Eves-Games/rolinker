@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { UsersIcon, CircleStackIcon, CodeBracketIcon, } from '@heroicons/react/24/outline'
 import Block from "../_components/Block";
+import { Metadata } from "next";
 
-export default function ManageLayout({
+export const metadata: Metadata = {
+    title: 'Manage'
+};
+
+export default function Layout({
     children,
 }: {
     children: React.ReactNode

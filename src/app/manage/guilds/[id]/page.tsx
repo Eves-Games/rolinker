@@ -8,21 +8,12 @@ import { GroupBasicResponse } from 'roblox-api-types';
 import { getUserRoles } from '@/lib/roblox';
 import Options from './Options';
 import Link from 'next/link';
-import { Metadata } from 'next';
 
 export const runtime = 'edge';
 
 export interface APIGuild extends OriginalAPIGuild {
     id: string;
 };
-
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-    const botGuild = await rest.get(Routes.guild(params.id)).catch(() => null) as APIGuild | null;
-
-    return {
-        title: 'Manage ' + botGuild?.name || 'Guild'
-    }
-}
 
 export default async function Page({ params }: { params: { id: string } }) {
     const session = await auth();
