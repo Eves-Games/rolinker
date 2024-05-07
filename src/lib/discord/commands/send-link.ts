@@ -1,6 +1,6 @@
-import { APIChatInputApplicationCommandInteraction, APIGuild, APIInteractionResponse, ButtonStyle, ComponentType, InteractionResponseType, MessageFlags, RESTPostAPIChannelMessageJSONBody, Routes } from 'discord-api-types/v10';
+import { APIChatInputApplicationCommandInteraction, APIGuild, ButtonStyle, ComponentType, InteractionResponseType, MessageFlags, RESTPostAPIChannelMessageJSONBody, Routes } from 'discord-api-types/v10';
 import { rest } from '../rest';
-import { generateMessage, MessageTitles } from '../messages';
+import { generateMessage, MessageColors, MessageTitles } from '../messages';
 
 export async function sendLinkCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id, channel } = interaction
@@ -37,5 +37,5 @@ export async function sendLinkCommand(interaction: APIChatInputApplicationComman
         } satisfies RESTPostAPIChannelMessageJSONBody
       });
 
-    return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, flags: MessageFlags.Ephemeral})
+    return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, flags: MessageFlags.Ephemeral, color: MessageColors.Green})
 };
