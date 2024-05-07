@@ -10,8 +10,11 @@ const open_sans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'RoLinker',
-  description: 'Access your Roblox accounts on Discord',
+  title: {
+    default: 'RoLinker',
+    template: 'RoLinker - %s'
+  },
+  description: 'Access your Roblox accounts and manage your Roblox groups through Discord',
 };
 
 export default async function RootLayout({

@@ -1,5 +1,10 @@
 import { APIApplicationCommand } from "discord-api-types/v10";
 import { DiscordLogo } from "../_components/DiscordLogo";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Commands'
+};
 
 export default async function Page() {
     const res = await fetch(`https://discord.com/api/v10/applications/${process.env.DISCORD_CLIENT_ID}/commands`, {

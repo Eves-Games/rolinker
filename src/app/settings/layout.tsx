@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { UserIcon, WalletIcon } from '@heroicons/react/24/outline'
 import Block from "../_components/Block";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Settings'
+};
 
 export default function Layout({
     children,

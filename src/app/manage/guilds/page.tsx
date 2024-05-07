@@ -1,10 +1,9 @@
 import { auth } from '@/auth';
-import { ExclamationTriangleIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
 import { APIGuild as OriginalAPIGuild, Routes } from 'discord-api-types/v10';
 import { createUserRest } from '@/lib/discord/rest';
-import { RequestBody as OriginalRequestBody } from '@discordjs/rest';
 
 export const runtime = 'edge';
 
