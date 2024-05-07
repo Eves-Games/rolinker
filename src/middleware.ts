@@ -16,5 +16,5 @@ export default auth((req) => {
 });
 
 export const config = {
-    matcher: ['/manage/guilds', '/manage/guilds/:path', '/manage/accounts', '/manage/api-key', '/settings/account', '/settings/billing'],
+    matcher: ['/manage/:path*', '/settings/:path*'],
 };
