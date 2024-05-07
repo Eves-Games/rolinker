@@ -14,16 +14,6 @@ const open_sans = Open_Sans({
 export const metadata: Metadata = {
   title: 'RoLinker',
   description: 'Access your Roblox accounts on Discord',
-  openGraph: {
-    images: [
-      {
-        url: 'https://rolinker.net/opengraph-image.png',
-        alt: 'Logo'
-      }
-    ],
-    locale: 'en_US',
-    type: 'website'
-  }
 };
 
 export default async function RootLayout({
