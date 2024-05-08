@@ -1,6 +1,6 @@
 import { getDetailedAccounts } from '@/lib/accounts';
 import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags, ComponentType } from 'discord-api-types/v10';
-import { generateMessage, MessageTitles } from '../messages';
+import { generateMessage, MessageTitles, noLinkedAccounts } from '../messages';
 import db from '@/lib/db';
 
 export async function switchCommand(interaction: APIChatInputApplicationCommandInteraction) {
@@ -22,30 +22,7 @@ export async function switchCommand(interaction: APIChatInputApplicationCommandI
 
     const detailedAccounts = await getDetailedAccounts(member.user.id);
 
-    if (detailedAccounts.length === 0) {
-        return {
-            type: InteractionResponseType.ChannelMessageWithSource,
-            data: {
-                embeds: [
-                    {
-                        title: 'You have no linked accounts!',
-                        color: 15548997,
-                    },
-                    {
-                        title: 'Link a Roblox Account',
-                        url: 'https://rolinker.net',
-                        fields: [
-                            { name: 'Step 1', value: 'Tap on the title and accept the redirection to the RoLinker website.' },
-                            { name: 'Step 2', value: 'Tap the sign in button on the top right of the website, and sign in with Discord.' },
-                            { name: 'Step 3', value: "Tap your Discord username, and select 'Manage' from the dropdown." },
-                            { name: 'Step 4', value: 'Tap the plus (+) icon to add a new Roblox account.' },
-                        ],
-                    },
-                ],
-                flags: MessageFlags.Ephemeral,
-            },
-        } satisfies APIInteractionResponse;
-    };
+    if (detailedAccounts.length === 0) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
 
     const primaryAccount = detailedAccounts.filter(account => account.isPrimary)[0]
 

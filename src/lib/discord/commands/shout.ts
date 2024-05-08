@@ -1,4 +1,4 @@
-import { APIChatInputApplicationCommandInteraction, APIGuild, ButtonStyle, ComponentType, InteractionResponseType, MessageFlags, RESTPostAPIChannelMessageJSONBody, Routes } from 'discord-api-types/v10';
+import { APIChatInputApplicationCommandInteraction, APIGuild, APIInteractionResponse, ButtonStyle, ComponentType, InteractionResponseType, MessageFlags, RESTPostAPIChannelMessageJSONBody, Routes } from 'discord-api-types/v10';
 import { rest } from '../rest';
 import { generateMessage, MessageColors, MessageTitles } from '../messages';
 import db from '@/lib/db';
@@ -28,29 +28,18 @@ export async function shoutCommand(interaction: APIChatInputApplicationCommandIn
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
     };
 
-    await rest.post(Routes.channelMessages(channel.id), {
-        body: {
+    return {
+        type: InteractionResponseType.ChannelMessageWithSource,
+        data: {
             embeds: [
                 {
-                    title: 'Link your Roblox account',
-                    description: "This server uses RoLinker for verification. Click below to link your Discord to your Roblox account."
+                    title: 'Shout Success!',
+                    fields: [
+                        {name: 'Content', value: 'Test shout'}
+                    ],
+                    color: MessageColors.Green
                 },
             ],
-            components: [
-                {
-                    type: ComponentType.ActionRow,
-                    components: [
-                        {
-                            type: ComponentType.Button,
-                            style: ButtonStyle.Link,
-                            label: 'Link Account',
-                            url: 'https://rolinker.net/manage/accounts'
-                        },
-                    ],
-                },
-            ]
-        } satisfies RESTPostAPIChannelMessageJSONBody
-    });
-
-    return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, flags: MessageFlags.Ephemeral, color: MessageColors.Green })
+        },
+    } satisfies APIInteractionResponse;
 };
