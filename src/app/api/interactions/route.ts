@@ -12,6 +12,7 @@ import {
     InteractionType,
 } from "discord-api-types/v10"
 import { NextResponse } from "next/server"
+import { shoutCommand } from "@/lib/discord/commands/shout"
 
 export const runtime = "edge"
 
@@ -59,6 +60,9 @@ export async function POST(request: Request) {
 
             case commands.sendlink.name:
                 return NextResponse.json(await sendLinkCommand(interaction));
+            
+            case commands.shout.name:
+                return NextResponse.json(await shoutCommand(interaction));
 
             default:
         }
