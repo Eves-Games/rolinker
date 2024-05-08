@@ -13,7 +13,7 @@ export async function shoutCommand(interaction: APIChatInputApplicationCommandIn
     if (!guild || !guild.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
     if (!guild.robloxCookie) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoRankBot, flags: MessageFlags.Ephemeral });
 
-    const res = await fetch(`https://rolinker-ranker-yqb3mestpa-uc.a.run.app/shout?group=${guild.groupId}`, {
+    const res = await fetch(`https://rolinker-ranker-yqb3mestpa-uk.a.run.app/shout?group=${guild.groupId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
