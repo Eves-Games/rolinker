@@ -13,20 +13,20 @@ export async function shoutCommand(interaction: APIChatInputApplicationCommandIn
     if (!guild || !guild.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
     if (!guild.robloxCookie) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoRankBot, flags: MessageFlags.Ephemeral });
 
-    const res = await fetch(`https://rolinker-ranker-yqb3mestpa-uk.a.run.app/shout?group=${guild.groupId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'roblox-cookie': guild.robloxCookie
-        },
-        body: JSON.stringify({
-            message: 'Test shout'
-        })
-    });
+    //const res = await fetch(`https://rolinker-ranker-yqb3mestpa-uk.a.run.app/shout?group=${guild.groupId}`, {
+    //    method: 'POST',
+    //    headers: {
+    //        'Content-Type': 'application/json',
+    //        'roblox-cookie': guild.robloxCookie
+    ///    },
+    //    body: JSON.stringify({
+    //        message: 'Test shout'
+    //    })
+    //});
 
-    if (!res.ok) {
-        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
-    };
+    //if (!res.ok) {
+    //    return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
+    //};
 
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
