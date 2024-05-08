@@ -1,6 +1,7 @@
-import { APIApplicationCommand } from "discord-api-types/v10";
+import { APIApplicationCommand, Routes } from "discord-api-types/v10";
 import { DiscordLogo } from "../_components/DiscordLogo";
 import { Metadata } from "next";
+import { rest } from "@/lib/discord/rest";
 
 export const metadata: Metadata = {
     title: 'Commands'

@@ -7,9 +7,11 @@ export enum MessageTitles {
 
     NoGroupId = 'This guild has no linked group!',
     NoDivisions = 'This guild has no linked divisions!',
+    NoRankBot = 'This guild has no linked rank bot!',
 
     UnableInvites = 'Unable to create invites!',
     UnableRole = 'Unable to give roles!',
+    UnableShout = 'Unable to group shout!',
 
     NoLinkedAccounts = 'You have no linked accounts!',
     NotInDivisions = 'You are not in any divisions!',

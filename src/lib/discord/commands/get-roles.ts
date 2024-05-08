@@ -10,13 +10,9 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
 
     if (!guild_id || !member) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' }});
 
-    const guild = await db.guild.findUnique({
-        where: {
-            id: guild_id
-        }
-    });
+    const guild = await db.guild.findUnique({ where: { id: guild_id } });
 
-    if (!guild?.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
+    if (!guild || !guild.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
 

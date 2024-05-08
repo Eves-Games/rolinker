@@ -45,4 +45,5 @@ model Guild {
   parentGuild     Guild?         @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   childGuilds     Guild[]        @relation("ParentChild")
   userAccounts    AccountGuild[]
+  robloxCookie    String?
 }

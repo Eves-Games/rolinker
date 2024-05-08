@@ -26,6 +26,11 @@ const GET_DIVISIONS_COMMAND = {
 const SEND_LINK_COMMAND = {
     name: 'send-link',
     description: 'send link account embed to channel'
+};
+
+const SHOUT_COMMAND = {
+    name: 'shout',
+    description: 'send a shout to the linked group'
 }
 
 export const commands = {
@@ -34,5 +39,6 @@ export const commands = {
     switch: SWITCH_COMMAND,
     getroles: GET_ROLES_COMMAND,
     getdivisions: GET_DIVISIONS_COMMAND,
-    sendlink: SEND_LINK_COMMAND
+    sendlink: SEND_LINK_COMMAND,
+    shout: SHOUT_COMMAND
 };
