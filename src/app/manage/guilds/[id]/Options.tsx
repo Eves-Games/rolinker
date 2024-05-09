@@ -142,7 +142,7 @@ export default function Options({
                         <PaperAirplaneIcon className='size-6 flex-shrink-0' aria-hidden='true' />
                     </button>
                 </form>
-                <p className='text-center'>This feature is not working right now <ExclamationTriangleIcon className="size-5 inline-block" /></p>
+                <p className='text-center'>This feature will be available on the 12th <ExclamationTriangleIcon className="size-5 inline-block" /></p>
                 <p className='text-center'><Link href='/terms-of-service' className='text-blue-500 hover:underline' target='_blank'>Terms of Service <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></Link></p>
             </div>
             <form action={handleSaveChanges}>
