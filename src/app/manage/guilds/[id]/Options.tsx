@@ -135,7 +135,7 @@ export default function Options({
                     <span>Rank Bot Options</span>
                 </div>
                 <p>Security Cookie</p>
-                <form className='flex space-x-4'>
+                <form className='flex space-x-2'>
                     <input type="text" placeholder="Enter Bot Cookie" className='flex justify-between space-x-4 w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg' />
                     <button className='flex justify-between space-x-4 bg-indigo-700 hover:bg-indigo-600 rounded-lg py-2 px-4 shadow-lg'>
                         <span className='truncate'>Submit Cookie</span>
