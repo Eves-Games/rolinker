@@ -4,7 +4,7 @@ import { GroupBasicResponse } from "roblox-api-types";
 import GroupList from "./_components/GroupList";
 import ParentList from "./_components/ParentList"
 import ChannelList from "./_components/ChannelList"
-import { ArrowPathIcon, CheckIcon, FlagIcon, UserGroupIcon, WrenchScrewdriverIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, CheckIcon, FlagIcon, UserGroupIcon, WrenchScrewdriverIcon, ArrowTopRightOnSquareIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { genDiscordRoles, performSave } from "./actions";
 import { APITextChannel } from "discord-api-types/v10";
 import { APIGuild } from "./page";
@@ -80,12 +80,20 @@ export default function Options({
 
     return (
         <>
-            <div className='bg-neutral-800 rounded shadow-lg w-full'>
-                <div className='flex items-center space-x-4 px-4 py-2'>
+            <div className='bg-neutral-800 rounded shadow-lg w-full px-4 py-2 space-y-2'>
+                <div className='flex items-center space-x-4 mb-4'>
                     <UserGroupIcon className='size-6' />
                     <span>Group Options</span>
                 </div>
-                <div className='gap-4 grid grid-cols-1 md:grid-cols-2 py-2 px-4'>
+                <div className='gap-4 grid grid-cols-1 md:grid-cols-2'>
+                    <div className='space-y-2 relative'>
+                        <span>Roblox Group</span>
+                        <GroupList
+                            groups={groups.userGroups}
+                            selectedGroup={currentGroup}
+                            onChange={handleGroupChange}
+                        />
+                    </div>
                     <div className='space-y-2'>
                         <span>Discord Roles</span>
                         <form action={() => { genDiscordRoles(guildId); }}>
@@ -95,22 +103,14 @@ export default function Options({
                             </button>
                         </form>
                     </div>
-                    <div className='space-y-2 relative'>
-                        <span>Roblox Group</span>
-                        <GroupList
-                            groups={groups.userGroups}
-                            selectedGroup={currentGroup}
-                            onChange={handleGroupChange}
-                        />
-                    </div>
                 </div>
             </div>
-            <div className='bg-neutral-800 rounded shadow-lg w-full'>
-                <div className='flex items-center space-x-4 px-4 py-2'>
+            <div className='bg-neutral-800 rounded shadow-lg w-full px-4 py-2 space-y-2'>
+                <div className='flex items-center space-x-4 mb-4'>
                     <FlagIcon className='size-6' />
                     <span>Affiliation Options</span>
                 </div>
-                <div className='gap-4 grid grid-cols-1 md:grid-cols-2 py-2 px-4'>
+                <div className='gap-4 grid grid-cols-1 md:grid-cols-2'>
                     <div className='space-y-2 relative'>
                         <span>Parent Guild</span>
                         <ParentList
@@ -129,20 +129,20 @@ export default function Options({
                     </div>
                 </div>
             </div>
-            <div className='bg-neutral-800 rounded shadow-lg w-full'>
-                <div className='flex items-center space-x-4 px-4 py-2'>
+            <div className='bg-neutral-800 rounded shadow-lg w-full py-2 px-4 space-y-2'>
+                <div className='flex items-center space-x-4 mb-4'>
                     <WrenchScrewdriverIcon className='size-6' />
                     <span>Rank Bot Options</span>
                 </div>
-                <div className='gap-4 grid grid-cols-1 md:grid-cols-1 py-2 px-4'>
-                    <div className='space-y-2 relative'>
-                        <span>Security Cookie</span>
-                        <form>
-                            <input type="text" placeholder="Enter Bot Cookie" className='flex justify-between space-x-4 w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg'/>
-                        </form>
-                        <p className='text-center'><Link href='/terms-of-service' className='text-blue-500 hover:underline' target='_blank'>Terms of Service <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></Link></p>
-                    </div>
-                </div>
+                <p>Security Cookie</p>
+                <form className='flex space-x-4'>
+                    <input type="text" placeholder="Enter Bot Cookie" className='flex justify-between space-x-4 w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg' />
+                    <button className='flex justify-between space-x-4 bg-indigo-700 hover:bg-indigo-600 rounded-lg py-2 px-4 shadow-lg'>
+                        <span className='truncate'>Submit Cookie</span>
+                        <PaperAirplaneIcon className='size-6 flex-shrink-0' aria-hidden='true' />
+                    </button>
+                </form>
+                <p className='text-center'><Link href='/terms-of-service' className='text-blue-500 hover:underline' target='_blank'>Terms of Service <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></Link></p>
             </div>
             <form action={handleSaveChanges}>
                 <button className={`flex justify-between space-x-4 bg-green-700 py-2 px-4 rounded ${canSubmit ? 'hover:bg-green-600' : 'opacity-50 cursor-not-allowed'}`} disabled={!canSubmit}>
