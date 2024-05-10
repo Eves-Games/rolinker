@@ -1,104 +1,99 @@
-'use server';
-
-interface GroupRole {
-    id: number;
-    name: string;
-    rank: number;
-    memberCount: number;
+export interface UserRoles {
+    data: UserRolesData[];
 };
 
-interface GroupRoles {
-    groupId: number;
-    roles: GroupRole[];
+export interface UserRolesData {
+    group: UserRolesGroup;
+    role: UserRole;
+    isNotificationsEnabled: boolean;
 };
 
-/**
- * @param {(string)} groupId - A single group ID or an array of group IDs.
- * @returns {Promise<GroupRole[]>} The details of the group(s) requested.
- */
-export async function getRoles(groupId: string) {
-    const res = await fetch(`https://groups.roblox.com/v1/groups/${groupId}/roles`);
-
-    if (!res.ok) return null;
-
-    const GroupRoles = await res.json() as GroupRoles;
-
-    return GroupRoles.roles;
-};
-
-interface UserGroup {
+export interface UserRolesGroup {
     id: number;
     name: string;
     memberCount: number;
     hasVerifiedBadge: boolean;
 };
 
-interface Role {
+export interface UserRole {
     id: number;
     name: string;
     rank: number;
 };
 
-interface UserRoles {
-    data: Array<{
-        group: UserGroup;
-        role: Role;
-    }>
-};
-
 /**
- * @param {(string)} userId - A single group ID or an array of group IDs.
- * @returns {Promise<Array<Group, Role>>} The details of the group(s) requested.
+ * @param {string | number} userId
+ * @returns {Promise<GroupMembership>}
+ * @throws {Error}
  */
-export async function getUserRoles(userId: string) {
+export async function getUserRoles(userId: string | number): Promise<UserRoles> {
     const res = await fetch(`https://groups.roblox.com/v2/users/${userId}/groups/roles`);
+    const data = await res.json();
 
-    if (!res.ok) return null;
+    if (!res.ok) throw new Error(data);
 
-    const UserRoles = await res.json() as UserRoles;
-
-    return UserRoles.data;
+    return data as UserRoles;
 };
 
-/**
- * @param {(string)} userId - The user ID.
- * @param {(string)} groupId - The group ID.
- * @returns {Promise<Role | null>} The user's role in the specified group, or null if not found.
- */
-export async function getUserRoleInGroup(userId: string, groupId: string) {
-    const userRoles = await getUserRoles(userId);
-    if (!userRoles) return null;
-
-    const groupRole = userRoles.find(role => role.group.id === parseInt(groupId));
-    if (!groupRole) return null;
-
-    return groupRole.role;
+export interface Groups {
+    data: GroupData[];
 };
 
-interface Group extends UserGroup {
+export interface GroupData {
+    id: number;
+    name: string;
     description: string;
     owner: {
         id: number;
         type: number;
         name: string;
     };
+    memberCount: number;
     created: string;
-};
-
-interface GroupInfos {
-    data: Array<Group>
+    hasVerifiedBadge: boolean;
 };
 
 /**
- * @param {(string)} groupId - A single group ID or an array of group IDs.
- * @returns {Promise<GroupRole[]>} The details of the group(s) requested.
+* @param {(string | number)[]} groupIds
+* @returns {Promise<Groups>}
+* @throws {Error}
+*/
+export async function getGroups(groupIds: (string | number)[]): Promise<Groups> {
+    const queryParams = new URLSearchParams();
+    groupIds.forEach((id) => queryParams.append('groupIds', id.toString()));
+
+    const res = await fetch(`https://groups.roblox.com/v2/groups?${queryParams}`);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data);
+
+    return data as Groups;
+};
+
+export interface GroupRoles {
+    data: any;
+    groupId: number;
+    roles: GroupRole[];
+};
+
+export interface GroupRole {
+    id: number;
+    name: string;
+    description: string;
+    rank: number;
+    memberCount: number;
+};
+
+/**
+ * @param {string | number} groupId
+ * @returns {Promise<GroupMembership>}
+ * @throws {Error}
  */
-export async function getGroups(groupId: string[]) {
-    const res = await fetch(`https://groups.roblox.com/v2/groups?groupIds=${groupId.join(',')}`)
+export async function getGroupRoles(groupId: string | number): Promise<GroupRoles> {
+    const res = await fetch(`https://groups.roblox.com/v1/groups/${groupId}/roles`);
+    const data = await res.json();
 
-    if (!res.ok) return null;
+    if (!res.ok) throw new Error(data);
 
-    const GroupInfos = await res.json() as GroupInfos;
-
-    return GroupInfos;
+    return data as GroupRoles;
 };
