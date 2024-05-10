@@ -28,10 +28,10 @@ export async function getDivisionsCommand(interaction: APIChatInputApplicationCo
     const account = await findAssociatedAccount(member.user.id, guild_id);
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
 
-    const userRanks = await getUserRoles(account.id);
-    if (!userRanks) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'User ranks not found. The account might be banned.' } });
+    const userRoles = await getUserRoles(account.id);
+    if (!userRoles) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'User ranks not found. The account might be banned.' } });
 
-    const userGroupIds = userRanks.map(userRank => userRank.group.id);
+    const userGroupIds = userRoles.data.map(role => role.group.id);
     const childGuilds = guild.childGuilds.filter(guild => guild.groupId && guild.inviteChannelId && userGroupIds.includes(parseInt(guild.groupId)));
     if (childGuilds.length === 0) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NotInDivisions, flags: MessageFlags.Ephemeral });
 
