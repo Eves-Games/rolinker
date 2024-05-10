@@ -5,7 +5,7 @@ import db from "@/lib/db";
 import { rest } from "@/lib/discord/rest";
 import { getGroupRoles } from "@/lib/roblox";
 import { Guild } from "@prisma/client/edge";
-import { APIGuild, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
+import { APIGuild, RESTGetAPIGuildResult, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
 
 export async function genDiscordRoles(guildId: string) {
     const session = await auth();
@@ -43,6 +43,11 @@ export async function genDiscordRoles(guildId: string) {
 export async function performSave(
     guildData: Guild
 ) {
+    const session = await auth();
+    const guild = await rest.get(Routes.guild(guildData.id)) as RESTGetAPIGuildResult;
+
+    if (guild.owner_id !== session?.user.id) return;
+
     await db.guild.update({
         where: { id: guildData.id },
         data: guildData,
