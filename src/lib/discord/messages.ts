@@ -1,5 +1,5 @@
 import { APIInteraction, APIInteractionResponse, InteractionResponseType, MessageFlags } from "discord-api-types/v10";
-import { GroupResponseV2 } from "roblox-api-types";
+import { GroupData } from "../roblox";
 
 export enum MessageTitles {
     Success = 'Success!',
@@ -43,7 +43,7 @@ export function generateMessage({ responseType, title, color, flags, error }: Me
     };
 };
 
-export function notInGroup(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, group: { id: string; name: string } | GroupResponseV2): APIInteractionResponse {
+export function notInGroup(responseType: InteractionResponseType.UpdateMessage | InteractionResponseType.ChannelMessageWithSource, group: { id: string; name: string } | GroupData): APIInteractionResponse {
     return {
         type: responseType,
         data: {
