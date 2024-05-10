@@ -1,5 +1,25 @@
 import db from '@/lib/db';
-import { GetUserResponse, ThumbnailBatchResponse } from 'roblox-api-types';
+
+interface ThumbnailBatchResponse {
+    requestId: string;
+    errorCode: number;
+    errorMessage: string;
+    targetId: number;
+    state: string;
+    imageUrl: string;
+    version: string;
+};
+
+export interface GetUserResponse {
+    description: string;
+    created: string;
+    isBanned: boolean;
+    externalAppDisplayName: string;
+    hasVerifiedBadge: boolean;
+    id: number;
+    name: string;
+    displayName: string;
+};
 
 export async function getDetailedAccounts(ownerId: string) {
     const accounts = await db.account.findMany({

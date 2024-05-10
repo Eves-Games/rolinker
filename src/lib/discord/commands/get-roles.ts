@@ -1,9 +1,9 @@
 import db from "@/lib/db";
-import { getGroups, getRoles, getUserRoleInGroup } from "@/lib/roblox";
 import { APIChatInputApplicationCommandInteraction, InteractionResponseType, MessageFlags, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
 import { generateMessage, MessageColors, MessageTitles, noLinkedAccounts, notInGroup } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
+import { getGroupRoles, getGroups, getUserRoles } from "@/lib/roblox";
 
 export async function getRolesCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction
@@ -18,11 +18,12 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
 
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
 
-    const groupRanks = await getRoles(guild.groupId);
-    const userRank = await getUserRoleInGroup(account.id, guild.groupId);
+    const groupRoles = await getGroupRoles(guild.groupId);
+    const userRoles = await getUserRoles(account.id);
+    const userRole = userRoles.data.find(role => role.group.id === parseInt(guild.groupId!));
     const memberRoles = member.roles;
 
-    if (!groupRanks || !userRank) {
+    if (!groupRoles || !userRole) {
         const group = await getGroups([guild.groupId]);
 
         if (!group) {
@@ -34,9 +35,9 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
 
     const guildRolesData = await rest.get(Routes.guildRoles(guild_id)).catch(() => { return []; }) as RESTGetAPIGuildRolesResult;
 
-    const removeRanks = groupRanks.filter(rank => rank.id == userRank.id);
+    const removeRanks = groupRoles.roles.filter(role => role.id == userRole.role.id);
     const removeRoles = guildRolesData.filter(role => removeRanks.some(rank => rank.name === role.name)).filter(role => memberRoles.includes(role.name));
-    const addRole = guildRolesData.find(role => role.name == userRank.name);
+    const addRole = guildRolesData.find(role => role.name == userRole.role.name);
 
     try {
         await rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();

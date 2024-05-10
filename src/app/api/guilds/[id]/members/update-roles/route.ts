@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
-import { getRoles, getUserRoleInGroup } from "@/lib/roblox";
+import { getGroupRoles, getUserRoles } from "@/lib/roblox";
 import { APIGuildMember, RESTGetAPIGuildResult, RESTGetAPIGuildRolesResult, Routes } from "discord-api-types/v10";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -49,9 +49,7 @@ export async function POST(
         status: 401,
     });
 
-    const guild = await db.guild.findUnique({
-        where: { id: guildId }
-    });
+    const guild = await db.guild.findUnique({ where: { id: guildId } });
 
     if (!guild || !guild.groupId) return new NextResponse('Guild is not linked to a Roblox group', {
         status: 400,
@@ -69,19 +67,20 @@ export async function POST(
         status: 400,
     });
 
-    const groupRanks = await getRoles(guild.groupId);
-    const userRank = await getUserRoleInGroup(account.id, guild.groupId);
+    const groupRoles = await getGroupRoles(guild.groupId);
+    const userRoles = await getUserRoles(account.id);
+    const userRole = userRoles.data.find(role => role.group.id === parseInt(guild.groupId!));
     const memberRoles = member.roles;
 
-    if (!groupRanks || !userRank) {
+    if (!groupRoles || !userRole) {
         return new NextResponse('User is not in linked Roblox group', {
             status: 400,
         });
     };
 
-    const removeRanks = groupRanks.filter(rank => rank.id == userRank.id);
+    const removeRanks = groupRoles.roles.filter(role => role.id == userRole.role.id);
     const removeRoles = apiGuild.roles.filter(role => removeRanks.some(rank => rank.name === role.name)).filter(role => memberRoles.includes(role.name));
-    const addRole = apiGuild.roles.find(role => role.name == userRank.name);
+    const addRole = apiGuild.roles.find(role => role.name == userRole.role.name);
 
     await rest.put(Routes.guildMemberRole(guildId, member.user!.id, addRole!.id)).catch();
 
