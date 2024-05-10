@@ -4,11 +4,11 @@ import { Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useSubmissionContext } from "../_contexts/SubmissionContext";
 import { UserRolesGroup } from "@/lib/roblox";
-import { APITextChannel, RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult } from "discord-api-types/v10";
+import { APIChannel, RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildChannelsResult } from "discord-api-types/v10";
 
 type SelectListProps = {
     type: "Group" | "Channel" | "Parent";
-    data: UserRolesGroup[] | APITextChannel[] | RESTGetAPICurrentUserGuildsResult;
+    data: UserRolesGroup[] | RESTGetAPIGuildChannelsResult | RESTGetAPICurrentUserGuildsResult;
 };
 
 export default function SelectList({ type, data }: SelectListProps) {
@@ -16,7 +16,7 @@ export default function SelectList({ type, data }: SelectListProps) {
 
     const currentEntry = data.find(entry => entry.id.toString() == submission.groupId) || null;
 
-    const handleChange = (entry: UserRolesGroup | APITextChannel | RESTAPIPartialCurrentUserGuild | null) => {
+    const handleChange = (entry: UserRolesGroup | APIChannel | RESTAPIPartialCurrentUserGuild | null) => {
         if (type == "Group") {
             setSubmission((prevSubmission) => ({
                 ...prevSubmission,
