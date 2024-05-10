@@ -17,23 +17,15 @@ export default function SelectList({ type, data }: SelectListProps) {
     const currentEntry = data.find(entry => entry.id.toString() == submission.groupId) || null;
 
     const handleChange = (entry: UserRolesGroup | APIChannel | RESTAPIPartialCurrentUserGuild | null) => {
-        if (type == "Group") {
-            setSubmission((prevSubmission) => ({
-                ...prevSubmission,
-                groupId: entry?.id.toString() || null,
-            }));
-        } else if (type == "Channel") {
-            setSubmission((prevSubmission) => ({
-                ...prevSubmission,
-                inviteChannelId: entry?.id.toString() || null,
-            }));
-        } else if (type == "Parent") {
-            setSubmission((prevSubmission) => ({
-                ...prevSubmission,
-                parentGuildId: entry?.id.toString() || null,
-            }));
+        const key = type === "Group" ? "groupId" : type === "Channel" ? "inviteChannelId" : type === "Parent" ? "parentGuildId" : null;
+      
+        if (key) {
+          setSubmission((prevSubmission) => ({
+            ...prevSubmission,
+            [key]: entry?.id.toString() || null,
+          }));
         }
-    }
+      };
 
     return (
         <Listbox value={currentEntry} onChange={handleChange}>
