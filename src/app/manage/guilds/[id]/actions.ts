@@ -50,7 +50,12 @@ export async function performSave(
 
     await db.guild.update({
         where: { id: guildData.id },
-        data: guildData,
+        data: {
+            groupId: guildData.groupId,
+            inviteChannelId: guildData.inviteChannelId,
+            parentGuildId: guildData.parentGuildId,
+            robloxCookie: guildData.robloxCookie,
+        }
     }).catch();
 };
 

@@ -2,20 +2,16 @@ import { auth } from '@/auth';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
-import { APIGuild as OriginalAPIGuild, Routes } from 'discord-api-types/v10';
+import { RESTGetAPICurrentUserGuildsResult, Routes } from 'discord-api-types/v10';
 import { createUserRest } from '@/lib/discord/rest';
 
 export const runtime = 'edge';
-
-interface APIGuild extends OriginalAPIGuild {
-    id: string;
-};
 
 export default async function Page() {
     const session = await auth();
 
     const userRest = createUserRest(session?.user.access_token);
-    const guilds = await userRest.get(Routes.userGuilds()) as APIGuild[]
+    const guilds = await userRest.get(Routes.userGuilds()) as RESTGetAPICurrentUserGuildsResult;
 
     if (!guilds) {
         return (
@@ -26,7 +22,7 @@ export default async function Page() {
         );
     };
 
-    const ownedGuilds: APIGuild[] = guilds.filter(guild => guild.owner === true);
+    const ownedGuilds = guilds.filter(guild => guild.owner === true);
 
     if (ownedGuilds.length === 0) {
         return (
