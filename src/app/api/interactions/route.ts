@@ -14,8 +14,6 @@ import {
 import { NextResponse } from "next/server"
 import { shoutCommand } from "@/lib/discord/commands/shout"
 
-export const runtime = "edge"
-
 export async function POST(request: Request) {
     const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_PUBLIC_KEY as string);
     if (!verifyResult.isValid || !verifyResult.interaction) {
