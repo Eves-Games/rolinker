@@ -5,9 +5,6 @@ const nextConfig = {
             { hostname: 'cdn.discordapp.com' },
             { hostname: 'tr.rbxcdn.com' }
         ]
-    },
-    experimental: {
-        esmExternals: true
     }
 };
 
