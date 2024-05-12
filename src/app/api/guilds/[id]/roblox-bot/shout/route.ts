@@ -29,6 +29,7 @@ export async function POST(
 
     try {
         const client = await new bloxy.Client({ credentials: { cookie: guild.robloxCookie } });
+        await client.login();
         const group = await client.getGroup(parseInt(guild.groupId));
         await group.updateShout('shout');
         return new NextResponse('Success');
