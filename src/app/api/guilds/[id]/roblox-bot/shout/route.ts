@@ -27,15 +27,18 @@ export async function POST(
     if (!guild || !guild.groupId) return new NextResponse('Guild is not linked to a Roblox group', { status: 404 });
     if (!guild.robloxCookie) return new NextResponse('Guild is not linked to a Roblox group', { status: 404 });
 
+    console.log(guild)
+
     try {
         const client = new Client({ credentials: { cookie: guild.robloxCookie } });
         await client.login();
 
         const group = await client.getGroup(parseInt(guild.groupId));
         await group.updateShout('shout');
-        
+
         return new NextResponse('Success');
     } catch (err) {
+        console.log(err)
         return NextResponse.json(err, { status: 500 })
     };
 };
