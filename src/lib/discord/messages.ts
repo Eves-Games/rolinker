@@ -12,6 +12,7 @@ export enum MessageTitles {
     UnableInvites = 'Unable to create invites!',
     UnableRole = 'Unable to give roles!',
     UnableShout = 'Unable to group shout!',
+    UnableLogin = 'Unable to log into the rank bot!',
 
     NoLinkedAccounts = 'You have no linked accounts!',
     NotInDivisions = 'You are not in any divisions!',
