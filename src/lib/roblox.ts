@@ -99,7 +99,7 @@ export async function getGroupRoles(groupId: string | number): Promise<GroupRole
 };
 
 export async function updateStatus(groupId: string | number, cookie: string) {
-    const res = await fetch(`https://groups.roblox.com/v1/groups/${groupId}/status`, {
+    /**const res = await fetch(`https://groups.roblox.com/v1/groups/${groupId}/status`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -112,5 +112,5 @@ export async function updateStatus(groupId: string | number, cookie: string) {
     const data = await res.json();
     console.log(data)
 
-    if (!res.ok) throw new Error(data);
+    if (!res.ok) throw new Error(data);*/
 };
