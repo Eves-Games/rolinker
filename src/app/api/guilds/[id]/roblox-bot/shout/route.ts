@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import bloxy from "bloxy";
+import {Client} from "bloxy";
 
 export async function POST(
     request: NextRequest,
@@ -28,10 +28,12 @@ export async function POST(
     if (!guild.robloxCookie) return new NextResponse('Guild is not linked to a Roblox group', { status: 404 });
 
     try {
-        const client = await new bloxy.Client({ credentials: { cookie: guild.robloxCookie } });
+        const client = new Client({ credentials: { cookie: guild.robloxCookie } });
         await client.login();
+
         const group = await client.getGroup(parseInt(guild.groupId));
         await group.updateShout('shout');
+        
         return new NextResponse('Success');
     } catch (err) {
         return NextResponse.json(err, { status: 500 })
