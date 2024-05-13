@@ -31,5 +31,19 @@ export async function shoutComponent(interaction: APIModalSubmitInteraction) {
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
     };
 
-    return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, color: MessageColors.Green, flags: MessageFlags.Ephemeral})
+
+    return {
+        type: InteractionResponseType.ChannelMessageWithSource,
+        data: {
+            embeds: [
+                {
+                    title: 'Shout Success!',
+                    fields: [
+                        {name: 'Content', value: 'Test shout'}
+                    ],
+                    color: MessageColors.Green
+                },
+            ],
+        },
+    } satisfies APIInteractionResponse;
 };
