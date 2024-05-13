@@ -22,7 +22,8 @@ export async function shoutCommand(interaction: APIChatInputApplicationCommandIn
                     custom_id: 'content',
                     label: 'Content',
                     style: 2,
-                    placeholder: 'Join the game!'
+                    placeholder: 'Join the game!',
+                    max_length: 255
                 }]
             }]
         }
