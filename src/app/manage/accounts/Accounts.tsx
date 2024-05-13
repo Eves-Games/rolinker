@@ -54,8 +54,7 @@ export default function Page({ accounts: initialAccounts }: AccountsPageProps) {
             <span className='text-lg'>{account.name}</span>
           </div>
           <div className='flex justify-between space-x-2'>
-            <form onSubmit={async (e) => {
-              e.preventDefault();
+            <form action={async () => {
               setPrimaryId(account.id);
               await updatePrimaryAccount(account.id);
             }}>
@@ -63,8 +62,7 @@ export default function Page({ accounts: initialAccounts }: AccountsPageProps) {
                 <StarIcon className='size-6' />
               </button>
             </form>
-            <form onSubmit={async (e) => {
-              e.preventDefault();
+            <form action={async () => {
               setAccounts((prevAccounts) => prevAccounts.filter((accountEntry) => accountEntry.id !== account.id));
               await deleteAccount(account.id);
             }}>
