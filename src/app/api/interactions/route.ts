@@ -13,56 +13,63 @@ import {
 } from "discord-api-types/v10"
 import { NextResponse } from "next/server"
 import { shoutCommand } from "@/lib/discord/commands/shout"
+import { shoutComponent } from "@/lib/discord/components/shout"
 
 export async function POST(request: Request) {
     const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_PUBLIC_KEY as string);
     if (!verifyResult.isValid || !verifyResult.interaction) {
         return new NextResponse("Invalid request", { status: 401 })
     };
+
     const { interaction } = verifyResult;
 
     if (interaction.type === InteractionType.Ping) {
         return NextResponse.json({ type: InteractionResponseType.Pong })
     };
 
-    if (interaction.type === InteractionType.MessageComponent) {
-        const { custom_id } = interaction.data
-
-        switch (custom_id) {
-            case 'account_switch':
-                return NextResponse.json(await switchComponent(interaction))
-        }
-    }
-
     if (interaction.type === InteractionType.ApplicationCommand) {
         const { name } = interaction.data
-
         switch (name) {
             case commands.ping.name:
                 return NextResponse.json({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: { content: 'Pong' },
                 } satisfies APIInteractionResponse);
-
             case commands.link.name:
                 return NextResponse.json(await linkCommand(interaction));
-
             case commands.switch.name:
                 return NextResponse.json(await switchCommand(interaction));
-
             case commands.getroles.name:
                 return NextResponse.json(await getRolesCommand(interaction));
-
             case commands.getdivisions.name:
                 return NextResponse.json(await getDivisionsCommand(interaction));
-
             case commands.sendlink.name:
                 return NextResponse.json(await sendLinkCommand(interaction));
-            
             case commands.shout.name:
                 return NextResponse.json(await shoutCommand(interaction));
-
             default:
+                return new NextResponse("Unknown command", { status: 400 });
+        }
+    };
+
+    if (interaction.type === InteractionType.MessageComponent) {
+        const { custom_id } = interaction.data
+        switch (custom_id) {
+            case 'account_switch':
+                return NextResponse.json(await switchComponent(interaction))
+            default:
+                return new NextResponse("Unknown component", { status: 400 });
+        }
+    }
+
+    if (interaction.type === InteractionType.ModalSubmit) {
+        const { custom_id } = interaction.data
+
+        switch (custom_id) {
+            case 'shout':
+                return NextResponse.json(await shoutComponent(interaction))
+            default:
+                return new NextResponse("Unknown modal", { status: 400 });
         }
     };
 

@@ -1,4 +1,4 @@
-import { APIChatInputApplicationCommandInteraction, APIMessageComponentSelectMenuInteraction, APIPingInteraction } from "discord-api-types/v10"
+import { APIChatInputApplicationCommandInteraction, APIMessageComponentSelectMenuInteraction, APIModalSubmitInteraction, APIPingInteraction } from "discord-api-types/v10"
 import nacl from "tweetnacl"
 
 type VerifyWithNaclArgs = {
@@ -18,7 +18,7 @@ const verifyWithNacl = ({ appPublicKey, signature, rawBody, timestamp }: VerifyW
 
 type VerifyDiscordRequestResult =
   | { isValid: false }
-  | { isValid: true; interaction: APIPingInteraction | APIMessageComponentSelectMenuInteraction | APIChatInputApplicationCommandInteraction }
+  | { isValid: true; interaction: APIPingInteraction | APIMessageComponentSelectMenuInteraction | APIChatInputApplicationCommandInteraction | APIModalSubmitInteraction }
 
 export async function verifyInteractionRequest(
   request: Request,
