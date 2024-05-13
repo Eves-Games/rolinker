@@ -12,6 +12,7 @@ export async function shoutComponent(interaction: APIModalSubmitInteraction) {
     if (!guild.robloxCookie) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoRankBot, flags: MessageFlags.Ephemeral });
 
     const { components } = interaction.data;
+    const shoutContent = components[0].components[0].value
     let client: Client;
 
     try {
@@ -24,7 +25,7 @@ export async function shoutComponent(interaction: APIModalSubmitInteraction) {
 
     try {
         const group = await client.getGroup(parseInt(guild.groupId));
-        await group.updateShout(components[0].components[0].value);
+        await group.updateShout(shoutContent);
     } catch (err: any) {
         console.log(err)
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
@@ -37,7 +38,7 @@ export async function shoutComponent(interaction: APIModalSubmitInteraction) {
                 {
                     title: 'Shout Success!',
                     fields: [
-                        {name: 'Content', value: 'Test shout'}
+                        {name: 'Content', value: shoutContent}
                     ],
                     color: MessageColors.Green
                 },
