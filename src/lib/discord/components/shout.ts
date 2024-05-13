@@ -1,7 +1,6 @@
 import db from '@/lib/db';
 import { InteractionResponseType, MessageFlags, APIModalSubmitInteraction, APIInteractionResponse } from 'discord-api-types/v10';
 import { generateMessage, MessageTitles, MessageColors } from '@/lib/discord/messages';
-import { getRelatedGuilds } from '../util';
 import { Client } from 'bloxy';
 
 export async function shoutComponent(interaction: APIModalSubmitInteraction) {
@@ -25,7 +24,7 @@ export async function shoutComponent(interaction: APIModalSubmitInteraction) {
 
     try {
         const group = await client.getGroup(parseInt(guild.groupId));
-        group.updateShout(components[0].components[0].value);
+        await group.updateShout(components[0].components[0].value);
     } catch (err: any) {
         console.log(err)
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
