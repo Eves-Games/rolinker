@@ -7,15 +7,12 @@ import { getGroupRoles, getGroups, getUserRoles } from "@/lib/roblox";
 
 export async function getRolesCommand(interaction: APIChatInputApplicationCommandInteraction) {
     const { member, guild_id } = interaction
-
     if (!guild_id || !member) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' }});
 
     const guild = await db.guild.findUnique({ where: { id: guild_id } });
-
     if (!guild || !guild.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
     const account = await findAssociatedAccount(member.user.id, guild_id);
-
     if (!account) return noLinkedAccounts(InteractionResponseType.ChannelMessageWithSource);
 
     const groupRoles = await getGroupRoles(guild.groupId);
@@ -26,11 +23,8 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
     if (!groupRoles || !userRole) {
         const group = await getGroups([guild.groupId]);
 
-        if (!group) {
-            return notInGroup(InteractionResponseType.ChannelMessageWithSource, { name: 'this group', id: guild.groupId, })
-        } else {
-            return notInGroup(InteractionResponseType.ChannelMessageWithSource, group.data[0]);
-        }
+        if (!group) return notInGroup(InteractionResponseType.ChannelMessageWithSource, { name: 'this group', id: guild.groupId, })
+        return notInGroup(InteractionResponseType.ChannelMessageWithSource, group.data[0]);
     };
 
     const guildRolesData = await rest.get(Routes.guildRoles(guild_id)).catch(() => { return []; }) as RESTGetAPIGuildRolesResult;
@@ -42,9 +36,7 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
     try {
         await rest.put(Routes.guildMemberRole(guild_id, member.user.id, addRole!.id)).catch();
 
-        for (const role of removeRoles) {
-            await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
-        };
+        for (const role of removeRoles) await rest.delete(Routes.guildMemberRole(guild_id, member.user.id, role.id)).catch();
     } catch {
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableRole, color: MessageColors.Red });
     };
