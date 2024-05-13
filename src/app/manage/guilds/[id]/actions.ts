@@ -49,6 +49,6 @@ export async function submitCookie(guildId: string, formData: FormData) {
 
     await db.guild.update({
         where: { id: guildId },
-        data: { robloxCookie: validatedFields.data.cookie }
+        data: { robloxCookie: !!validatedFields.data.cookie.length ? validatedFields.data.cookie : null }
     }).catch();
 }
