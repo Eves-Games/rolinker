@@ -35,6 +35,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(await sendLinkCommand(interaction));
             case commands.bot.name:
                 if (!options) return new NextResponse("Options expected", { status: 400 });
+                console.log(interaction, interaction.data)
 
                 for (const option of options) {
                     const { name } = option
