@@ -26,6 +26,8 @@ export async function POST(request: Request) {
 
     if (interaction.type === InteractionType.ApplicationCommand) {
         const { name } = interaction.data
+        console.log(interaction)
+        console.log(interaction.data)
         switch (name) {
             case commands.link.name:
                 return NextResponse.json(await linkCommand(interaction));
