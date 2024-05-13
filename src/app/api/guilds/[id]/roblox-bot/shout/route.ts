@@ -1,6 +1,8 @@
 import db from "@/lib/db";
+import { rest } from "@/lib/discord/rest";
 import { updateStatus } from "@/lib/roblox";
 import { Client } from "bloxy";
+import { RESTGetAPIGuildResult, Routes } from "discord-api-types/v10";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -23,6 +25,10 @@ export async function POST(
         where: { key: apiKeyHeader },
         data: { usage: { increment: 1 } }
     }).catch();
+
+    const botGuild = await rest.get(Routes.guild(guildId)).catch(() => { return null; }) as RESTGetAPIGuildResult | null;
+    if (!botGuild) return new NextResponse('Could not find guild', { status: 404 });
+    if (botGuild.owner_id !== apiKey.userId) return new NextResponse('Unauthorized API key', { status: 401 });
 
     const guild = await db.guild.findUnique({ where: { id: guildId } });
     if (!guild || !guild.groupId) return new NextResponse('Guild is not linked to a Roblox group', { status: 404 });

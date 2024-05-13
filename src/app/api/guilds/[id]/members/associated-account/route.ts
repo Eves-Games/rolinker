@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { rest } from "@/lib/discord/rest";
 import { findAssociatedAccount } from "@/lib/discord/util";
-import { APIGuildMember, Routes } from "discord-api-types/v10";
+import { APIGuildMember, RESTGetAPIGuildResult, Routes } from "discord-api-types/v10";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -29,6 +29,10 @@ export async function GET(
         where: { key: apiKeyHeader },
         data: { usage: { increment: 1 } }
     }).catch();
+
+    const botGuild = await rest.get(Routes.guild(guildId)).catch(() => { return null; }) as RESTGetAPIGuildResult | null;
+    if (!botGuild) return new NextResponse('Could not find guild', { status: 404 });
+    if (botGuild.owner_id !== apiKey.userId) return new NextResponse('Unauthorized API key', { status: 401 });
 
     const member = await rest.get(Routes.guildMember(guildId, memberId)).catch(() => { return null; }) as APIGuildMember | null;
     if (!member) return new NextResponse('User not apart of guild API key is linked too', { status: 404 });

@@ -29,16 +29,16 @@ export async function GET(
         data: { usage: { increment: 1 } }
     }).catch();
 
-    const apiGuild = await rest.get(Routes.guild(guildId)).catch(() => { return []; }) as RESTGetAPIGuildResult;
-
-    if (apiGuild.owner_id !== apiKey.userId) return new NextResponse('Unauthorized API key', { status: 401, });
+    const botGuild = await rest.get(Routes.guild(guildId)).catch(() => { return null; }) as RESTGetAPIGuildResult | null;
+    if (!botGuild) return new NextResponse('Could not find guild', { status: 404 });
+    if (botGuild.owner_id !== apiKey.userId) return new NextResponse('Unauthorized API key', { status: 401 });
 
     const guild = await db.guild.findUnique({ where: { id: guildId } });
 
     if (guild) {
         const { robloxCookie, ...guildWithoutCookie } = guild;
         return NextResponse.json(guildWithoutCookie);
-      }
-    
-      return NextResponse.json(null);
+    }
+
+    return NextResponse.json(null);
 };
