@@ -8,7 +8,7 @@ import Link from "next/link";
 import { SubmissionContextProvider } from "./_contexts/SubmissionContext";
 import { getUserRoles } from "@/lib/roblox";
 import SelectList from "./_components/SelectList";
-import GenRoles from "./_components/GenRoles";
+import { genDiscordRoles, submitCookie } from "./actions";
 
 export const runtime = "edge";
 
@@ -41,6 +41,9 @@ export default async function Page({ params }: { params: { id: string } }) {
         }
     }))).flat();
 
+    const genDiscordRolesWithId = genDiscordRoles.bind(null, botGuild.id)
+    const submitCookieWithId = submitCookie.bind(null, botGuild.id)
+
     return (
         <div className="w-full space-y-2">
             <div className="flex items-center space-x-4 bg-neutral-800 px-4 py-2 rounded shadow-lg w-full" key={guild.id}>
@@ -66,7 +69,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                         </div>
                         <div className="space-y-2">
                             <span>Discord Roles</span>
-                            <GenRoles />
+                            <button formAction={genDiscordRolesWithId} className="flex justify-between space-x-4 w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg">
+                                <span className="truncate">Generate Discord Roles</span>
+                                <ArrowPathIcon className="size-6 flex-shrink-0" aria-hidden="true" />
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -92,8 +98,8 @@ export default async function Page({ params }: { params: { id: string } }) {
                         <span>Rank Bot Options</span>
                     </div>
                     <p>Security Cookie</p>
-                    <form className="flex space-x-2">
-                        <input type="text" placeholder="Enter Bot Cookie" className="flex justify-between space-x-4 w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg" />
+                    <form action={submitCookieWithId} className="flex space-x-2">
+                        <input name="cookie" type="text" placeholder="Enter Bot Cookie" className="flex justify-between space-x-4 w-full bg-neutral-700 hover:bg-neutral-600 rounded-lg py-2 px-4 shadow-lg" />
                         <button className="flex justify-between space-x-4 bg-indigo-700 hover:bg-indigo-600 rounded-lg py-2 px-4 shadow-lg">
                             <span className="truncate">Submit Cookie</span>
                             <PaperAirplaneIcon className="size-6 flex-shrink-0" aria-hidden="true" />
