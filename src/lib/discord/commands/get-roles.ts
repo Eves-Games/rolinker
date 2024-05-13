@@ -20,8 +20,6 @@ export async function getRolesCommand(interaction: APIChatInputApplicationComman
     const group = await client.getGroup(parseInt(guild.groupId));
     if (!group) return notInGroup(InteractionResponseType.ChannelMessageWithSource, { id: guild.groupId, name: 'this group' })
     
-    
-
     const groupRoles = await group.getRoles();
     const userRoles = await getUserRoles(account.id);
     const userRole = userRoles.data.find(role => role.group.id === parseInt(guild.groupId!));

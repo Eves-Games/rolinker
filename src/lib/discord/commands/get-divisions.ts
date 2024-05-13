@@ -10,7 +10,6 @@ import {
     ButtonStyle,
     APIInvite,
     RESTPostAPIChannelInviteJSONBody,
-    APIGuildPreview,
 } from "discord-api-types/v10";
 import { generateMessage, noLinkedAccounts, MessageTitles, MessageColors } from "@/lib/discord/messages";
 import { rest } from "@/lib/discord/rest";

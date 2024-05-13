@@ -1,44 +1,91 @@
-const PING_COMMAND = {
-    name: 'ping',
-    description: 'responds with pong',
-};
+import { RESTPatchAPIApplicationCommandJSONBody } from "discord-api-types/v10";
 
 const LINK_COMMAND = {
     name: 'link',
     description: 'redirect user to link web-page'
-};
+} satisfies RESTPatchAPIApplicationCommandJSONBody;
 
 const SWITCH_COMMAND = {
     name: 'switch',
     description: 'switch roblox account being used'
-};
-
-const GET_ROLES_COMMAND = {
-    name: 'get-roles',
-    description: 'assign roblox group roles to user'
-};
-
-const GET_DIVISIONS_COMMAND = {
-    name: 'get-divisions',
-    description: 'give division invite links to user'
-};
+} satisfies RESTPatchAPIApplicationCommandJSONBody;
 
 const SEND_LINK_COMMAND = {
     name: 'send-link',
     description: 'send link account embed to channel'
-};
+} satisfies RESTPatchAPIApplicationCommandJSONBody;
 
-const SHOUT_COMMAND = {
-    name: 'shout',
-    description: 'send a shout to the linked group'
-}
+const GET = {
+    name: 'get',
+    description: 'commands for getting user data',
+    options: [
+        {
+            name: 'divisions',
+            description: 'give division invite links to user',
+            type: 1
+        },
+        {
+            name: 'roles',
+            description: 'assign roblox group roles to user',
+            type: 1
+        },
+    ]
+} satisfies RESTPatchAPIApplicationCommandJSONBody;
+
+const BOT = {
+    name: 'bot',
+    description: 'commands for the connected rank bot',
+    options: [
+        {
+            name: 'shout',
+            description: 'send a shout to the linked group',
+            type: 1
+        },
+        {
+            name: 'promote',
+            description: 'promote a user in the linked group',
+            type: 1,
+            options: [
+                {
+                    name: 'username',
+                    description: 'username of user to promote',
+                    type: 3,
+                    max_length: 20,
+                    required: true
+                },
+                {
+                    name: 'reason',
+                    description: 'reason for the promotion',
+                    type: 3
+                }
+            ]
+        },
+        {
+            name: 'demote',
+            description: 'demote a user in the linked group',
+            type: 1,
+            options: [
+                {
+                    name: 'username',
+                    description: 'username of user to demote',
+                    type: 3,
+                    max_length: 20,
+                    required: true
+                },
+                {
+                    name: 'reason',
+                    description: 'reason for the demotion',
+                    type: 3
+                }
+            ]
+        }
+    ]
+} satisfies RESTPatchAPIApplicationCommandJSONBody;
 
 export const commands = {
-    ping: PING_COMMAND,
     link: LINK_COMMAND,
     switch: SWITCH_COMMAND,
-    getroles: GET_ROLES_COMMAND,
-    getdivisions: GET_DIVISIONS_COMMAND,
     sendlink: SEND_LINK_COMMAND,
-    shout: SHOUT_COMMAND
+    get: GET,
+    bot: BOT
 };

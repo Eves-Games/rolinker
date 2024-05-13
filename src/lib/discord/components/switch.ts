@@ -5,30 +5,25 @@ import { getRelatedGuilds } from '../util';
 
 export async function switchComponent(interaction: APIMessageComponentSelectMenuInteraction) {
     const { guild_id, member } = interaction;
-    const { values } = interaction.data;
+    if (!member || !guild_id) return generateMessage({ responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' } });
 
-    if (!member || !guild_id) return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' }});
-
-    const guild = await db.guild.findUnique({
-        where: { id: guild_id },
-        include: { parentGuild: true, childGuilds: true },
-    });
-
+    const guild = await db.guild.findUnique({ where: { id: guild_id }, include: { parentGuild: true, childGuilds: true }, });
     if (!guild?.groupId) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoGroupId, flags: MessageFlags.Ephemeral });
 
+    const { values } = interaction.data;
     const relatedGuilds = await getRelatedGuilds(guild_id);
     const relatedGuildIds = relatedGuilds.map((guild) => guild.id);
 
     if (values[0] === 'default') {
         try {
             await db.accountGuild.deleteMany({
-                where: { 
+                where: {
                     userId: member.user.id,
                     guildId: { in: relatedGuildIds },
                 },
             });
         } catch (error) {
-            return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: error }});
+            return generateMessage({ responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: error } });
         }
     } else {
         try {
@@ -40,7 +35,7 @@ export async function switchComponent(interaction: APIMessageComponentSelectMenu
                 });
             }
         } catch (error) {
-            return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: error }});
+            return generateMessage({ responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: error } });
         }
     };
 

@@ -6,14 +6,11 @@ import { switchCommand } from '@/lib/discord/commands/switch'
 import { sendLinkCommand } from '@/lib/discord/commands/send-link'
 import { switchComponent } from "@/lib/discord/components/switch"
 import { verifyInteractionRequest } from "@/lib/discord/verify-discord-request"
-import {
-    APIInteractionResponse,
-    InteractionResponseType,
-    InteractionType,
-} from "discord-api-types/v10"
+import { InteractionResponseType, InteractionType } from "discord-api-types/v10"
 import { NextResponse } from "next/server"
 import { shoutCommand } from "@/lib/discord/commands/shout"
 import { shoutComponent } from "@/lib/discord/components/shout"
+import { promoteCommand } from "@/lib/discord/commands/promote"
 
 export async function POST(request: Request) {
     const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_PUBLIC_KEY as string);
@@ -30,23 +27,22 @@ export async function POST(request: Request) {
     if (interaction.type === InteractionType.ApplicationCommand) {
         const { name } = interaction.data
         switch (name) {
-            case commands.ping.name:
-                return NextResponse.json({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: { content: 'Pong' },
-                } satisfies APIInteractionResponse);
             case commands.link.name:
                 return NextResponse.json(await linkCommand(interaction));
             case commands.switch.name:
                 return NextResponse.json(await switchCommand(interaction));
-            case commands.getroles.name:
-                return NextResponse.json(await getRolesCommand(interaction));
-            case commands.getdivisions.name:
-                return NextResponse.json(await getDivisionsCommand(interaction));
             case commands.sendlink.name:
                 return NextResponse.json(await sendLinkCommand(interaction));
-            case commands.shout.name:
+            case commands.bot.options[0].name: // shout
                 return NextResponse.json(await shoutCommand(interaction));
+            case commands.bot.options[1].name: // promote
+                return NextResponse.json(await promoteCommand(interaction));
+            case commands.bot.options[2].name: // demote
+                return NextResponse.json(await shoutCommand(interaction));
+            case commands.get.options[0].name: // get divisions
+                return NextResponse.json(await getDivisionsCommand(interaction));
+            case commands.get.options[1].name: // get roles
+                return NextResponse.json(await getRolesCommand(interaction));
             default:
                 return new NextResponse("Unknown command", { status: 400 });
         }
