@@ -25,11 +25,11 @@ export async function shoutComponent(interaction: APIModalSubmitInteraction) {
 
     try {
         const group = await client.getGroup(parseInt(guild.groupId));
-        console.log(components)
+        console.log(components[0])
     } catch (err: any) {
         console.log(err)
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
     };
 
-    return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, color: MessageColors.Green})
+    return generateMessage({responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.Success, color: MessageColors.Green, flags: MessageFlags.Ephemeral})
 };
