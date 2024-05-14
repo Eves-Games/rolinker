@@ -17,11 +17,8 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
 
     const { components } = interaction.data;
     const promoteTarget = components[0].components[0].value
-    const promoteReason = components[0].components[1].value
+    const promoteReason = components[1].components[0].value
     let client: Client;
-
-    console.log(components)
-    console.log(promoteTarget, promoteReason)
 
     try {
         client = new Client({ credentials: { cookie: guild.robloxCookie } });

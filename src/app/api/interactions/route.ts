@@ -15,18 +15,14 @@ import { promoteComponent } from "@/lib/discord/components/promote"
 
 export async function POST(request: Request) {
     const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_PUBLIC_KEY as string);
-    if (!verifyResult.isValid || !verifyResult.interaction) {
-        return new NextResponse("Invalid request", { status: 401 })
-    };
+    if (!verifyResult.isValid || !verifyResult.interaction) return new NextResponse("Invalid request", { status: 401 });
 
     const { interaction } = verifyResult;
 
-    if (interaction.type === InteractionType.Ping) {
-        return NextResponse.json({ type: InteractionResponseType.Pong })
-    };
+    if (interaction.type === InteractionType.Ping) return NextResponse.json({ type: InteractionResponseType.Pong });
 
     if (interaction.type === InteractionType.ApplicationCommand) {
-        const { name, options } = interaction.data
+        const { name, options } = interaction.data;
         switch (name) {
             case commands.link.name:
                 return NextResponse.json(await linkCommand(interaction));
@@ -66,7 +62,7 @@ export async function POST(request: Request) {
     };
 
     if (interaction.type === InteractionType.MessageComponent) {
-        const { custom_id } = interaction.data
+        const { custom_id } = interaction.data;
         switch (custom_id) {
             case 'account_switch':
                 return NextResponse.json(await switchComponent(interaction))
@@ -76,8 +72,7 @@ export async function POST(request: Request) {
     }
 
     if (interaction.type === InteractionType.ModalSubmit) {
-        const { custom_id } = interaction.data
-
+        const { custom_id } = interaction.data;
         switch (custom_id) {
             case 'shout':
                 return NextResponse.json(await shoutComponent(interaction));
