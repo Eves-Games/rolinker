@@ -15,6 +15,7 @@ export enum MessageTitles {
     UnableLogin = 'Unable to log into the rank bot!',
     UnableRank = 'Unable to rank user!',
 
+    NoPermission = 'You have no permission to do this!',
     NoLinkedAccounts = 'You have no linked accounts!',
     NotInDivisions = 'You are not in any divisions!',
     NotInGroup = 'You are not in this guilds linked group!',

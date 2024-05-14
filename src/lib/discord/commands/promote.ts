@@ -34,25 +34,37 @@ export async function promoteCommand(interaction: APIChatInputApplicationCommand
         if (!role || !role.id) throw new Error('No role');
 
         const rolePermissions = await group.getRolePermissions(role.id)
-        if (!rolePermissions.permissions.groupPostsPermissions.postToStatus) throw new Error('No permission');
+        if (!rolePermissions.permissions.groupMembershipPermissions.changeRank) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoPermission, flags: MessageFlags.Ephemeral });
     } catch (err: any) {
         console.log(err)
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableRank, color: MessageColors.Red });
     };
 
     return {
-        type: InteractionResponseType.ChannelMessageWithSource,
+        type: InteractionResponseType.Modal,
         data: {
-            embeds: [
-                {
-                    title: 'Promote Success!',
-                    fields: [
-                        {name: 'User', value: 'target'},
-                        {name: 'Reason', value: 'reason'}
-                    ],
-                    color: MessageColors.Green
-                },
-            ],
-        },
+            custom_id: 'promote',
+            title: 'Bot Promote',
+            components: [{
+                type: 1,
+                components: [
+                    {
+                        type: 4,
+                        custom_id: 'username',
+                        label: 'Username',
+                        style: 1,
+                        placeholder: 'zek7',
+                        max_length: 20
+                    },
+                    {
+                        type: 4,
+                        custom_id: 'reason',
+                        label: 'Reason',
+                        style: 2,
+                        placeholder: "He's just awesome!"
+                    }
+                ]
+            }]
+        }
     } satisfies APIInteractionResponse;
 };

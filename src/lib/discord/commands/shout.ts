@@ -34,7 +34,7 @@ export async function shoutCommand(interaction: APIChatInputApplicationCommandIn
         if (!role || !role.id) throw new Error('No role');
 
         const rolePermissions = await group.getRolePermissions(role.id)
-        if (!rolePermissions.permissions.groupPostsPermissions.postToStatus) throw new Error('No permission');
+        if (!rolePermissions.permissions.groupPostsPermissions.postToStatus) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoPermission, flags: MessageFlags.Ephemeral });
     } catch (err: any) {
         console.log(err)
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
@@ -44,7 +44,7 @@ export async function shoutCommand(interaction: APIChatInputApplicationCommandIn
         type: InteractionResponseType.Modal,
         data: {
             custom_id: 'shout',
-            title: 'Group Shout',
+            title: 'Bot Shout',
             components: [{
                 type: 1,
                 components: [{
