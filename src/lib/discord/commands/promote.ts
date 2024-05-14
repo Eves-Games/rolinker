@@ -37,7 +37,7 @@ export async function promoteCommand(interaction: APIChatInputApplicationCommand
         if (!rolePermissions.permissions.groupMembershipPermissions.changeRank) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoPermission, flags: MessageFlags.Ephemeral });
     } catch (err: any) {
         console.log(err)
-        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableRank, color: MessageColors.Red });
+        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnablePromote, color: MessageColors.Red });
     };
 
     return {
@@ -65,7 +65,8 @@ export async function promoteCommand(interaction: APIChatInputApplicationCommand
                         label: 'Reason',
                         style: 2,
                         placeholder: "He's just awesome!",
-                        max_length: 1024
+                        max_length: 1024,
+                        required: false
                     }]
                 }
             ]

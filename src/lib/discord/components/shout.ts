@@ -19,7 +19,7 @@ export async function shoutComponent(interaction: APIModalSubmitInteraction) {
         client = new Client({ credentials: { cookie: guild.robloxCookie } });
         await client.login();
     } catch (err: any) {
-        console.log(err)
+        console.log(err);
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableLogin, color: MessageColors.Red });
     };
 
@@ -27,7 +27,7 @@ export async function shoutComponent(interaction: APIModalSubmitInteraction) {
         const group = await client.getGroup(parseInt(guild.groupId));
         await group.updateShout(shoutContent);
     } catch (err: any) {
-        console.log(err)
+        console.log(err);
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
     };
 

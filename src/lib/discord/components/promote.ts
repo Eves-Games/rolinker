@@ -17,14 +17,14 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
 
     const { components } = interaction.data;
     const promoteTarget = components[0].components[0].value
-    const promoteReason = components[1].components[0].value
+    const promoteReason: string | null = components[1].components[0].value
     let client: Client;
 
     try {
         client = new Client({ credentials: { cookie: guild.robloxCookie } });
         await client.login();
     } catch (err: any) {
-        console.log(err)
+        console.log(err);
         return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableLogin, color: MessageColors.Red });
     };
 
@@ -33,7 +33,7 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
         const member = await group.getMember(parseInt(account.id));
         const targetUserId = await client.getUserIdFromUsername(promoteTarget);
         const targetMember = await group.getMember(targetUserId.id);
-        if (!member || !targetMember) throw new Error('No member');
+        if (!member || !targetMember || member == targetMember) throw new Error('No member');
 
         const role = member.role
         const targetRole = targetMember.role
@@ -41,10 +41,14 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
         if (role.rank <= targetRole.rank + 1) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoPermission, flags: MessageFlags.Ephemeral });
 
         const roles = await group.getRoles();
-        console.log(roles);
+        const targetRoleIndex = roles.findIndex(role => role.id === targetRole.id);
+        const targetNewRole = roles[targetRoleIndex + 1];
+        if (!targetNewRole.id) throw new Error('No target role');
+
+        await group.updateMember(targetMember.id, targetNewRole.id)
     } catch (err: any) {
-        console.log(err)
-        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableShout, color: MessageColors.Red });
+        console.log(err);
+        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnablePromote, color: MessageColors.Red });
     };
 
     return {
@@ -55,7 +59,7 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
                     title: 'Promote Success!',
                     fields: [
                         {name: 'User', value: promoteTarget},
-                        {name: 'Reason', value: promoteReason}
+                        {name: 'Reason', value: promoteReason || 'None provided'}
                     ],
                     color: MessageColors.Green
                 },
