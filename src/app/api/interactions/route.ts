@@ -11,6 +11,7 @@ import { NextResponse } from "next/server"
 import { shoutCommand } from "@/lib/discord/commands/shout"
 import { shoutComponent } from "@/lib/discord/components/shout"
 import { promoteCommand } from "@/lib/discord/commands/promote"
+import { promoteComponent } from "@/lib/discord/components/promote"
 
 export async function POST(request: Request) {
     const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_PUBLIC_KEY as string);
@@ -80,7 +81,9 @@ export async function POST(request: Request) {
 
         switch (custom_id) {
             case 'shout':
-                return NextResponse.json(await shoutComponent(interaction))
+                return NextResponse.json(await shoutComponent(interaction));
+            case 'promote':
+                return NextResponse.json(await promoteComponent(interaction));
             default:
                 return new NextResponse("Unknown modal", { status: 400 });
         }

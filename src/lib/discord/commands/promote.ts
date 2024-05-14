@@ -61,7 +61,8 @@ export async function promoteCommand(interaction: APIChatInputApplicationCommand
                         custom_id: 'reason',
                         label: 'Reason',
                         style: 2,
-                        placeholder: "He's just awesome!"
+                        placeholder: "He's just awesome!",
+                        max_length: 1024
                     }
                 ]
             }]
