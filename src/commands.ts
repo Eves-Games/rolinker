@@ -44,40 +44,12 @@ const BOT = {
         {
             name: 'promote',
             description: 'promote a user in the linked group',
-            type: 1,
-            options: [
-                {
-                    name: 'username',
-                    description: 'username of user to promote',
-                    type: 3,
-                    max_length: 20,
-                    required: true
-                },
-                {
-                    name: 'reason',
-                    description: 'reason for the promotion',
-                    type: 3
-                }
-            ]
+            type: 1
         },
         {
             name: 'demote',
             description: 'demote a user in the linked group',
-            type: 1,
-            options: [
-                {
-                    name: 'username',
-                    description: 'username of user to demote',
-                    type: 3,
-                    max_length: 20,
-                    required: true
-                },
-                {
-                    name: 'reason',
-                    description: 'reason for the demotion',
-                    type: 3
-                }
-            ]
+            type: 1
         }
     ]
 } satisfies RESTPatchAPIApplicationCommandJSONBody;
