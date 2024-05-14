@@ -20,6 +20,9 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
     const promoteReason = components[0].components[1].value
     let client: Client;
 
+    console.log(components)
+    console.log(promoteTarget, promoteReason)
+
     try {
         client = new Client({ credentials: { cookie: guild.robloxCookie } });
         await client.login();
@@ -38,7 +41,7 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
         const role = member.role
         const targetRole = targetMember.role
         if (!role || !role.rank || !targetRole || !targetRole.rank) throw new Error('No role');
-        if (role.rank <= targetRole.rank) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoPermission, flags: MessageFlags.Ephemeral });
+        if (role.rank <= targetRole.rank + 1) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoPermission, flags: MessageFlags.Ephemeral });
 
         const roles = await group.getRoles();
         console.log(roles);
