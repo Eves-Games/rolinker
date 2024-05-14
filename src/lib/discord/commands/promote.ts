@@ -45,27 +45,30 @@ export async function promoteCommand(interaction: APIChatInputApplicationCommand
         data: {
             custom_id: 'promote',
             title: 'Bot Promote',
-            components: [{
-                type: 1,
-                components: [
-                    {
+            components: [
+                {
+                    type: 1,
+                    components: [{
                         type: 4,
                         custom_id: 'username',
                         label: 'Username',
                         style: 1,
                         placeholder: 'zek7',
                         max_length: 20
-                    },
-                    {
+                    }]
+                },
+                {
+                    type: 1,
+                    components: [{
                         type: 4,
                         custom_id: 'reason',
                         label: 'Reason',
                         style: 2,
                         placeholder: "He's just awesome!",
                         max_length: 1024
-                    }
-                ]
-            }]
+                    }]
+                }
+            ]
         }
     } satisfies APIInteractionResponse;
 };
