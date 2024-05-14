@@ -12,6 +12,8 @@ import { shoutCommand } from "@/lib/discord/commands/shout"
 import { shoutComponent } from "@/lib/discord/components/shout"
 import { promoteCommand } from "@/lib/discord/commands/promote"
 import { promoteComponent } from "@/lib/discord/components/promote"
+import { demoteComponent } from "@/lib/discord/components/demote"
+import { demoteCommand } from "@/lib/discord/commands/demote"
 
 export async function POST(request: Request) {
     const verifyResult = await verifyInteractionRequest(request, process.env.DISCORD_PUBLIC_KEY as string);
@@ -41,7 +43,7 @@ export async function POST(request: Request) {
                         case commands.bot.options[1].name: // promote
                             return NextResponse.json(await promoteCommand(interaction));
                         case commands.bot.options[2].name: // demote
-                            return NextResponse.json(await shoutCommand(interaction));
+                            return NextResponse.json(await demoteCommand(interaction));
                     }
                 };
             case commands.get.name:
@@ -78,6 +80,8 @@ export async function POST(request: Request) {
                 return NextResponse.json(await shoutComponent(interaction));
             case 'promote':
                 return NextResponse.json(await promoteComponent(interaction));
+            case 'demote':
+                return NextResponse.json(await demoteComponent(interaction));
             default:
                 return new NextResponse("Unknown modal", { status: 400 });
         }

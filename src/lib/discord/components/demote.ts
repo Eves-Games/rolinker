@@ -4,7 +4,7 @@ import { generateMessage, MessageTitles, MessageColors, noLinkedAccounts } from 
 import { Client } from 'bloxy';
 import { findAssociatedAccount } from '../util';
 
-export async function promoteComponent(interaction: APIModalSubmitInteraction) {
+export async function demoteComponent(interaction: APIModalSubmitInteraction) {
     const { guild_id, member } = interaction;
     if (!member || !guild_id) return generateMessage({responseType: InteractionResponseType.UpdateMessage, title: MessageTitles.Error, error: { interaction, message: 'Interaction objects not found' }});
 
@@ -38,17 +38,17 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
         const role = member.role
         const targetRole = targetMember.role
         if (!role || !role.rank || !targetRole || !targetRole.rank) throw new Error('No role');
-        if (role.rank <= targetRole.rank + 1) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoPermission, flags: MessageFlags.Ephemeral });
+        if (role.rank <= targetRole.rank) return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.NoPermission, flags: MessageFlags.Ephemeral });
 
         const roles = await group.getRoles();
         const targetRoleIndex = roles.findIndex(role => role.id === targetRole.id);
-        const targetNewRole = roles[targetRoleIndex + 1];
+        const targetNewRole = roles[targetRoleIndex - 1];
         if (!targetNewRole.id) throw new Error('No target role');
 
         await group.updateMember(targetMember.id, targetNewRole.id)
     } catch (err: any) {
         console.log(err);
-        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnablePromote, color: MessageColors.Red });
+        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableDemote, color: MessageColors.Red });
     };
 
     return {
@@ -56,7 +56,7 @@ export async function promoteComponent(interaction: APIModalSubmitInteraction) {
         data: {
             embeds: [
                 {
-                    title: 'Promote Success!',
+                    title: 'Demote Success!',
                     fields: [
                         {name: 'User', value: target},
                         {name: 'Reason', value: reason || 'None provided'}
