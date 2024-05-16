@@ -13,7 +13,7 @@ export default function Footer() {
                 </section>
                 <section className='flex flex-col gap-1'>
                     <span className='font-bold text-xl'>Business</span>
-                    <Link href='https://eves.gg/careers-and-commissions'>Careers and Commissions</Link>
+                    <Link href='https://eves.gg'>Careers and Commissions</Link>
                 </section>
                 <section className='flex flex-col gap-1'>
                     <span className='font-bold text-xl'>Legal</span>
