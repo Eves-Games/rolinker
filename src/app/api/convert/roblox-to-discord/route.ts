@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     const account = await db.account.findUnique({ where: { id: query } });
 
-    if (!account) { return new NextResponse('User not found', { status: 400, }); };
+    if (!account) { return new NextResponse('Discord user not found', { status: 400, }); };
 
     return NextResponse.json({ userId: account.userId });
 };
