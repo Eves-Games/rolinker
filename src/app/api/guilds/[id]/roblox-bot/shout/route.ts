@@ -12,7 +12,7 @@ export async function POST(
 ) {
     const headersList = headers();
 
-    const apiKeyHeader = headersList.get('Authorization');
+    const apiKeyHeader = headersList.get('apiKey');
     const guildId = params.id
 
     if (!apiKeyHeader) return new NextResponse('No API key provided', { status: 400 });

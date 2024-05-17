@@ -11,7 +11,7 @@ export async function GET(
     { params }: { params: { id: string } }
 ) {
     const headersList = headers();
-    const apiKeyHeader = headersList.get('Authorization');
+    const apiKeyHeader = headersList.get('apiKey');
     const searchParams = request.nextUrl.searchParams;
     const memberId = searchParams.get('memberId')
     const guildId = params.id

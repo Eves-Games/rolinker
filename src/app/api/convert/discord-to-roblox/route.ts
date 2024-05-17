@@ -6,7 +6,7 @@ export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
     const headersList = headers();
-    const apiKeyHeader = headersList.get('api_key');
+    const apiKeyHeader = headersList.get('apiKey');
     const searchParams = request.nextUrl.searchParams;
     const query = searchParams.get('discordId');
 
