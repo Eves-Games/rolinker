@@ -2,7 +2,7 @@
 
 * [Quick Start](README.md)
 
-## 🔗 API
+## API
 
 * [🛡️ Guilds](api/guilds/README.md)
   * [🙂 Members](api/guilds/members.md)
