@@ -6,7 +6,7 @@ export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
     const headersList = headers();
-    const apiKeyHeader = headersList.get('Authorization');
+    const apiKeyHeader = headersList.get('api_key');
     const searchParams = request.nextUrl.searchParams;
     const query = searchParams.get('robloxId');
 
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     const account = await db.account.findUnique({ where: { id: query } });
 
-    if (!account) { return new NextResponse('Discord user not found', { status: 400, }); };
+    if (!account) { return new NextResponse('Discord user not found', { status: 404, }); };
 
     return NextResponse.json({ userId: account.userId });
 };
