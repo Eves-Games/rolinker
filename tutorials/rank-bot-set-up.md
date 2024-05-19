@@ -9,7 +9,7 @@ description: >-
 
 
 
-## **Retrieving a `.ROBLOSECURITY` cookie from a specific location:**
+## **Retrieving a valid `.ROBLOSECURITY` cookie**
 
 To bypass Roblox's IP region lock on `.ROBLOSECURITY` cookies, you must create the token from the desired location. In this case, we want to obtain a cookie that appears to be from North America, specifically Washington D.C., United States. The easiest way to achieve this is by using a VPN service.
 
