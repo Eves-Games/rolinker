@@ -4,9 +4,7 @@
 
 ## API
 
-* [🛡️ Guilds](api/guilds/README.md)
-  * [🙂 Members](api/guilds/members.md)
-  * [🤖 Roblox Bot](api/guilds/roblox-bot.md)
+* [🛡️ Guilds](api/guilds.md)
 * [🔁 Convert](api/convert.md)
 
 ## Tutorials
