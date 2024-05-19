@@ -4,12 +4,14 @@ info:
   description: Description
   version: 1.0.0
 servers:
-  - url: https://rolinker.net/api/convert
+  - url: https://rolinker.net/api
 tags:
   - name: convert
     description: Convert account IDs between Roblox and Discord
+  - name: guilds
+    description: Operations related to guilds
 paths:
-  /roblox-to-discord:
+  /convert/roblox-to-discord:
     get:
       tags:
         - convert
@@ -36,7 +38,7 @@ paths:
           description: Discord user not found
       security:
         - api_key: []
-  /discord-to-roblox:
+  /convert/discord-to-roblox:
     get:
       tags:
         - convert
@@ -63,6 +65,127 @@ paths:
           description: Roblox accounts not found
       security:
         - api_key: []
+  /guilds/{id}:
+    get:
+      tags:
+        - guilds
+      summary: Get guild information
+      operationId: GetGuild
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: memberId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Guild'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Guild not found
+      security:
+        - api_key: []
+  /guilds/{id}/members/associated-account:
+    get:
+      tags:
+        - guilds
+      summary: Get associated Roblox account of a guild member
+      operationId: GetAssociatedAccount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: memberId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RobloxAccount'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Associated account not found
+      security:
+        - api_key: []
+  /guilds/{id}/members/update-roles:
+    post:
+      tags:
+        - guilds
+      summary: Update guild member roles based on Roblox roles
+      operationId: UpdateMemberRoles
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: memberId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Guild or member not found
+      security:
+      - api_key: []
+  /guilds/{id}/roblox-bot/shout:
+    post:
+      tags:
+        - guilds
+      summary: Update Roblox group shout via bot
+      operationId: UpdateGroupShout
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            requestBody:
+              content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ShoutRequest'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Guild not linked to Roblox group
+        '500':
+          description: Internal server error
+      security:
+      - api_key: []
 components:
   schemas:
     RobloxAccounts:
@@ -91,6 +214,22 @@ components:
           type: string
           examples:
             - '952777630078341121'
+    Guild:
+      type: object
+      properties:
+        id:
+          type: string
+        groupId:
+          type: string
+        inviteChannelId:
+          type: string
+        parentGuildId:
+          type: string
+    ShoutRequest:
+      type: object
+      properties:
+        shout:
+          type: string
   securitySchemes:
     api_key:
       type: apiKey

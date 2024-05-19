@@ -1,9 +1,9 @@
 # 🔁 Convert
 
-{% swagger src="../.gitbook/assets/openapi3_1.yaml" path="/roblox-to-discord" method="get" %}
-[openapi3_1.yaml](../.gitbook/assets/openapi3_1.yaml)
+{% swagger src="broken-reference" path="/roblox-to-discord" method="get" %}
+[Broken file](broken-reference)
 {% endswagger %}
 
-{% swagger src="../.gitbook/assets/openapi3_1.yaml" path="/discord-to-roblox" method="get" %}
-[openapi3_1.yaml](../.gitbook/assets/openapi3_1.yaml)
+{% swagger src="broken-reference" path="/discord-to-roblox" method="get" %}
+[Broken file](broken-reference)
 {% endswagger %}
