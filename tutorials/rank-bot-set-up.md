@@ -13,7 +13,7 @@ description: >-
 
 To bypass Roblox's IP region lock on `.ROBLOSECURITY` cookies, you must create the token from the desired location. In this case, we want to obtain a cookie that appears to be from North America, specifically Washington D.C., United States. The easiest way to achieve this is by using a VPN service.
 
-_**If you already live in North America, you can go straight to step 4.**_
+_**If you're already connecting from North America, you can go straight to step 4.**_
 
 1. Sign out of the target Roblox account if you are currently logged in.
 2. Choose a reliable VPN service that offers servers in Washington D.C. Some popular options include NordVPN, ExpressVPN, and CyberGhost. Subscribe to the service and install the VPN client on your device.
