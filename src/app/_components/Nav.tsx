@@ -12,6 +12,7 @@ export interface NavLink {
 
 const NavLinks = [
   { name: 'Commands', href: '/commands' },
+  { name: 'Docs', href: 'https://docs.rolinker.net' },
   { name: 'Support', href: 'https://discord.gg/CJDuGzwFX4' },
 ] satisfies Array<NavLink>;
 

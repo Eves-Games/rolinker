@@ -10,6 +10,7 @@ export default function Footer() {
                     <span className='font-bold text-xl'>RoLinker</span>
                     <Link href='/'>Home</Link>
                     <Link href='/commands'>Commands</Link>
+                    <Link href='https://docs.rolinker.net'>Docs</Link>
                 </section>
                 <section className='flex flex-col gap-1'>
                     <span className='font-bold text-xl'>Business</span>
