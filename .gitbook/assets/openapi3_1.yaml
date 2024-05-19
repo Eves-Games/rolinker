@@ -4,7 +4,7 @@ info:
   description: Description
   version: 1.0.0
 servers:
-  - url: https://rolinker.net/api
+  - url: https://rolinker.net/api/convert
 tags:
   - name: convert
     description: Convert account IDs between Roblox and Discord
@@ -34,6 +34,8 @@ paths:
           description: Invalid API key supplied
         '404':
           description: Discord user not found
+      security:
+        - api_key: []
   /discord-to-roblox:
     get:
       tags:
@@ -59,6 +61,8 @@ paths:
           description: Invalid API key supplied
         '404':
           description: Roblox accounts not found
+      security:
+        - api_key: []
 components:
   schemas:
     RobloxAccounts:
@@ -90,5 +94,5 @@ components:
   securitySchemes:
     api_key:
       type: apiKey
-      name: api_key
+      name: apiKey
       in: header
