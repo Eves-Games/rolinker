@@ -1,12 +1,8 @@
 # Table of contents
 
-* [Quick Start](README.md)
-
 ## API
 
-* [🛡️ Guilds](api/guilds/README.md)
-  * [🙂 Members](api/guilds/members.md)
-  * [🤖 Roblox Bot](api/guilds/roblox-bot.md)
+* [🛡️ Guilds](README.md)
 * [🔁 Convert](api/convert.md)
 
 ## Tutorials
