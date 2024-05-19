@@ -1,10 +1,8 @@
 # Table of contents
 
-* [Quick Start](README.md)
-
 ## API
 
-* [🛡️ Guilds](api/guilds.md)
+* [🛡️ Guilds](README.md)
 * [🔁 Convert](api/convert.md)
 
 ## Tutorials
