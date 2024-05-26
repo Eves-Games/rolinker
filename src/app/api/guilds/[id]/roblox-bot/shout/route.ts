@@ -3,7 +3,6 @@ import db from "@/lib/db";
 import { rest } from "@/lib/discord/rest";
 import { Client } from "bloxy";
 import { RESTGetAPIGuildResult, Routes } from "discord-api-types/v10";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(

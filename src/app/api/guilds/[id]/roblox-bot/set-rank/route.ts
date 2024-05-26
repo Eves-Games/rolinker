@@ -1,6 +1,5 @@
 import db from '@/lib/db';
-import { InteractionResponseType, RESTGetAPIGuildResult, Routes } from 'discord-api-types/v10';
-import { generateMessage, MessageTitles, MessageColors } from '@/lib/discord/messages';
+import { RESTGetAPIGuildResult, Routes } from 'discord-api-types/v10';
 import { Client } from 'bloxy';
 import { NextRequest, NextResponse } from 'next/server';
 import { rest } from '@/lib/discord/rest';
@@ -42,8 +41,7 @@ export async function POST(
         client = new Client({ credentials: { cookie: guild.robloxCookie } });
         await client.login();
     } catch (err: any) {
-        console.log(err);
-        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnableLogin, color: MessageColors.Red });
+        return new NextResponse(err, { status: 500 });
     };
 
     try {
@@ -59,7 +57,6 @@ export async function POST(
 
         return new NextResponse('Success');
     } catch (err: any) {
-        console.log(err);
-        return generateMessage({ responseType: InteractionResponseType.ChannelMessageWithSource, title: MessageTitles.UnablePromote, color: MessageColors.Red });
+        return new NextResponse(err, { status: 500 });
     };
 };
