@@ -19,7 +19,5 @@ export async function GET(request: NextRequest) {
         console.error('Error resetting API key usage:', error);
     };
 
-    return new NextResponse('Success', {
-        status: 200,
-    });
+    return new NextResponse('Success');
 };
