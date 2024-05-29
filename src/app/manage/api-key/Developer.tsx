@@ -43,7 +43,7 @@ export default function Page({
                         </button>
                     </div>
                 </div>
-                <p className='text-center'><Link href='/documentation' className='text-blue-500 hover:underline' target='_blank'>Documentation <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></Link></p>
+                <p className='text-center'><Link href='https://docs.rolinker.net' className='text-blue-500 hover:underline' target='_blank'>Documentation <ArrowTopRightOnSquareIcon className="size-5 inline-block" /></Link></p>
             </div>
 
             <div className='bg-neutral-800 rounded shadow-lg w-full px-4 py-2 space-y-4'>
