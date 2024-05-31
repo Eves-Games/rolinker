@@ -4,6 +4,7 @@ import { auth, signIn } from '@/auth';
 import NavButton from '@/app/_components/NavButton';
 import { RoLinkerLogo } from '@/app/_components/RoLinkerLogo';
 import { DiscordLogo } from '@/app/_components/DiscordLogo';
+import { Button } from '@/components/ui/button';
 
 export interface NavLink {
   name: string;
@@ -29,7 +30,9 @@ export default async function Nav() {
           </Link>
           <div className='hidden items-center gap-2 md:flex'>
             {NavLinks.map((navLink, index) => (
-              <Link key={index} href={navLink.href} className='px-4 py-2 rounded hover:bg-neutral-800 hover:shadow-lg'>{navLink.name}</Link>
+              <Button key={index} variant="ghost" asChild>
+                <Link href={navLink.href}>{navLink.name}</Link>
+              </Button>
             ))}
           </div>
         </div>
