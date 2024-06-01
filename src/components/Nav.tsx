@@ -33,8 +33,7 @@ export default async function Nav() {
   const session = await auth();
 
   return (
-    <div className='bg-base-100'>
-      <nav className="navbar mx-auto max-w-screen-lg">
+      <nav className="max-w-screen-lg container navbar">
         <ul className="navbar-start menu menu-horizontal py-0 gap-2 flex-nowrap items-center">
           <div className="md:hidden dropdown dropdown-start">
             <div tabIndex={0} role="button" className="btn btn-ghost">
@@ -74,6 +73,5 @@ export default async function Nav() {
           )}
         </div>
       </nav>
-    </div>
   );
 };

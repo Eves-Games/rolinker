@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import './globals.css';
-import Footer from '@/app/_components/Footer'
 import Nav from '@/components/Nav';
+import { Footer } from '@/components/Footer';
 
 const open_sans = Open_Sans({
   subsets: ['latin'],
@@ -10,6 +10,7 @@ const open_sans = Open_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://rolinker.net'),
   title: {
     default: 'RoLinker',
     template: 'RoLinker - %s'
@@ -30,7 +31,6 @@ export default async function RootLayout({
           <Nav />
           {children}
         </div>
-        <hr className='border-secondary' />
         <Footer />
       </body>
     </html>
