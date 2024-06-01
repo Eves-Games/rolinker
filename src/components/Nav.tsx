@@ -4,7 +4,7 @@ import { RoLinkerLogo } from '@/app/_components/RoLinkerLogo';
 import { Book, Command, Menu, Settings, Sliders } from 'lucide-react';
 import { ReactNode } from 'react';
 import { DiscordLogo } from '../app/_components/DiscordLogo';
-import NavUser from './NavUser';
+import { NavUser } from './NavUser';
 
 export interface LinkHref {
   name: string;
