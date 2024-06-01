@@ -2,11 +2,7 @@ import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import './globals.css';
 import Footer from '@/app/_components/Footer'
-import { ThemeProvider } from '@/components/theme-provider';
-import NewNav from './_components/NewNav';
-import type { AppProps } from "next/app"
-import { SessionProvider } from "next-auth/react"
-import { auth } from '@/auth';
+import Nav from '@/components/Nav';
 
 const open_sans = Open_Sans({
   subsets: ['latin'],
@@ -26,25 +22,16 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await auth()
-
   return (
-    <html lang='en'>
+    <html lang='en' data-theme='business'>
       <head />
-      <body className={`${open_sans.className} bg-neutral-900 text-neutral-100 tracking-wide overflow-y-auto`}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='dark'
-        >
-          <div className='min-h-screen'>
-            <SessionProvider session={session}>
-              <NewNav />
-            </SessionProvider>
-            {children}
-          </div>
-          <hr className='border-neutral-800' />
-          <Footer />
-        </ThemeProvider>
+      <body className={`${open_sans.className} tracking-wide overflow-y-auto`}>
+        <div className='min-h-screen'>
+          <Nav />
+          {children}
+        </div>
+        <hr className='border-secondary' />
+        <Footer />
       </body>
     </html>
   );
