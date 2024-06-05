@@ -14,7 +14,13 @@ export async function sendLinkCommand(interaction: APIChatInputApplicationComman
             embeds: [
                 {
                     title: 'Link your Roblox account',
-                    description: "This server uses RoLinker for verification. Click below to link your Discord to your Roblox account."
+                    description: "This server uses RoLinker for verification. Click the button to go to RoLinker.net.",
+                    fields: [
+                        { name: 'Step 1', value: 'Tap on the title and accept the redirection to the RoLinker website.' },
+                        { name: 'Step 2', value: 'Tap the sign in button on the top right of the website, and sign in with Discord.' },
+                        { name: 'Step 3', value: "Tap your Discord username, and select 'Manage' from the dropdown." },
+                        { name: 'Step 4', value: 'Tap the plus (+) icon to add a new Roblox account.' },
+                    ],
                 },
             ],
             components: [
@@ -25,7 +31,7 @@ export async function sendLinkCommand(interaction: APIChatInputApplicationComman
                             type: ComponentType.Button,
                             style: ButtonStyle.Link,
                             label: 'Link Account',
-                            url: 'https://rolinker.net/manage/accounts'
+                            url: 'https://rolinker.net'
                         },
                     ],
                 },
