@@ -45,7 +45,7 @@ export default async function Page() {
         <Card>
           <h2 className="card-title">
             <CircleSlash className="size-6" />
-            No active subscriptions found
+            None Found
           </h2>
         </Card>
       )}
