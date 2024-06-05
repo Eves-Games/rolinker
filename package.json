@@ -1,12 +1,15 @@
 {
   "name": "rolinker",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
+  "author": "Zeke Pari",
+  "description": "RoLinker full-stack application for linking Roblox and Discord accounts",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "register-commands": "tsx ./scripts/register-commands"
   },
   "dependencies": {
