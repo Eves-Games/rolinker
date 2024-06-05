@@ -3,7 +3,6 @@ import db from "@/db";
 import { rest } from "@/discord/rest";
 import { findAssociatedAccount } from "@/discord/util";
 import { Client } from "bloxy";
-import { GroupRole } from "bloxy/dist/structures";
 import { APIGuildMember, RESTGetAPIGuildResult, Routes } from "discord-api-types/v10";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -36,8 +35,8 @@ export async function POST(
     const account = await findAssociatedAccount(memberId, guildId);
     if (!account) return new NextResponse('User has no linked Roblox accounts', { status: 400 });
 
-    let groupRoles: GroupRole[];
-    let userRole: { id: number; name: string; description: string; rank: number; memberCount: number; };
+    let groupRoles;
+    let userRole;
 
     try {
         const client = new Client();
