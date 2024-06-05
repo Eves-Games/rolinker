@@ -141,7 +141,7 @@ export default function Page() {
         <div className="hero-content flex flex-col text-center">
           <h1 className="text-5xl font-black">
             <DiscordLogo className="inline-block size-14 fill-white" /> Join our
-            Discord Server!
+            Discord server!
           </h1>
           <Link
             href="https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code"

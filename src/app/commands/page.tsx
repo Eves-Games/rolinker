@@ -13,7 +13,7 @@ interface CommandData {
 
 const CommandCard = ({ name, description }: CommandData) => {
   return (
-    <div className="card bg-base-200 shadow-lg">
+    <div className="card bg-base-200 shadow">
       <div className="card-body">
         <h2 className="card-title">/{name}</h2>
         <p>{description}</p>
@@ -25,7 +25,7 @@ const CommandCard = ({ name, description }: CommandData) => {
 export default function Page() {
   return (
     <div className="space-y-12">
-      <section className="hero bg-gradient-to-r from-[#5865F2] to-indigo-700 py-12 shadow-lg">
+      <section className="hero bg-gradient-to-r from-[#5865F2] to-indigo-700 py-12 shadow">
         <div className="hero-content flex w-full max-w-screen-lg flex-col items-center md:items-start">
           <h1 className="text-5xl font-black">
             <DiscordLogo className="inline-block size-14 fill-white" /> Commands
