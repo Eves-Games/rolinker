@@ -2,7 +2,7 @@ import { apiKeyCheck } from "@/api";
 import db from "@/db";
 import { rest } from "@/discord/rest";
 import { findAssociatedAccount } from "@/discord/util";
-import { Client } from "bloxy";
+import { getGroupRoles, getUserRoles } from "@/roblox";
 import { APIGuildMember, RESTGetAPIGuildResult, Routes } from "discord-api-types/v10";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -35,28 +35,16 @@ export async function POST(
     const account = await findAssociatedAccount(memberId, guildId);
     if (!account) return new NextResponse('User has no linked Roblox accounts', { status: 400 });
 
-    let groupRoles;
-    let userRole;
-
-    try {
-        const client = new Client();
-        const group = await client.getGroup(parseInt(guild.groupId));
-        const user = await client.getUser(account.id);
-
-        const userGroups = await user.getGroups();
-        const targetGroup = userGroups.data.find(group => group.group.id == parseInt(guild.groupId!)) || null;
-        if (!targetGroup) return new NextResponse('User is not in linked Roblox group', { status: 400 });
-
-        groupRoles = await group.getRoles();
-        userRole = targetGroup.role;
-    } catch (err: any) {
-        return new NextResponse(err, { status: 500 });
-    };
-
+    const groupRoles = await getGroupRoles(guild.groupId);
+    const userRoles = await getUserRoles(account.id);
+    const userRole = userRoles.data.find(role => role.group.id === parseInt(guild.groupId!));
     const memberRoles = member.roles;
-    const removeRanks = groupRoles.filter(role => role.id == userRole.id);
+
+    if (!groupRoles || !userRole) return new NextResponse('User is not in linked Roblox group', { status: 400 });
+
+    const removeRanks = groupRoles.roles.filter(role => role.id == userRole.role.id);
     const removeRoles = botGuild.roles.filter(role => removeRanks.some(rank => rank.name === role.name)).filter(role => memberRoles.includes(role.name));
-    const addRole = botGuild.roles.find(role => role.name == userRole.name);
+    const addRole = botGuild.roles.find(role => role.name == userRole.role.name);
 
     await rest.put(Routes.guildMemberRole(guildId, member.user!.id, addRole!.id)).catch();
 
