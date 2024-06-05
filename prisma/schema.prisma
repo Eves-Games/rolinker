@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "mongodb"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+model ApiKey {
+  userId  String  @id @map("_id")
+  key     String  @default(uuid()) @unique
+  usage   Int     @default(0)
+  premium Boolean @default(false)
+}
+
+model Account {
+  id         String         @id @map("_id")
+  userId     String
+  isPrimary  Boolean        @default(false)
+  userGuilds AccountGuild[]
+
+  @@unique([userId, isPrimary], name: "onePrimaryAccountPerUser")
+  @@index([userId])
+}
+
+model AccountGuild {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  accountId String
+  guildId   String
+  account   Account @relation(fields: [accountId], references: [id])
+  guild     Guild   @relation(fields: [guildId], references: [id])
+
+  @@unique([accountId, guildId])
+  @@unique([userId, guildId])
+}
+
+model Guild {
+  id              String         @id @map("_id")
+  groupId         String?
+  inviteChannelId String?
+  parentGuildId   String?
+  parentGuild     Guild?         @relation("ParentChild", fields: [parentGuildId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childGuilds     Guild[]        @relation("ParentChild")
+  userAccounts    AccountGuild[]
+  robloxCookie    String?
+  verifiedRoleId  String?
+}
