@@ -1,6 +1,6 @@
-import { apiKeyCheck } from "@/lib/api";
-import db from "@/lib/db";
-import { rest } from "@/lib/discord/rest";
+import { apiKeyCheck } from "@/api";
+import db from "@/db";
+import { rest } from "@/discord/rest";
 import { RESTGetAPIGuildResult, Routes } from "discord-api-types/v10";
 import { NextRequest, NextResponse } from "next/server";
 
