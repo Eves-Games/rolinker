@@ -144,7 +144,7 @@ export default function Page() {
             Discord server!
           </h1>
           <Link
-            href="https://discord.com/api/oauth2/authorize?scope=bot+applications.commands&client_id=990855457885278208&permissions=8&redirect_uri=https://rolinker.net/api/auth/guild&response_type=code"
+            href="https://discord.gg/CJDuGzwFX4"
             className="btn btn-outline"
           >
             Join RoLinker Discord
