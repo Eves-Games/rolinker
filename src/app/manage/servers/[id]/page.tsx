@@ -159,7 +159,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </div>
               <GenerateRoles guildId={botGuild.id} />
             </label>
-            <label className="form-control w-full col-span-2">
+            <label className="form-control w-full col-span-full">
               <div className="label">
                 <span className="label-text">Verified Role</span>
               </div>

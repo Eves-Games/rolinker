@@ -26,7 +26,7 @@ export default function SubmitCookie() {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-col md:flex-row gap-2">
       <textarea onChange={handleChange} className={clsx("textarea w-full h-24 overflow-y-hidden", !cookieVisible && "blur-sm")} placeholder={"Enter bot cookie"}>
         {currentCookie}
       </textarea>

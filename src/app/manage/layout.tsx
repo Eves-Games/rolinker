@@ -11,7 +11,7 @@ export default function RootLayout({
       <div className="prose">
         <h1>Manage</h1>
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 md:flex-row">
         <div className="w-fit space-y-2">
           <ul className="menu menu-sm rounded-box bg-base-200 shadow">
             <li>
